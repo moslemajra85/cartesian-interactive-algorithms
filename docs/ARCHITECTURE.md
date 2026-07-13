@@ -1,6 +1,6 @@
 # Cartesian Architecture
 
-This document explains the current runtime design, the boundaries that should remain stable, and the decisions intentionally deferred until the application has more than one complete lesson family.
+This document explains the current runtime design, the boundaries that should remain stable, and the decisions intentionally deferred while the application grows beyond its first sorting lesson family.
 
 ## System goal
 
@@ -37,7 +37,7 @@ The arrows show ownership: the lesson owns the input, the algorithm owns event c
 
 ### Algorithm event generator
 
-Location: `src/features/sorting/bubbleSort.ts`
+Locations: `src/features/sorting/bubbleSort.ts` and `src/features/sorting/selectionSort.ts`
 
 Responsibilities:
 
@@ -49,9 +49,9 @@ Responsibilities:
 
 It must not import React, access the DOM, start timers, or choose colors.
 
-### Lesson component
+### Shared sorting lesson player
 
-Location: `src/features/sorting/BubbleSortLesson.tsx`
+Location: `src/features/sorting/SortLesson.tsx`
 
 Responsibilities:
 
@@ -61,7 +61,9 @@ Responsibilities:
 - Render semantic event state
 - Keep visualization, pseudocode, and narration synchronized
 
-The current player logic remains local to the Bubble Sort lesson. It should become a shared hook only after a second lesson demonstrates the exact common API. This avoids prematurely freezing an abstraction around one algorithm.
+Bubble Sort and Selection Sort provide typed lesson definitions and pure event generators to the shared player. The extraction happened only after Selection Sort demonstrated the common API: playback state, semantic bars, pseudocode highlighting, narration, speed controls, and lesson navigation.
+
+The algorithm-specific wrapper components contain educational content rather than playback mechanics. This keeps lesson configuration explicit while preventing duplicated visualization code.
 
 ### Application shell
 
@@ -117,8 +119,8 @@ The visualization does not own a separate copy of algorithm state. It derives ev
 
 Unit tests currently cover the event generator because it contains correctness-sensitive transformations. The next useful test layers are:
 
-1. Playback hook tests after the hook has a second consumer.
-2. Component interaction tests for keyboard and button behavior.
+1. Shared player interaction tests for button and timer behavior.
+2. Keyboard navigation and accessible-state tests.
 3. One end-to-end lesson flow after routing and progress persistence exist.
 
 Snapshot-testing the entire page is deliberately avoided. Large markup snapshots are noisy and do not prove that algorithm states are correct.

@@ -1,23 +1,9 @@
-export type BubbleSortStep = {
-  values: number[]
-  compared: [number, number] | null
-  swapped: [number, number] | null
-  sortedIndices: number[]
-  line: number
-  pass: number
-  title: string
-  explanation: string
-}
+import { createSortStep, type SortStep } from './sortStep'
 
-const snapshot = (
-  values: number[],
-  overrides: Omit<BubbleSortStep, 'values'>,
-): BubbleSortStep => ({ values: [...values], ...overrides })
-
-export function createBubbleSortSteps(input: number[]): BubbleSortStep[] {
+export function createBubbleSortSteps(input: number[]): SortStep[] {
   const values = [...input]
-  const steps: BubbleSortStep[] = [
-    snapshot(values, {
+  const steps: SortStep[] = [
+    createSortStep(values, {
       compared: null,
       swapped: null,
       sortedIndices: [],
@@ -29,7 +15,7 @@ export function createBubbleSortSteps(input: number[]): BubbleSortStep[] {
   ]
 
   if (values.length < 2) {
-    steps.push(snapshot(values, {
+    steps.push(createSortStep(values, {
       compared: null,
       swapped: null,
       sortedIndices: values.map((_, index) => index),
@@ -48,7 +34,7 @@ export function createBubbleSortSteps(input: number[]): BubbleSortStep[] {
     pass += 1
     let swappedInPass = false
 
-    steps.push(snapshot(values, {
+    steps.push(createSortStep(values, {
       compared: null,
       swapped: null,
       sortedIndices: [...sortedIndices],
@@ -60,7 +46,7 @@ export function createBubbleSortSteps(input: number[]): BubbleSortStep[] {
 
     for (let left = 0; left < end; left += 1) {
       const right = left + 1
-      steps.push(snapshot(values, {
+      steps.push(createSortStep(values, {
         compared: [left, right],
         swapped: null,
         sortedIndices: [...sortedIndices],
@@ -78,7 +64,7 @@ export function createBubbleSortSteps(input: number[]): BubbleSortStep[] {
         values[right] = leftValue
         swappedInPass = true
 
-        steps.push(snapshot(values, {
+        steps.push(createSortStep(values, {
           compared: null,
           swapped: [left, right],
           sortedIndices: [...sortedIndices],
@@ -91,7 +77,7 @@ export function createBubbleSortSteps(input: number[]): BubbleSortStep[] {
     }
 
     sortedIndices.add(end)
-    steps.push(snapshot(values, {
+    steps.push(createSortStep(values, {
       compared: null,
       swapped: null,
       sortedIndices: [...sortedIndices],
@@ -108,7 +94,7 @@ export function createBubbleSortSteps(input: number[]): BubbleSortStep[] {
   }
 
   for (let index = 0; index < values.length; index += 1) sortedIndices.add(index)
-  steps.push(snapshot(values, {
+  steps.push(createSortStep(values, {
     compared: null,
     swapped: null,
     sortedIndices: [...sortedIndices].sort((left, right) => left - right),

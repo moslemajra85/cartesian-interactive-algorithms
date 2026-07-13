@@ -101,6 +101,10 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 .lesson-crumbs { display: flex; align-items: center; gap: 12px; color: #858990; font: 9px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
 .lesson-crumbs button { padding: 0; border: 0; background: transparent; color: var(--ink); cursor: pointer; }
 .lesson-crumbs strong { color: var(--coral); font-weight: 500; }
+.lesson-switcher { display: flex; justify-content: flex-end; gap: 7px; margin-top: -24px; }
+.lesson-switcher button { padding: 8px 11px; border: 1px solid var(--line); background: rgba(255,253,248,.65); color: #737982; cursor: pointer; font: 8px var(--mono); letter-spacing: .04em; transition: border-color 160ms ease, background 160ms ease, color 160ms ease; }
+.lesson-switcher button:hover { border-color: var(--ink); color: var(--ink); }
+.lesson-switcher button.is-current { border-color: var(--ink); background: var(--ink); color: white; }
 .lesson-heading { min-height: 238px; display: flex; align-items: center; justify-content: space-between; gap: 40px; }
 .lesson-heading .eyebrow { margin-bottom: 15px; }
 .lesson-heading h1 { margin: 0; font-size: clamp(48px, 6vw, 78px); line-height: 1; letter-spacing: -.06em; }
@@ -200,6 +204,8 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
   .footer-brand { justify-content: center; }
   .lesson-page { padding: 22px 14px 70px; }
   .lesson-crumbs span:not(:last-child) { display: none; }
+  .lesson-switcher { justify-content: flex-start; margin-top: 22px; overflow-x: auto; }
+  .lesson-switcher button { white-space: nowrap; }
   .lesson-heading { min-height: 220px; }
   .lesson-heading h1 { font-size: 51px; }
   .lesson-heading > div > p:last-child { max-width: 250px; line-height: 1.6; }

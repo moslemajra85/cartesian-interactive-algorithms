@@ -2,7 +2,7 @@
 
 An interactive, visual learning environment for understanding data structures and algorithms through animated execution, synchronized pseudocode, and step-by-step reasoning.
 
-> **Project status:** Active development. The application currently includes the complete handbook shell and a production-quality Bubble Sort lesson as its first vertical slice.
+> **Project status:** Active development. The application currently includes the complete handbook shell and two production-quality sorting lessons backed by a shared visualization player.
 
 ![Cartesian interactive handbook home](docs/images/home-desktop.png)
 
@@ -23,16 +23,18 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - Responsive, book-inspired learning interface
 - Chapter navigation and progress presentation
 - Keyboard-accessible navigation drawer (`M` to toggle, `Escape` to close)
-- Interactive Bubble Sort lesson
+- Interactive Bubble Sort and Selection Sort lessons
 - Play, pause, replay, previous-step, and next-step controls
 - Three playback speeds
 - Random input generation
 - Synchronized pseudocode highlighting
 - Step-specific explanations and pass tracking
-- Direct lesson link through `#bubble-sort`
+- Direct lesson links through `#bubble-sort` and `#selection-sort`
 - Reduced-motion support
 
 ![Bubble Sort visualization with synchronized pseudocode](docs/images/bubble-sort-lesson.png)
+
+![Selection Sort visualization using the shared lesson player](docs/images/selection-sort-lesson.png)
 
 <details>
 <summary>Mobile experience</summary>
@@ -57,10 +59,10 @@ flowchart LR
     Player --> Explanation[Step narration]
 ```
 
-For example, Bubble Sort emits snapshots containing:
+Both sorting algorithms emit snapshots with the same semantic contract:
 
 ```ts
-type BubbleSortStep = {
+type SortStep = {
   values: number[]
   compared: [number, number] | null
   swapped: [number, number] | null
@@ -83,7 +85,7 @@ This boundary keeps the algorithm testable without a browser and allows the UI t
 - Oxlint
 - CSS animations and responsive layout
 
-No visualization or animation library is currently required. That is intentional: the first vertical slice is small enough for browser-native transitions, and a dependency should only be introduced when it solves a demonstrated orchestration problem.
+No visualization or animation library is currently required. That is intentional: the current sorting interactions remain small enough for browser-native transitions, and a dependency should only be introduced when it solves a demonstrated orchestration problem.
 
 ## Getting started
 
@@ -103,10 +105,11 @@ npm run dev
 
 Vite prints the local development URL after startup.
 
-Open the Bubble Sort lesson directly at:
+Open either implemented lesson directly at:
 
 ```text
 http://localhost:5173/#bubble-sort
+http://localhost:5173/#selection-sort
 ```
 
 ## Available commands
@@ -131,8 +134,13 @@ cartesian-interactive-algorithms/
 │   ├── features/
 │   │   └── sorting/
 │   │       ├── BubbleSortLesson.tsx
+│   │       ├── SelectionSortLesson.tsx
+│   │       ├── SortLesson.tsx
+│   │       ├── sortStep.ts
 │   │       ├── bubbleSort.ts
-│   │       └── bubbleSort.test.ts
+│   │       ├── bubbleSort.test.ts
+│   │       ├── selectionSort.ts
+│   │       └── selectionSort.test.ts
 │   ├── App.tsx                 # Handbook shell and screen navigation
 │   ├── App.css                 # Product and lesson styling
 │   ├── index.css               # Global tokens and defaults
@@ -154,7 +162,7 @@ The current tests target the pure event generator because it carries the correct
 - Adjacent-only swap events
 - Complete sorted-index metadata
 
-UI interaction tests will be added when the shared playback controller is extracted for use by a second lesson. Extracting it earlier would create an abstraction without a second real consumer.
+The second lesson justified extracting a shared sorting player. Component interaction tests are now the next useful layer for protecting playback, navigation, and keyboard behavior.
 
 ## Roadmap
 
@@ -164,6 +172,7 @@ UI interaction tests will be added when the shared playback controller is extrac
 - [x] Responsive chapter navigation
 - [x] Event-driven animation model
 - [x] Bubble Sort vertical slice
+- [x] Selection Sort lesson and shared sorting player
 - [x] Algorithm unit tests
 - [ ] Continuous integration
 - [ ] Static deployment
@@ -178,7 +187,7 @@ UI interaction tests will be added when the shared playback controller is extrac
 
 ### Curriculum
 
-- [ ] Selection Sort and Insertion Sort
+- [ ] Insertion Sort
 - [ ] Binary Search
 - [ ] Linked lists, stacks, and queues
 - [ ] Tree traversal

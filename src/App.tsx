@@ -1,6 +1,21 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { BubbleSortLesson } from './features/sorting/BubbleSortLesson'
+import { SelectionSortLesson } from './features/sorting/SelectionSortLesson'
+import type { LessonLink } from './features/sorting/SortLesson'
+
+type LessonSlug = 'bubble-sort' | 'selection-sort'
+type Screen = 'home' | LessonSlug
+
+const sortingLessons: LessonLink[] = [
+  { slug: 'bubble-sort', label: '03 · Bubble Sort' },
+  { slug: 'selection-sort', label: '04 · Selection Sort' },
+]
+
+function screenFromHash(): Screen {
+  const slug = window.location.hash.slice(1)
+  return sortingLessons.some((lesson) => lesson.slug === slug) ? slug as LessonSlug : 'home'
+}
 
 type Chapter = {
   id: string
@@ -149,11 +164,12 @@ function ChapterCard({ chapter, onOpen }: { chapter: Chapter; onOpen: () => void
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [screen, setScreen] = useState<'home' | 'bubble-sort'>(() => window.location.hash === '#bubble-sort' ? 'bubble-sort' : 'home')
+  const [screen, setScreen] = useState<Screen>(screenFromHash)
 
-  const openLesson = () => {
-    setScreen('bubble-sort')
-    window.history.pushState(null, '', '#bubble-sort')
+  const openLesson = (requestedSlug: string = 'bubble-sort') => {
+    const slug = sortingLessons.some((lesson) => lesson.slug === requestedSlug) ? requestedSlug as LessonSlug : 'bubble-sort'
+    setScreen(slug)
+    window.history.pushState(null, '', `#${slug}`)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -174,9 +190,13 @@ function App() {
   }, [])
 
   useEffect(() => {
-    const onHistoryChange = () => setScreen(window.location.hash === '#bubble-sort' ? 'bubble-sort' : 'home')
+    const onHistoryChange = () => setScreen(screenFromHash())
     window.addEventListener('popstate', onHistoryChange)
-    return () => window.removeEventListener('popstate', onHistoryChange)
+    window.addEventListener('hashchange', onHistoryChange)
+    return () => {
+      window.removeEventListener('popstate', onHistoryChange)
+      window.removeEventListener('hashchange', onHistoryChange)
+    }
   }, [])
 
   return (
@@ -228,7 +248,11 @@ function App() {
       </aside>
       {menuOpen && <button className="drawer-backdrop" type="button" aria-label="Close menu" onClick={() => setMenuOpen(false)} />}
 
-      {screen === 'bubble-sort' ? <BubbleSortLesson onBack={openHome} /> : <main id="top">
+      {screen === 'bubble-sort' ? (
+        <BubbleSortLesson lessons={sortingLessons} onBack={openHome} onOpenLesson={openLesson} />
+      ) : screen === 'selection-sort' ? (
+        <SelectionSortLesson lessons={sortingLessons} onBack={openHome} onOpenLesson={openLesson} />
+      ) : <main id="top">
         <section className="hero-section">
           <div className="hero-copy">
             <p className="eyebrow"><span /> THE INTERACTIVE HANDBOOK</p>
@@ -237,7 +261,7 @@ function App() {
               Build intuition through visual stories, hands-on experiments, and problems that teach you how to reason—not what to memorize.
             </p>
             <div className="hero-actions">
-              <button className="primary-action" type="button" onClick={openLesson}>
+              <button className="primary-action" type="button" onClick={() => openLesson()}>
                 Continue learning <span aria-hidden="true">→</span>
               </button>
               <span className="resume-note">
@@ -258,7 +282,7 @@ function App() {
             <p>Five connected chapters. Forty-nine visual lessons. One stronger problem-solving mind.</p>
           </div>
           <div className="chapter-grid">
-            {chapters.map((chapter) => <ChapterCard chapter={chapter} onOpen={openLesson} key={chapter.id} />)}
+            {chapters.map((chapter) => <ChapterCard chapter={chapter} onOpen={() => openLesson()} key={chapter.id} />)}
           </div>
         </section>
 
