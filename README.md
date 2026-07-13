@@ -25,6 +25,7 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - Keyboard-accessible navigation drawer (`M` to toggle, `Escape` to close)
 - Interactive Bubble Sort, Selection Sort, and Insertion Sort lessons
 - Play, pause, replay, previous-step, and next-step controls
+- Keyboard playback controls with visible shortcut guidance
 - Three playback speeds
 - Random input generation
 - Synchronized pseudocode highlighting
@@ -125,6 +126,18 @@ http://localhost:5173/#insertion-sort
 | `npm run build` | Type-check and create a production build |
 | `npm run preview` | Preview the production build locally |
 
+## Lesson keyboard controls
+
+| Key | Action |
+| --- | --- |
+| `Space` | Play or pause; replay from the start after completion |
+| `←` | Pause and move to the previous event |
+| `→` | Pause and move to the next event |
+| `R` | Restart the current timeline |
+| `S` | Cycle through playback speeds |
+
+Global lesson shortcuts are disabled while a button, link, input, or editable element has focus. Browser and operating-system combinations such as `Ctrl+R`, `Cmd+S`, and `Alt+←` are not intercepted.
+
 ## Project structure
 
 ```text
@@ -145,6 +158,8 @@ cartesian-interactive-algorithms/
 │   │       ├── bubbleSort.test.ts
 │   │       ├── insertionSort.ts
 │   │       ├── insertionSort.test.ts
+│   │       ├── playbackShortcuts.ts
+│   │       ├── playbackShortcuts.test.ts
 │   │       ├── selectionSort.ts
 │   │       └── selectionSort.test.ts
 │   ├── App.tsx                 # Handbook shell and screen navigation
@@ -167,8 +182,9 @@ The current tests target the pure event generator because it carries the correct
 - Empty and singleton inputs
 - Adjacent-only swap events
 - Complete sorted-index metadata
+- Keyboard-command mapping and modified-shortcut protection
 
-The second lesson justified extracting a shared sorting player. Component interaction tests are now the next useful layer for protecting playback, navigation, and keyboard behavior.
+The second lesson justified extracting a shared sorting player. Component interaction tests are now the next useful layer for protecting timer behavior and verifying the browser-level keyboard listener around real focused elements.
 
 ## Roadmap
 
@@ -188,7 +204,7 @@ The second lesson justified extracting a shared sorting player. Component intera
 
 - [ ] Prediction checkpoints
 - [ ] Lesson completion and local progress persistence
-- [ ] Accessible keyboard playback controls
+- [x] Accessible keyboard playback controls
 - [ ] Lesson catalogue and routing
 - [ ] User-provided visualization inputs
 

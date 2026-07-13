@@ -146,6 +146,9 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 .speed-button { padding: 0 11px; font: 8px var(--mono); }
 .timeline { height: 4px; background: #e4dfd5; }
 .timeline span { display: block; height: 100%; background: var(--coral); transition: width 250ms ease; }
+.shortcut-strip { min-height: 42px; padding: 8px 18px; display: flex; align-items: center; justify-content: center; gap: 18px; border-top: 1px solid var(--line); background: #f6f2e9; color: #777c84; font: 8px var(--mono); }
+.shortcut-strip span { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.shortcut-strip kbd { min-width: 21px; padding: 3px 5px; border: 1px solid rgba(25,32,43,.22); border-bottom-width: 2px; border-radius: 3px; background: var(--paper); color: var(--ink); font: 8px var(--mono); text-align: center; }
 
 .code-panel { min-width: 0; background: #18212c; color: white; }
 .code-panel .panel-label { color: #a9afb7; border-color: rgba(255,255,255,.14); }
@@ -216,6 +219,7 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
   .visual-legend { gap: 9px; }
   .player-controls { gap: 5px; }
   .speed-button { padding: 0 6px; }
+  .shortcut-strip { justify-content: flex-start; gap: 12px; overflow-x: auto; }
   .lesson-concept { grid-template-columns: 1fr; gap: 25px; padding: 50px 28px; }
   .lesson-concept > p { grid-column: auto; }
   .concept-number { font-size: 38px; }

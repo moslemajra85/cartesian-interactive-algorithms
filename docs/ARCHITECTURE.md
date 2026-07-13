@@ -120,7 +120,7 @@ The visualization does not own a separate copy of algorithm state. It derives ev
 Unit tests currently cover the event generator because it contains correctness-sensitive transformations. The next useful test layers are:
 
 1. Shared player interaction tests for button and timer behavior.
-2. Keyboard navigation and accessible-state tests.
+2. Browser-level focus and accessible-state tests.
 3. One end-to-end lesson flow after routing and progress persistence exist.
 
 Snapshot-testing the entire page is deliberately avoided. Large markup snapshots are noisy and do not prove that algorithm states are correct.
@@ -132,12 +132,14 @@ Current foundations:
 - Semantic buttons for every interactive control
 - Descriptive labels for icon-only buttons
 - Live narration region for step changes
+- Keyboard playback bindings for play/pause, stepping, restart, and speed
+- Protection for native browser shortcuts and focused interactive elements
+- Visible shortcut reference in every sorting lesson
 - Reduced-motion media query
 - Responsive layouts that preserve content order
 
 Known gaps:
 
-- Playback needs full keyboard bindings.
 - Bar-state changes need richer screen-reader descriptions.
 - Focus should move predictably when navigating between lessons.
 - Color states should gain shape or label redundancy in the visualization itself.

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { getPlaybackCommand } from './playbackShortcuts'
 import type { SortStep } from './sortStep'
 
 const SPEEDS = [1200, 750, 380]
@@ -75,6 +76,48 @@ export function SortLesson({ definition, lessons, onBack, onOpenLesson }: SortLe
     setValues(randomValues(definition.initialValues.length))
   }
 
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target
+      const hasInteractiveFocus = target instanceof Element
+        && target.closest('button, a, input, textarea, select, [contenteditable="true"]') !== null
+      if (hasInteractiveFocus) return
+
+      const command = getPlaybackCommand(event)
+      if (!command) return
+      event.preventDefault()
+
+      switch (command) {
+        case 'toggle-playback':
+          if (isComplete) {
+            setPlaying(false)
+            setStepIndex(0)
+          } else {
+            setPlaying((current) => !current)
+          }
+          break
+        case 'previous-step':
+          setPlaying(false)
+          setStepIndex((current) => Math.max(0, current - 1))
+          break
+        case 'next-step':
+          setPlaying(false)
+          setStepIndex((current) => Math.min(steps.length - 1, current + 1))
+          break
+        case 'restart':
+          setPlaying(false)
+          setStepIndex(0)
+          break
+        case 'change-speed':
+          setSpeedIndex((current) => (current + 1) % SPEEDS.length)
+          break
+      }
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [isComplete, steps.length])
+
   return (
     <main className="lesson-page">
       <div className="lesson-crumbs">
@@ -150,6 +193,12 @@ export function SortLesson({ definition, lessons, onBack, onOpenLesson }: SortLe
             <button className="speed-button" type="button" onClick={() => setSpeedIndex((current) => (current + 1) % SPEEDS.length)}>{speedIndex + 1}× speed</button>
           </div>
           <div className="timeline" aria-label={`Step ${stepIndex + 1} of ${steps.length}`}><span style={{ width: `${(stepIndex / (steps.length - 1)) * 100}%` }} /></div>
+          <div className="shortcut-strip" aria-label="Keyboard shortcuts">
+            <span><kbd>Space</kbd> Play / pause</span>
+            <span><kbd>←</kbd><kbd>→</kbd> Step</span>
+            <span><kbd>R</kbd> Restart</span>
+            <span><kbd>S</kbd> Speed</span>
+          </div>
         </div>
 
         <aside className="code-panel">
