@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import { BubbleSortLesson } from './features/sorting/BubbleSortLesson'
 
 type Chapter = {
   id: string
@@ -119,7 +120,7 @@ function HeroIllustration() {
   )
 }
 
-function ChapterCard({ chapter }: { chapter: Chapter }) {
+function ChapterCard({ chapter, onOpen }: { chapter: Chapter; onOpen: () => void }) {
   return (
     <article className={`chapter-card tone-${chapter.tone}`}>
       <div className="chapter-card-top">
@@ -138,7 +139,7 @@ function ChapterCard({ chapter }: { chapter: Chapter }) {
       <div className="progress-track" aria-label={`${chapter.progress}% complete`}>
         <span style={{ width: `${chapter.progress}%` }} />
       </div>
-      <button className="card-link" type="button" disabled={chapter.status === 'locked'}>
+      <button className="card-link" type="button" disabled={chapter.status === 'locked'} onClick={chapter.id === 'arrays' ? onOpen : undefined}>
         {chapter.status === 'locked' ? 'Complete previous chapter' : chapter.progress ? 'Continue chapter' : 'Start chapter'}
         <span aria-hidden="true">→</span>
       </button>
@@ -148,6 +149,19 @@ function ChapterCard({ chapter }: { chapter: Chapter }) {
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [screen, setScreen] = useState<'home' | 'bubble-sort'>(() => window.location.hash === '#bubble-sort' ? 'bubble-sort' : 'home')
+
+  const openLesson = () => {
+    setScreen('bubble-sort')
+    window.history.pushState(null, '', '#bubble-sort')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const openHome = () => {
+    setScreen('home')
+    window.history.pushState(null, '', window.location.pathname)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -159,10 +173,16 @@ function App() {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
 
+  useEffect(() => {
+    const onHistoryChange = () => setScreen(window.location.hash === '#bubble-sort' ? 'bubble-sort' : 'home')
+    window.addEventListener('popstate', onHistoryChange)
+    return () => window.removeEventListener('popstate', onHistoryChange)
+  }, [])
+
   return (
     <div className="app-shell">
       <header className="topbar">
-        <a className="brand" href="#top" aria-label="Cartesian home">
+        <a className="brand" href="#top" aria-label="Cartesian home" onClick={openHome}>
           <BookMark />
           <span>
             <strong>Cartesian</strong>
@@ -208,7 +228,7 @@ function App() {
       </aside>
       {menuOpen && <button className="drawer-backdrop" type="button" aria-label="Close menu" onClick={() => setMenuOpen(false)} />}
 
-      <main id="top">
+      {screen === 'bubble-sort' ? <BubbleSortLesson onBack={openHome} /> : <main id="top">
         <section className="hero-section">
           <div className="hero-copy">
             <p className="eyebrow"><span /> THE INTERACTIVE HANDBOOK</p>
@@ -217,7 +237,7 @@ function App() {
               Build intuition through visual stories, hands-on experiments, and problems that teach you how to reason—not what to memorize.
             </p>
             <div className="hero-actions">
-              <button className="primary-action" type="button">
+              <button className="primary-action" type="button" onClick={openLesson}>
                 Continue learning <span aria-hidden="true">→</span>
               </button>
               <span className="resume-note">
@@ -238,7 +258,7 @@ function App() {
             <p>Five connected chapters. Forty-nine visual lessons. One stronger problem-solving mind.</p>
           </div>
           <div className="chapter-grid">
-            {chapters.map((chapter) => <ChapterCard chapter={chapter} key={chapter.id} />)}
+            {chapters.map((chapter) => <ChapterCard chapter={chapter} onOpen={openLesson} key={chapter.id} />)}
           </div>
         </section>
 
@@ -247,7 +267,7 @@ function App() {
           <div><span>02</span><strong>Control the pace</strong><p>Pause, step, rewind, and inspect every decision.</p></div>
           <div><span>03</span><strong>Prove you understand</strong><p>Predict the next step before the animation reveals it.</p></div>
         </section>
-      </main>
+      </main>}
 
       <footer>
         <a className="brand footer-brand" href="#top"><BookMark /><strong>Cartesian</strong></a>
