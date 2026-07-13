@@ -130,7 +130,7 @@ export function SortLesson({ definition, lessons, onBack, onOpenLesson }: SortLe
             <div className="visual-legend">
               <span><i className="legend-compare" /> Inspecting</span>
               <span><i className="legend-swap" /> Swapped</span>
-              <span><i className="legend-sorted" /> Sorted</span>
+              <span><i className="legend-sorted" /> Ordered</span>
             </div>
           </div>
 

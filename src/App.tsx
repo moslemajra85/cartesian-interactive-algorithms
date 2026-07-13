@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { BubbleSortLesson } from './features/sorting/BubbleSortLesson'
+import { InsertionSortLesson } from './features/sorting/InsertionSortLesson'
 import { SelectionSortLesson } from './features/sorting/SelectionSortLesson'
 import type { LessonLink } from './features/sorting/SortLesson'
 
-type LessonSlug = 'bubble-sort' | 'selection-sort'
+type LessonSlug = 'bubble-sort' | 'selection-sort' | 'insertion-sort'
 type Screen = 'home' | LessonSlug
 
 const sortingLessons: LessonLink[] = [
   { slug: 'bubble-sort', label: '03 · Bubble Sort' },
   { slug: 'selection-sort', label: '04 · Selection Sort' },
+  { slug: 'insertion-sort', label: '05 · Insertion Sort' },
 ]
 
 function screenFromHash(): Screen {
@@ -252,6 +254,8 @@ function App() {
         <BubbleSortLesson lessons={sortingLessons} onBack={openHome} onOpenLesson={openLesson} />
       ) : screen === 'selection-sort' ? (
         <SelectionSortLesson lessons={sortingLessons} onBack={openHome} onOpenLesson={openLesson} />
+      ) : screen === 'insertion-sort' ? (
+        <InsertionSortLesson lessons={sortingLessons} onBack={openHome} onOpenLesson={openLesson} />
       ) : <main id="top">
         <section className="hero-section">
           <div className="hero-copy">

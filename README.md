@@ -2,7 +2,7 @@
 
 An interactive, visual learning environment for understanding data structures and algorithms through animated execution, synchronized pseudocode, and step-by-step reasoning.
 
-> **Project status:** Active development. The application currently includes the complete handbook shell and two production-quality sorting lessons backed by a shared visualization player.
+> **Project status:** Active development. The application currently includes the complete handbook shell and three production-quality sorting lessons backed by a shared visualization player.
 
 ![Cartesian interactive handbook home](docs/images/home-desktop.png)
 
@@ -23,18 +23,20 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - Responsive, book-inspired learning interface
 - Chapter navigation and progress presentation
 - Keyboard-accessible navigation drawer (`M` to toggle, `Escape` to close)
-- Interactive Bubble Sort and Selection Sort lessons
+- Interactive Bubble Sort, Selection Sort, and Insertion Sort lessons
 - Play, pause, replay, previous-step, and next-step controls
 - Three playback speeds
 - Random input generation
 - Synchronized pseudocode highlighting
 - Step-specific explanations and pass tracking
-- Direct lesson links through `#bubble-sort` and `#selection-sort`
+- Direct lesson links for each implemented algorithm
 - Reduced-motion support
 
 ![Bubble Sort visualization with synchronized pseudocode](docs/images/bubble-sort-lesson.png)
 
 ![Selection Sort visualization using the shared lesson player](docs/images/selection-sort-lesson.png)
+
+![Insertion Sort visualization with an ordered prefix](docs/images/insertion-sort-lesson.png)
 
 <details>
 <summary>Mobile experience</summary>
@@ -110,6 +112,7 @@ Open either implemented lesson directly at:
 ```text
 http://localhost:5173/#bubble-sort
 http://localhost:5173/#selection-sort
+http://localhost:5173/#insertion-sort
 ```
 
 ## Available commands
@@ -134,11 +137,14 @@ cartesian-interactive-algorithms/
 │   ├── features/
 │   │   └── sorting/
 │   │       ├── BubbleSortLesson.tsx
+│   │       ├── InsertionSortLesson.tsx
 │   │       ├── SelectionSortLesson.tsx
 │   │       ├── SortLesson.tsx
 │   │       ├── sortStep.ts
 │   │       ├── bubbleSort.ts
 │   │       ├── bubbleSort.test.ts
+│   │       ├── insertionSort.ts
+│   │       ├── insertionSort.test.ts
 │   │       ├── selectionSort.ts
 │   │       └── selectionSort.test.ts
 │   ├── App.tsx                 # Handbook shell and screen navigation
@@ -173,6 +179,7 @@ The second lesson justified extracting a shared sorting player. Component intera
 - [x] Event-driven animation model
 - [x] Bubble Sort vertical slice
 - [x] Selection Sort lesson and shared sorting player
+- [x] Insertion Sort lesson
 - [x] Algorithm unit tests
 - [ ] Continuous integration
 - [ ] Static deployment
@@ -187,7 +194,7 @@ The second lesson justified extracting a shared sorting player. Component intera
 
 ### Curriculum
 
-- [ ] Insertion Sort
+- [ ] Merge Sort
 - [ ] Binary Search
 - [ ] Linked lists, stacks, and queues
 - [ ] Tree traversal

@@ -37,7 +37,7 @@ The arrows show ownership: the lesson owns the input, the algorithm owns event c
 
 ### Algorithm event generator
 
-Locations: `src/features/sorting/bubbleSort.ts` and `src/features/sorting/selectionSort.ts`
+Locations: `src/features/sorting/bubbleSort.ts`, `src/features/sorting/selectionSort.ts`, and `src/features/sorting/insertionSort.ts`
 
 Responsibilities:
 
@@ -61,7 +61,7 @@ Responsibilities:
 - Render semantic event state
 - Keep visualization, pseudocode, and narration synchronized
 
-Bubble Sort and Selection Sort provide typed lesson definitions and pure event generators to the shared player. The extraction happened only after Selection Sort demonstrated the common API: playback state, semantic bars, pseudocode highlighting, narration, speed controls, and lesson navigation.
+Bubble Sort, Selection Sort, and Insertion Sort provide typed lesson definitions and pure event generators to the shared player. The extraction happened only after Selection Sort demonstrated the common API: playback state, semantic bars, pseudocode highlighting, narration, speed controls, and lesson navigation.
 
 The algorithm-specific wrapper components contain educational content rather than playback mechanics. This keeps lesson configuration explicit while preventing duplicated visualization code.
 
