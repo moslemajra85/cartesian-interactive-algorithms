@@ -29,6 +29,7 @@ type BubbleSortLessonProps = {
   lessons: LessonLink[]
   onBack: () => void
   onOpenLesson: (slug: string) => void
+  onCompleteLesson: (slug: string) => void
 }
 
 export function BubbleSortLesson(props: BubbleSortLessonProps) {

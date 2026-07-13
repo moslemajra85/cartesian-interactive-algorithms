@@ -29,6 +29,7 @@ type InsertionSortLessonProps = {
   lessons: LessonLink[]
   onBack: () => void
   onOpenLesson: (slug: string) => void
+  onCompleteLesson: (slug: string) => void
 }
 
 export function InsertionSortLesson(props: InsertionSortLessonProps) {

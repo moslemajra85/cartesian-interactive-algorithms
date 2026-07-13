@@ -31,6 +31,7 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - Synchronized pseudocode highlighting
 - Step-specific explanations and pass tracking
 - Direct lesson links for each implemented algorithm
+- Versioned local progress, completion marks, resume behavior, and reset controls
 - Reduced-motion support
 
 ![Bubble Sort visualization with synchronized pseudocode](docs/images/bubble-sort-lesson.png)
@@ -45,6 +46,17 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 | Learning path | Bubble Sort lesson |
 | --- | --- |
 | ![Cartesian home on mobile](docs/images/home-mobile.png) | ![Bubble Sort lesson on mobile](docs/images/bubble-sort-mobile.png) |
+
+</details>
+
+<details>
+<summary>Restored learning progress</summary>
+
+Progress is restored on refresh without an account. Percentages are derived from completed lessons rather than stored separately.
+
+| Desktop | Mobile |
+| --- | --- |
+| ![Cartesian restoring two completed lessons and resuming Insertion Sort](docs/images/progress-resume-desktop.png) | ![Cartesian progress resume state on mobile](docs/images/progress-resume-mobile.png) |
 
 </details>
 
@@ -148,6 +160,9 @@ cartesian-interactive-algorithms/
 │   └── CONTRIBUTING.md         # Development workflow
 ├── src/
 │   ├── features/
+│   │   ├── progress/
+│   │   │   ├── learningProgress.ts
+│   │   │   └── learningProgress.test.ts
 │   │   └── sorting/
 │   │       ├── BubbleSortLesson.tsx
 │   │       ├── InsertionSortLesson.tsx
@@ -183,6 +198,7 @@ The current tests target the pure event generator because it carries the correct
 - Adjacent-only swap events
 - Complete sorted-index metadata
 - Keyboard-command mapping and modified-shortcut protection
+- Progress schema validation, deduplication, storage failures, save, and reset behavior
 
 The second lesson justified extracting a shared sorting player. Component interaction tests are now the next useful layer for protecting timer behavior and verifying the browser-level keyboard listener around real focused elements.
 
@@ -203,7 +219,7 @@ The second lesson justified extracting a shared sorting player. Component intera
 ### Learning experience
 
 - [ ] Prediction checkpoints
-- [ ] Lesson completion and local progress persistence
+- [x] Lesson completion and local progress persistence
 - [x] Accessible keyboard playback controls
 - [ ] Lesson catalogue and routing
 - [ ] User-provided visualization inputs

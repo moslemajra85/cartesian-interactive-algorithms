@@ -30,6 +30,7 @@ type SelectionSortLessonProps = {
   lessons: LessonLink[]
   onBack: () => void
   onOpenLesson: (slug: string) => void
+  onCompleteLesson: (slug: string) => void
 }
 
 export function SelectionSortLesson(props: SelectionSortLessonProps) {

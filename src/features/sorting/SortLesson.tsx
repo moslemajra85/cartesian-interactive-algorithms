@@ -23,6 +23,7 @@ export type SortLessonDefinition = {
 export type LessonLink = {
   slug: string
   label: string
+  completed?: boolean
 }
 
 type SortLessonProps = {
@@ -30,13 +31,14 @@ type SortLessonProps = {
   lessons: LessonLink[]
   onBack: () => void
   onOpenLesson: (slug: string) => void
+  onCompleteLesson: (slug: string) => void
 }
 
 function randomValues(length: number) {
   return Array.from({ length }, () => Math.floor(Math.random() * 9) + 1)
 }
 
-export function SortLesson({ definition, lessons, onBack, onOpenLesson }: SortLessonProps) {
+export function SortLesson({ definition, lessons, onBack, onOpenLesson, onCompleteLesson }: SortLessonProps) {
   const [values, setValues] = useState(definition.initialValues)
   const [stepIndex, setStepIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
@@ -118,6 +120,10 @@ export function SortLesson({ definition, lessons, onBack, onOpenLesson }: SortLe
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [isComplete, steps.length])
 
+  useEffect(() => {
+    if (isComplete) onCompleteLesson(definition.slug)
+  }, [definition.slug, isComplete, onCompleteLesson])
+
   return (
     <main className="lesson-page">
       <div className="lesson-crumbs">
@@ -128,13 +134,15 @@ export function SortLesson({ definition, lessons, onBack, onOpenLesson }: SortLe
       <nav className="lesson-switcher" aria-label="Sorting lessons">
         {lessons.map((lesson) => (
           <button
-            className={lesson.slug === definition.slug ? 'is-current' : ''}
+            className={`${lesson.slug === definition.slug ? 'is-current' : ''} ${lesson.completed ? 'is-complete' : ''}`.trim()}
             type="button"
             onClick={() => onOpenLesson(lesson.slug)}
             aria-current={lesson.slug === definition.slug ? 'page' : undefined}
+            aria-label={`${lesson.label}${lesson.completed ? ', completed' : ''}`}
             key={lesson.slug}
           >
             {lesson.label}
+            {lesson.completed && <span className="lesson-check" aria-hidden="true">✓</span>}
           </button>
         ))}
       </nav>

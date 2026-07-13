@@ -121,9 +121,32 @@ Unit tests currently cover the event generator because it contains correctness-s
 
 1. Shared player interaction tests for button and timer behavior.
 2. Browser-level focus and accessible-state tests.
-3. One end-to-end lesson flow after routing and progress persistence exist.
+3. One end-to-end lesson flow after a stable lesson catalogue and routing layer exist.
 
 Snapshot-testing the entire page is deliberately avoided. Large markup snapshots are noisy and do not prove that algorithm states are correct.
+
+## Progress persistence
+
+Progress is stored under the versioned key `cartesian.learning-progress.v1`. The payload intentionally contains only source-of-truth identifiers:
+
+```ts
+type LearningProgress = {
+  version: 1
+  completedLessonSlugs: string[]
+  lastLessonSlug: string | null
+}
+```
+
+Chapter percentages, completion counts, resume labels, and navigation badges are derived at render time. They are not persisted, because derived values would become stale when lessons are added or removed.
+
+The loader validates the schema, removes duplicate and unknown slugs, and falls back to empty progress for malformed JSON, unsupported versions, or unavailable browser storage. The application continues to function when persistence fails.
+
+Current trade-offs:
+
+- Progress belongs to one browser profile and does not synchronize across devices.
+- Clearing site data removes progress.
+- No personal data or algorithm input values are stored.
+- A future account system can replace the storage adapter without changing the lesson event model.
 
 ## Accessibility
 

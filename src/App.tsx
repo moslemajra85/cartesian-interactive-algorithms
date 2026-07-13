@@ -1,5 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import './App.css'
+import {
+  clearLearningProgress,
+  createEmptyProgress,
+  loadLearningProgress,
+  recordLessonCompletion,
+  recordLessonVisit,
+  saveLearningProgress,
+} from './features/progress/learningProgress'
 import { BubbleSortLesson } from './features/sorting/BubbleSortLesson'
 import { InsertionSortLesson } from './features/sorting/InsertionSortLesson'
 import { SelectionSortLesson } from './features/sorting/SelectionSortLesson'
@@ -13,6 +21,16 @@ const sortingLessons: LessonLink[] = [
   { slug: 'selection-sort', label: '04 · Selection Sort' },
   { slug: 'insertion-sort', label: '05 · Insertion Sort' },
 ]
+
+const sortingLessonSlugs = sortingLessons.map((lesson) => lesson.slug)
+
+function loadBrowserProgress() {
+  try {
+    return loadLearningProgress(window.localStorage, sortingLessonSlugs)
+  } catch {
+    return createEmptyProgress()
+  }
+}
 
 function screenFromHash(): Screen {
   const slug = window.location.hash.slice(1)
@@ -28,7 +46,7 @@ type Chapter = {
   lessons: number
   progress: number
   tone: 'coral' | 'blue' | 'gold' | 'violet'
-  status?: 'current' | 'locked'
+  status?: 'current' | 'completed' | 'locked'
 }
 
 const chapters: Chapter[] = [
@@ -39,8 +57,9 @@ const chapters: Chapter[] = [
     shortTitle: 'Foundations',
     description: 'Build the mental models behind efficient problem solving.',
     lessons: 6,
-    progress: 100,
+    progress: 0,
     tone: 'gold',
+    status: 'locked',
   },
   {
     id: 'arrays',
@@ -48,8 +67,8 @@ const chapters: Chapter[] = [
     title: 'Arrays & Sorting',
     shortTitle: 'Arrays & Sorting',
     description: 'See data move, compare, and settle into order.',
-    lessons: 9,
-    progress: 32,
+    lessons: 3,
+    progress: 0,
     tone: 'coral',
     status: 'current',
   },
@@ -62,6 +81,7 @@ const chapters: Chapter[] = [
     lessons: 8,
     progress: 0,
     tone: 'blue',
+    status: 'locked',
   },
   {
     id: 'trees',
@@ -72,6 +92,7 @@ const chapters: Chapter[] = [
     lessons: 12,
     progress: 0,
     tone: 'violet',
+    status: 'locked',
   },
   {
     id: 'graphs',
@@ -143,6 +164,7 @@ function ChapterCard({ chapter, onOpen }: { chapter: Chapter; onOpen: () => void
       <div className="chapter-card-top">
         <span className="chapter-number">CHAPTER {chapter.number}</span>
         {chapter.status === 'current' && <span className="status-pill">In progress</span>}
+        {chapter.status === 'completed' && <span className="status-pill is-complete">Complete</span>}
         {chapter.status === 'locked' && <span className="lock-mark" aria-label="Locked">◇</span>}
       </div>
       <div>
@@ -157,7 +179,7 @@ function ChapterCard({ chapter, onOpen }: { chapter: Chapter; onOpen: () => void
         <span style={{ width: `${chapter.progress}%` }} />
       </div>
       <button className="card-link" type="button" disabled={chapter.status === 'locked'} onClick={chapter.id === 'arrays' ? onOpen : undefined}>
-        {chapter.status === 'locked' ? 'Complete previous chapter' : chapter.progress ? 'Continue chapter' : 'Start chapter'}
+        {chapter.status === 'locked' ? 'Coming in a future milestone' : chapter.progress === 100 ? 'Review chapter' : chapter.progress ? 'Continue chapter' : 'Start chapter'}
         <span aria-hidden="true">→</span>
       </button>
     </article>
@@ -167,6 +189,38 @@ function ChapterCard({ chapter, onOpen }: { chapter: Chapter; onOpen: () => void
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [screen, setScreen] = useState<Screen>(screenFromHash)
+  const [progress, setProgress] = useState(loadBrowserProgress)
+  const completedLessonCount = progress.completedLessonSlugs.length
+  const sortingProgress = Math.round((completedLessonCount / sortingLessons.length) * 100)
+  const chaptersWithProgress = chapters.map((chapter) => chapter.id === 'arrays'
+    ? { ...chapter, progress: sortingProgress, status: sortingProgress === 100 ? 'completed' as const : 'current' as const }
+    : chapter)
+  const lessonsWithProgress = sortingLessons.map((lesson) => ({
+    ...lesson,
+    completed: progress.completedLessonSlugs.includes(lesson.slug),
+  }))
+  const lastUnfinishedLesson = progress.lastLessonSlug
+    && !progress.completedLessonSlugs.includes(progress.lastLessonSlug)
+    ? sortingLessons.find((lesson) => lesson.slug === progress.lastLessonSlug)
+    : null
+  const nextLesson = lastUnfinishedLesson
+    ?? sortingLessons.find((lesson) => !progress.completedLessonSlugs.includes(lesson.slug))
+    ?? sortingLessons.at(-1)!
+
+  useEffect(() => {
+    try {
+      saveLearningProgress(window.localStorage, progress)
+    } catch {
+      // The app remains usable when browser storage is unavailable.
+    }
+  }, [progress])
+
+  useEffect(() => {
+    if (screen === 'home') return
+    setProgress((current) => current.lastLessonSlug === screen
+      ? current
+      : recordLessonVisit(current, screen))
+  }, [screen])
 
   const openLesson = (requestedSlug: string = 'bubble-sort') => {
     const slug = sortingLessons.some((lesson) => lesson.slug === requestedSlug) ? requestedSlug as LessonSlug : 'bubble-sort'
@@ -179,6 +233,20 @@ function App() {
     setScreen('home')
     window.history.pushState(null, '', window.location.pathname)
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const completeLesson = useCallback((slug: string) => {
+    setProgress((current) => recordLessonCompletion(current, slug))
+  }, [])
+
+  const resetProgress = () => {
+    if (!window.confirm('Reset all locally saved Cartesian lesson progress?')) return
+    try {
+      clearLearningProgress(window.localStorage)
+    } catch {
+      // State is still reset even when browser storage is unavailable.
+    }
+    setProgress(createEmptyProgress())
   }
 
   useEffect(() => {
@@ -213,7 +281,7 @@ function App() {
         </a>
 
         <nav className="top-actions" aria-label="Primary navigation">
-          <span className="progress-copy"><b>1</b> of 49 lessons</span>
+          <span className="progress-copy"><b>{completedLessonCount}</b> of {sortingLessons.length} lessons</span>
           <button className="icon-button" type="button" aria-label="Open search">
             <span aria-hidden="true">⌕</span>
           </button>
@@ -237,9 +305,16 @@ function App() {
           <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close chapter menu">×</button>
         </div>
         <ol>
-          {chapters.map((chapter) => (
+          {chaptersWithProgress.map((chapter) => (
             <li key={chapter.id}>
-              <button type="button" disabled={chapter.status === 'locked'}>
+              <button
+                type="button"
+                disabled={chapter.status === 'locked'}
+                onClick={chapter.id === 'arrays' ? () => {
+                  setMenuOpen(false)
+                  openLesson(nextLesson.slug)
+                } : undefined}
+              >
                 <span>{chapter.number}</span>
                 <strong>{chapter.shortTitle}</strong>
                 <i>{chapter.progress ? `${chapter.progress}%` : chapter.status === 'locked' ? 'Locked' : 'New'}</i>
@@ -247,15 +322,19 @@ function App() {
             </li>
           ))}
         </ol>
+        <div className="drawer-progress-actions">
+          <span>Progress is saved on this device.</span>
+          <button type="button" onClick={resetProgress} disabled={completedLessonCount === 0 && !progress.lastLessonSlug}>Reset progress</button>
+        </div>
       </aside>
       {menuOpen && <button className="drawer-backdrop" type="button" aria-label="Close menu" onClick={() => setMenuOpen(false)} />}
 
       {screen === 'bubble-sort' ? (
-        <BubbleSortLesson lessons={sortingLessons} onBack={openHome} onOpenLesson={openLesson} />
+        <BubbleSortLesson lessons={lessonsWithProgress} onBack={openHome} onOpenLesson={openLesson} onCompleteLesson={completeLesson} />
       ) : screen === 'selection-sort' ? (
-        <SelectionSortLesson lessons={sortingLessons} onBack={openHome} onOpenLesson={openLesson} />
+        <SelectionSortLesson lessons={lessonsWithProgress} onBack={openHome} onOpenLesson={openLesson} onCompleteLesson={completeLesson} />
       ) : screen === 'insertion-sort' ? (
-        <InsertionSortLesson lessons={sortingLessons} onBack={openHome} onOpenLesson={openLesson} />
+        <InsertionSortLesson lessons={lessonsWithProgress} onBack={openHome} onOpenLesson={openLesson} onCompleteLesson={completeLesson} />
       ) : <main id="top">
         <section className="hero-section">
           <div className="hero-copy">
@@ -265,12 +344,12 @@ function App() {
               Build intuition through visual stories, hands-on experiments, and problems that teach you how to reason—not what to memorize.
             </p>
             <div className="hero-actions">
-              <button className="primary-action" type="button" onClick={() => openLesson()}>
-                Continue learning <span aria-hidden="true">→</span>
+              <button className="primary-action" type="button" onClick={() => openLesson(nextLesson.slug)}>
+                {completedLessonCount ? 'Continue learning' : 'Start learning'} <span aria-hidden="true">→</span>
               </button>
               <span className="resume-note">
-                <b>Up next</b>
-                Bubble Sort · 8 min
+                <b>{lastUnfinishedLesson ? 'Resume' : completedLessonCount === sortingLessons.length ? 'Review' : 'Up next'}</b>
+                {nextLesson.label.replace(/^\d+ · /, '')}
               </span>
             </div>
           </div>
@@ -286,7 +365,7 @@ function App() {
             <p>Five connected chapters. Forty-nine visual lessons. One stronger problem-solving mind.</p>
           </div>
           <div className="chapter-grid">
-            {chapters.map((chapter) => <ChapterCard chapter={chapter} onOpen={() => openLesson()} key={chapter.id} />)}
+            {chaptersWithProgress.map((chapter) => <ChapterCard chapter={chapter} onOpen={() => openLesson(nextLesson.slug)} key={chapter.id} />)}
           </div>
         </section>
 
