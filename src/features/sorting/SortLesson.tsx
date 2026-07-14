@@ -29,12 +29,15 @@ export type LessonLink = {
   completed?: boolean
 }
 
-type SortLessonProps = {
-  definition: SortLessonDefinition
+export type LessonComponentProps = {
   lessons: LessonLink[]
   onBack: () => void
   onOpenLesson: (slug: string) => void
   onCompleteLesson: (slug: string) => void
+}
+
+type SortLessonProps = LessonComponentProps & {
+  definition: SortLessonDefinition
 }
 
 function randomValues(length: number) {
@@ -159,7 +162,7 @@ export function SortLesson({ definition, lessons, onBack, onOpenLesson, onComple
       <section className="lesson-heading">
         <div>
           <p className="eyebrow"><span /> {definition.lessonLabel} · {definition.duration}</p>
-          <h1>{definition.title}</h1>
+          <h1 data-route-heading tabIndex={-1}>{definition.title}</h1>
           <p>{definition.tagline}</p>
         </div>
         <div className="complexity-stamp" aria-label={`${definition.title} time complexity`}>

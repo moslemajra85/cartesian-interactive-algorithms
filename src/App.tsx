@@ -1,5 +1,16 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
+import { LessonCatalogue } from './features/catalog/LessonCatalogue'
+import { NotFoundScreen } from './features/catalog/NotFoundScreen'
+import {
+  chapterCatalog,
+  findLesson,
+  isLessonSlug,
+  lessonCatalog,
+  lessonSlugs,
+  type ChapterDefinition,
+} from './features/catalog/curriculum'
+import { hashForRoute, routeFromHash, titleForRoute, type AppRoute } from './features/catalog/routing'
 import {
   clearLearningProgress,
   createEmptyProgress,
@@ -8,104 +19,28 @@ import {
   recordLessonVisit,
   saveLearningProgress,
 } from './features/progress/learningProgress'
-import { BubbleSortLesson } from './features/sorting/BubbleSortLesson'
-import { InsertionSortLesson } from './features/sorting/InsertionSortLesson'
-import { SelectionSortLesson } from './features/sorting/SelectionSortLesson'
 import type { LessonLink } from './features/sorting/SortLesson'
 
-type LessonSlug = 'bubble-sort' | 'selection-sort' | 'insertion-sort'
-type Screen = 'home' | LessonSlug
-
 const sortingLessons: LessonLink[] = [
-  { slug: 'bubble-sort', label: '03 · Bubble Sort' },
-  { slug: 'selection-sort', label: '04 · Selection Sort' },
-  { slug: 'insertion-sort', label: '05 · Insertion Sort' },
+  ...lessonCatalog.map((lesson) => ({
+    slug: lesson.definition.slug,
+    label: `${lesson.order} · ${lesson.definition.title}`,
+  })),
 ]
-
-const sortingLessonSlugs = sortingLessons.map((lesson) => lesson.slug)
 
 function loadBrowserProgress() {
   try {
-    return loadLearningProgress(window.localStorage, sortingLessonSlugs)
+    return loadLearningProgress(window.localStorage, lessonSlugs)
   } catch {
     return createEmptyProgress()
   }
 }
 
-function screenFromHash(): Screen {
-  const slug = window.location.hash.slice(1)
-  return sortingLessons.some((lesson) => lesson.slug === slug) ? slug as LessonSlug : 'home'
-}
-
-type Chapter = {
-  id: string
-  number: string
-  title: string
-  shortTitle: string
-  description: string
+type ChapterView = ChapterDefinition & {
   lessons: number
   progress: number
-  tone: 'coral' | 'blue' | 'gold' | 'violet'
-  status?: 'current' | 'completed' | 'locked'
+  status: 'current' | 'completed' | 'locked'
 }
-
-const chapters: Chapter[] = [
-  {
-    id: 'foundations',
-    number: '01',
-    title: 'The Foundations',
-    shortTitle: 'Foundations',
-    description: 'Build the mental models behind efficient problem solving.',
-    lessons: 6,
-    progress: 0,
-    tone: 'gold',
-    status: 'locked',
-  },
-  {
-    id: 'arrays',
-    number: '02',
-    title: 'Arrays & Sorting',
-    shortTitle: 'Arrays & Sorting',
-    description: 'See data move, compare, and settle into order.',
-    lessons: 3,
-    progress: 0,
-    tone: 'coral',
-    status: 'current',
-  },
-  {
-    id: 'linked-lists',
-    number: '03',
-    title: 'Linked Structures',
-    shortTitle: 'Linked Structures',
-    description: 'Follow references through lists, stacks, and queues.',
-    lessons: 8,
-    progress: 0,
-    tone: 'blue',
-    status: 'locked',
-  },
-  {
-    id: 'trees',
-    number: '04',
-    title: 'Trees & Heaps',
-    shortTitle: 'Trees & Heaps',
-    description: 'Explore hierarchical data one branch at a time.',
-    lessons: 12,
-    progress: 0,
-    tone: 'violet',
-    status: 'locked',
-  },
-  {
-    id: 'graphs',
-    number: '05',
-    title: 'Graphs',
-    shortTitle: 'Graphs',
-    description: 'Navigate networks, paths, cycles, and connections.',
-    lessons: 14,
-    progress: 0,
-    tone: 'gold',
-    status: 'locked',
-  },
-]
 
 function MenuIcon({ open }: { open: boolean }) {
   return (
@@ -158,7 +93,7 @@ function HeroIllustration() {
   )
 }
 
-function ChapterCard({ chapter, onOpen }: { chapter: Chapter; onOpen: () => void }) {
+function ChapterCard({ chapter, onOpen }: { chapter: ChapterView; onOpen: () => void }) {
   return (
     <article className={`chapter-card tone-${chapter.tone}`}>
       <div className="chapter-card-top">
@@ -188,13 +123,21 @@ function ChapterCard({ chapter, onOpen }: { chapter: Chapter; onOpen: () => void
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [screen, setScreen] = useState<Screen>(screenFromHash)
+  const [route, setRoute] = useState<AppRoute>(() => routeFromHash(window.location.hash))
   const [progress, setProgress] = useState(loadBrowserProgress)
+  const shouldFocusRoute = useRef(false)
   const completedLessonCount = progress.completedLessonSlugs.length
   const sortingProgress = Math.round((completedLessonCount / sortingLessons.length) * 100)
-  const chaptersWithProgress = chapters.map((chapter) => chapter.id === 'arrays'
-    ? { ...chapter, progress: sortingProgress, status: sortingProgress === 100 ? 'completed' as const : 'current' as const }
-    : chapter)
+  const chaptersWithProgress: ChapterView[] = chapterCatalog.map((chapter) => ({
+    ...chapter,
+    lessons: chapter.id === 'arrays'
+      ? lessonCatalog.filter((lesson) => lesson.chapterId === chapter.id).length
+      : chapter.plannedLessonCount,
+    progress: chapter.id === 'arrays' ? sortingProgress : 0,
+    status: chapter.availability === 'locked'
+      ? 'locked'
+      : sortingProgress === 100 ? 'completed' : 'current',
+  }))
   const lessonsWithProgress = sortingLessons.map((lesson) => ({
     ...lesson,
     completed: progress.completedLessonSlugs.includes(lesson.slug),
@@ -206,6 +149,8 @@ function App() {
   const nextLesson = lastUnfinishedLesson
     ?? sortingLessons.find((lesson) => !progress.completedLessonSlugs.includes(lesson.slug))
     ?? sortingLessons.at(-1)!
+  const currentLesson = route.kind === 'lesson' ? findLesson(route.slug) : undefined
+  const CurrentLesson = currentLesson?.component
 
   useEffect(() => {
     try {
@@ -216,24 +161,26 @@ function App() {
   }, [progress])
 
   useEffect(() => {
-    if (screen === 'home') return
-    setProgress((current) => current.lastLessonSlug === screen
+    if (route.kind !== 'lesson') return
+    setProgress((current) => current.lastLessonSlug === route.slug
       ? current
-      : recordLessonVisit(current, screen))
-  }, [screen])
+      : recordLessonVisit(current, route.slug))
+  }, [route])
 
-  const openLesson = (requestedSlug: string = 'bubble-sort') => {
-    const slug = sortingLessons.some((lesson) => lesson.slug === requestedSlug) ? requestedSlug as LessonSlug : 'bubble-sort'
-    setScreen(slug)
-    window.history.pushState(null, '', `#${slug}`)
+  const navigate = (nextRoute: Exclude<AppRoute, { kind: 'not-found' }>) => {
+    shouldFocusRoute.current = true
+    setRoute(nextRoute)
+    const hash = hashForRoute(nextRoute)
+    window.history.pushState(null, '', hash || `${window.location.pathname}${window.location.search}`)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const openHome = () => {
-    setScreen('home')
-    window.history.pushState(null, '', window.location.pathname)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+  const openLesson = (requestedSlug: string) => {
+    if (isLessonSlug(requestedSlug)) navigate({ kind: 'lesson', slug: requestedSlug })
   }
+
+  const openCatalogue = () => navigate({ kind: 'catalogue', chapterId: 'arrays' })
+  const openHome = () => navigate({ kind: 'home' })
 
   const completeLesson = useCallback((slug: string) => {
     setProgress((current) => recordLessonCompletion(current, slug))
@@ -260,7 +207,18 @@ function App() {
   }, [])
 
   useEffect(() => {
-    const onHistoryChange = () => setScreen(screenFromHash())
+    document.title = titleForRoute(route)
+    if (!shouldFocusRoute.current) return
+
+    document.querySelector<HTMLElement>('[data-route-heading]')?.focus({ preventScroll: true })
+    shouldFocusRoute.current = false
+  }, [route])
+
+  useEffect(() => {
+    const onHistoryChange = () => {
+      shouldFocusRoute.current = true
+      setRoute(routeFromHash(window.location.hash))
+    }
     window.addEventListener('popstate', onHistoryChange)
     window.addEventListener('hashchange', onHistoryChange)
     return () => {
@@ -272,7 +230,7 @@ function App() {
   return (
     <div className="app-shell">
       <header className="topbar">
-        <a className="brand" href="#top" aria-label="Cartesian home" onClick={openHome}>
+        <a className="brand" href="#top" aria-label="Cartesian home" onClick={(event) => { event.preventDefault(); openHome() }}>
           <BookMark />
           <span>
             <strong>Cartesian</strong>
@@ -312,7 +270,7 @@ function App() {
                 disabled={chapter.status === 'locked'}
                 onClick={chapter.id === 'arrays' ? () => {
                   setMenuOpen(false)
-                  openLesson(nextLesson.slug)
+                  openCatalogue()
                 } : undefined}
               >
                 <span>{chapter.number}</span>
@@ -329,17 +287,23 @@ function App() {
       </aside>
       {menuOpen && <button className="drawer-backdrop" type="button" aria-label="Close menu" onClick={() => setMenuOpen(false)} />}
 
-      {screen === 'bubble-sort' ? (
-        <BubbleSortLesson lessons={lessonsWithProgress} onBack={openHome} onOpenLesson={openLesson} onCompleteLesson={completeLesson} />
-      ) : screen === 'selection-sort' ? (
-        <SelectionSortLesson lessons={lessonsWithProgress} onBack={openHome} onOpenLesson={openLesson} onCompleteLesson={completeLesson} />
-      ) : screen === 'insertion-sort' ? (
-        <InsertionSortLesson lessons={lessonsWithProgress} onBack={openHome} onOpenLesson={openLesson} onCompleteLesson={completeLesson} />
+      {CurrentLesson ? (
+        <CurrentLesson lessons={lessonsWithProgress} onBack={openCatalogue} onOpenLesson={openLesson} onCompleteLesson={completeLesson} />
+      ) : route.kind === 'catalogue' ? (
+        <LessonCatalogue
+          lessons={lessonCatalog}
+          completedLessonSlugs={progress.completedLessonSlugs}
+          lastLessonSlug={progress.lastLessonSlug}
+          onBack={openHome}
+          onOpenLesson={openLesson}
+        />
+      ) : route.kind === 'not-found' ? (
+        <NotFoundScreen requestedPath={route.requestedPath} onOpenCatalogue={openCatalogue} onOpenHome={openHome} />
       ) : <main id="top">
         <section className="hero-section">
           <div className="hero-copy">
             <p className="eyebrow"><span /> THE INTERACTIVE HANDBOOK</p>
-            <h1>Don’t just learn algorithms. <em>Watch them think.</em></h1>
+            <h1 data-route-heading tabIndex={-1}>Don’t just learn algorithms. <em>Watch them think.</em></h1>
             <p className="hero-intro">
               Build intuition through visual stories, hands-on experiments, and problems that teach you how to reason—not what to memorize.
             </p>
@@ -365,7 +329,7 @@ function App() {
             <p>Five connected chapters. Forty-nine visual lessons. One stronger problem-solving mind.</p>
           </div>
           <div className="chapter-grid">
-            {chaptersWithProgress.map((chapter) => <ChapterCard chapter={chapter} onOpen={() => openLesson(nextLesson.slug)} key={chapter.id} />)}
+            {chaptersWithProgress.map((chapter) => <ChapterCard chapter={chapter} onOpen={openCatalogue} key={chapter.id} />)}
           </div>
         </section>
 
@@ -377,7 +341,7 @@ function App() {
       </main>}
 
       <footer>
-        <a className="brand footer-brand" href="#top"><BookMark /><strong>Cartesian</strong></a>
+        <a className="brand footer-brand" href="#top" onClick={(event) => { event.preventDefault(); openHome() }}><BookMark /><strong>Cartesian</strong></a>
         <p>Learn the shape of a solution.</p>
         <span>Built for curious problem solvers.</span>
       </footer>

@@ -103,6 +103,43 @@ footer { min-height: 145px; padding: 0 clamp(28px, 7vw, 112px); display: grid; g
 footer p { text-align: center; font-family: 'Playfair Display', serif; font-style: italic; }
 footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
 
+.catalogue-page { min-height: calc(100vh - 82px); padding: 32px clamp(24px, 5vw, 76px) 100px; background-color: var(--paper-deep); background-image: linear-gradient(rgba(54,68,86,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(54,68,86,.03) 1px, transparent 1px); background-size: 32px 32px; }
+.catalogue-heading { min-height: 290px; display: grid; grid-template-columns: minmax(0, 1fr) 190px; gap: 60px; align-items: center; }
+.catalogue-heading .eyebrow { margin-bottom: 16px; }
+.catalogue-heading h1 { margin: 0; font-size: clamp(50px, 7vw, 88px); line-height: .95; letter-spacing: -.065em; }
+.catalogue-heading > div > p:last-child { max-width: 650px; margin: 22px 0 0; color: #686e77; font-size: 14px; line-height: 1.7; }
+.catalogue-progress { padding: 23px; display: grid; grid-template-columns: 1fr auto; align-items: end; border: 1px solid var(--ink); background: var(--paper); box-shadow: 6px 6px 0 var(--coral); transform: rotate(2deg); }
+.catalogue-progress > span { color: #737982; font: 9px var(--mono); }
+.catalogue-progress > strong { font: 27px var(--mono); }
+.catalogue-progress > i { grid-column: 1 / -1; height: 4px; margin-top: 14px; overflow: hidden; background: #e4dfd5; }
+.catalogue-progress > i b { display: block; height: 100%; background: var(--coral); }
+.lesson-catalogue-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.lesson-catalogue-card { min-height: 400px; padding: 23px; display: flex; flex-direction: column; border: 1px solid var(--line); border-top: 4px solid var(--coral); background: var(--paper); box-shadow: 5px 6px 0 rgba(25,32,43,.08); transition: transform 180ms ease, box-shadow 180ms ease; }
+.lesson-catalogue-card:hover { transform: translateY(-5px); box-shadow: 8px 10px 0 rgba(25,32,43,.12); }
+.lesson-catalogue-card.is-complete { border-top-color: #65aa84; }
+.catalogue-card-top { min-height: 25px; display: flex; justify-content: space-between; color: #777c84; font: 8px var(--mono); letter-spacing: .08em; }
+.catalogue-card-top i { color: #4b946c; font-style: normal; }
+.lesson-catalogue-card h2 { margin: 38px 0 13px; font-size: clamp(27px, 2.6vw, 38px); letter-spacing: -.05em; }
+.lesson-catalogue-card p { margin: 0; color: #6a7079; font-size: 11px; line-height: 1.75; }
+.lesson-catalogue-card dl { margin: auto 0 24px; padding-top: 30px; display: grid; grid-template-columns: repeat(3, 1fr); }
+.lesson-catalogue-card dl div { padding: 0 12px; border-left: 1px solid var(--line); }
+.lesson-catalogue-card dl div:first-child { padding-left: 0; border-left: 0; }
+.lesson-catalogue-card dt { color: #878b92; font: 7px var(--mono); letter-spacing: .1em; }
+.lesson-catalogue-card dd { margin: 6px 0 0; font: 11px var(--mono); }
+.lesson-catalogue-card > button { min-height: 44px; padding: 0 13px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--ink); background: var(--ink); color: white; cursor: pointer; font-size: 9px; font-weight: 700; }
+.lesson-catalogue-card > button span { color: var(--coral); font-size: 17px; }
+.catalogue-note { margin-top: 18px; padding: 25px 29px; display: grid; grid-template-columns: 150px minmax(0, 760px); gap: 30px; border: 1px solid var(--line); background: rgba(255,253,248,.68); }
+.catalogue-note span { color: var(--coral); font: 8px var(--mono); letter-spacing: .12em; }
+.catalogue-note p { margin: 0; color: #646a73; font-size: 11px; line-height: 1.75; }
+
+.not-found-page { min-height: calc(100vh - 227px); padding: 100px clamp(24px, 9vw, 145px); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; background-color: var(--paper-deep); background-image: linear-gradient(rgba(54,68,86,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(54,68,86,.035) 1px, transparent 1px); background-size: 32px 32px; }
+.not-found-code { color: var(--coral); font: 12px var(--mono); letter-spacing: .18em; }
+.not-found-page h1 { max-width: 800px; margin: 17px 0; font-size: clamp(47px, 7vw, 88px); line-height: .98; letter-spacing: -.06em; }
+.not-found-page > p:not(.eyebrow) { color: #686e77; font-size: 14px; }
+.not-found-page code { padding: 3px 6px; background: #ebe5da; color: var(--ink); font: 11px var(--mono); }
+.not-found-page > div { margin-top: 30px; display: flex; align-items: center; gap: 25px; }
+.not-found-home { padding: 10px 0; border: 0; border-bottom: 1px solid var(--ink); background: transparent; cursor: pointer; font-size: 10px; font-weight: 700; }
+
 .lesson-page { min-height: calc(100vh - 82px); padding: 32px clamp(24px, 5vw, 76px) 100px; background-color: var(--paper-deep); background-image: linear-gradient(rgba(54,68,86,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(54,68,86,.03) 1px, transparent 1px); background-size: 32px 32px; }
 .lesson-crumbs { display: flex; align-items: center; gap: 12px; color: #858990; font: 9px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
 .lesson-crumbs button { padding: 0; border: 0; background: transparent; color: var(--ink); cursor: pointer; }
@@ -221,6 +258,8 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
   .hero-illustration { min-height: 470px; }
   .chapter-card { grid-column: span 3; }
   .chapter-card:last-child { grid-column: span 6; }
+  .lesson-catalogue-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lesson-catalogue-card:last-child { grid-column: 1 / -1; min-height: 340px; }
   .lesson-workspace { grid-template-columns: 1fr; }
   .visualizer-panel { border-right: 0; }
   .code-panel { min-height: 500px; }
@@ -232,7 +271,7 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 
 @media (max-width: 680px) {
   .topbar { height: 70px; padding: 0 18px; }
-  .brand small, .progress-copy, .icon-button, .menu-button > span, .menu-button kbd { display: none; }
+  .brand small, .progress-copy, .icon-button, .menu-button > span:not(.menu-icon), .menu-button kbd { display: none; }
   .menu-button { width: 42px; justify-content: center; }
   .hero-section { padding: 48px 20px 65px; gap: 25px; }
   .hero-copy h1 { font-size: 45px; }
@@ -254,6 +293,15 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
   footer > span { text-align: center; }
   .footer-brand { justify-content: center; }
   .lesson-page { padding: 22px 14px 70px; }
+  .catalogue-page { padding: 22px 14px 70px; }
+  .catalogue-heading { min-height: 370px; grid-template-columns: 1fr; gap: 28px; padding: 45px 0; }
+  .catalogue-heading h1 { font-size: 53px; }
+  .catalogue-progress { width: 170px; }
+  .lesson-catalogue-grid { grid-template-columns: 1fr; }
+  .lesson-catalogue-card, .lesson-catalogue-card:last-child { grid-column: auto; min-height: 370px; }
+  .catalogue-note { grid-template-columns: 1fr; gap: 12px; }
+  .not-found-page { min-height: calc(100vh - 215px); padding: 75px 22px; }
+  .not-found-page > div { align-items: flex-start; flex-direction: column; }
   .lesson-crumbs span:not(:last-child) { display: none; }
   .lesson-switcher { justify-content: flex-start; margin-top: 22px; overflow-x: auto; }
   .lesson-switcher button { white-space: nowrap; }

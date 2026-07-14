@@ -25,6 +25,7 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 
 - Responsive, book-inspired learning interface
 - Chapter navigation and progress presentation
+- Typed lesson catalogue with a dedicated Arrays & Sorting chapter screen
 - Keyboard-accessible navigation drawer (`M` to toggle, `Escape` to close)
 - Interactive Bubble Sort, Selection Sort, and Insertion Sort lessons
 - Play, pause, replay, previous-step, and next-step controls
@@ -35,6 +36,7 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - Synchronized pseudocode highlighting
 - Step-specific explanations and pass tracking
 - Direct lesson links for each implemented algorithm
+- Browser back/forward support, route-specific titles, and an explicit not-found state
 - Versioned local progress, completion marks, resume behavior, and reset controls
 - Algorithm-specific prediction checkpoints with retryable hints and invariant explanations
 - Reduced-motion support
@@ -51,6 +53,17 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 | Learning path | Bubble Sort lesson |
 | --- | --- |
 | ![Cartesian home on mobile](docs/images/home-mobile.png) | ![Bubble Sort lesson on mobile](docs/images/bubble-sort-mobile.png) |
+
+</details>
+
+<details>
+<summary>Lesson catalogue and routing</summary>
+
+Chapter navigation now opens a progress-aware catalogue derived from the same typed registry used by routing, lesson switching, and persistence validation.
+
+| Desktop | Mobile |
+| --- | --- |
+| ![Arrays and Sorting lesson catalogue](docs/images/lesson-catalogue-desktop.png) | ![Arrays and Sorting lesson catalogue on mobile](docs/images/lesson-catalogue-mobile.png) |
 
 </details>
 
@@ -153,6 +166,7 @@ Vite prints the local development URL after startup.
 Open any implemented lesson directly at:
 
 ```text
+http://localhost:5173/#arrays
 http://localhost:5173/#bubble-sort
 http://localhost:5173/#selection-sort
 http://localhost:5173/#insertion-sort
@@ -203,6 +217,11 @@ cartesian-interactive-algorithms/
 │   └── CONTRIBUTING.md         # Development workflow
 ├── src/
 │   ├── features/
+│   │   ├── catalog/
+│   │   │   ├── curriculum.tsx
+│   │   │   ├── LessonCatalogue.tsx
+│   │   │   ├── NotFoundScreen.tsx
+│   │   │   └── routing.ts
 │   │   ├── learning/
 │   │   │   ├── PredictionCheckpoint.tsx
 │   │   │   └── PredictionCheckpoint.test.tsx
@@ -216,6 +235,7 @@ cartesian-interactive-algorithms/
 │   │       ├── SelectionSortLesson.tsx
 │   │       ├── SortLesson.tsx
 │   │       ├── arrayInput.ts
+│   │       ├── lessonDefinitions.ts
 │   │       ├── sortStep.ts
 │   │       ├── bubbleSort.ts
 │   │       ├── bubbleSort.test.ts
@@ -249,8 +269,9 @@ Pure event-generator tests protect algorithm correctness. They verify:
 - Keyboard-command mapping and modified-shortcut protection
 - Progress schema validation, deduplication, storage failures, save, and reset behavior
 - Custom-array parsing, normalization, size limits, value limits, and duplicate preservation
+- Route parsing, serialization, document titles, unknown paths, and legacy direct links
 
-Component tests exercise prediction attempts, retry behavior, correct-answer locking, explanatory feedback, custom-array apply/cancel flows, accessible validation, and shuffle delegation. The current suite contains 60 passing tests. The next useful UI layer is shared-player coverage for timer behavior and the browser-level keyboard listener around real focused elements.
+Component tests exercise prediction attempts, retry behavior, custom-array flows, catalogue navigation, browser history events, route focus, document titles, and not-found behavior. Registry tests protect route uniqueness, chapter availability, and lesson numbering. The current suite contains 74 passing tests. The next useful UI layer is shared-player coverage for timer behavior and the browser-level keyboard listener around real focused elements.
 
 ## Roadmap
 
@@ -271,7 +292,7 @@ Component tests exercise prediction attempts, retry behavior, correct-answer loc
 - [x] Prediction checkpoints
 - [x] Lesson completion and local progress persistence
 - [x] Accessible keyboard playback controls
-- [ ] Lesson catalogue and routing
+- [x] Lesson catalogue and routing
 - [x] User-provided visualization inputs
 
 ### Curriculum

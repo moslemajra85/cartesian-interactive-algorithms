@@ -96,10 +96,13 @@ Responsibilities:
 
 - Render the handbook identity and learning path
 - Own global chapter-menu state
-- Select the current screen
-- Synchronize the current vertical slice with browser history
+- Select a typed application route
+- Synchronize home, catalogue, lesson, and not-found screens with browser history
+- Update document titles and move focus after client-side navigation
 
-The current hash navigation is intentionally small. A router becomes justified when multiple lessons need parameters, nested layouts, not-found behavior, and route-level loading.
+Route parsing and serialization live in `src/features/catalog/routing.ts`. The application uses a discriminated union rather than arbitrary route strings, so only catalogue-validated lesson slugs can reach lesson rendering or progress persistence. Existing `#bubble-sort`-style links remain valid, while `#arrays` addresses the chapter catalogue and unknown hashes render an explicit recovery screen.
+
+The typed curriculum registry in `src/features/catalog/curriculum.tsx` is the source for lesson routes, switcher labels, chapter counts, progress validation, catalogue cards, and component selection. Educational definitions remain in the sorting feature rather than moving into the routing layer.
 
 ## Event design
 
@@ -144,7 +147,7 @@ Unit tests cover event generators, custom-input parsing, and persistence because
 
 1. Shared player interaction tests for button and timer behavior.
 2. Browser-level focus and accessible-state tests.
-3. One end-to-end lesson flow after a stable lesson catalogue and routing layer exist.
+3. One end-to-end catalogue-to-completion flow in a real browser.
 
 Snapshot-testing the entire page is deliberately avoided. Large markup snapshots are noisy and do not prove that algorithm states are correct.
 
@@ -214,6 +217,6 @@ Pull requests run the same quality gate but cannot upload or deploy the site. Ac
 - **Animation library:** CSS transitions cover the current choreography.
 - **Backend:** progress can begin in local storage.
 - **Content management:** typed local lesson modules are simpler at the current scale.
-- **Router:** direct hash navigation is sufficient for the current lesson family.
+- **Routing library:** the typed hash layer supports the current flat catalogue and works without server fallback configuration on GitHub Pages. A dependency becomes justified for nested layouts, route loaders, or URL parameters.
 
 These are deliberate deferrals, not missing architecture. Each should be revisited when a concrete feature makes the current solution painful.

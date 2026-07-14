@@ -34,6 +34,8 @@ GitHub Actions repeats these checks for pull requests and pushes to `main`. Succ
 
 Sorting event generators may support broader numeric inputs than the interface. The current visualization contract is intentionally narrower: 2–8 whole numbers from 1–99. Change `arrayInput.ts`, its tests, the visible guidance, and responsive bar verification together if that product boundary changes.
 
+Register a new lesson once in `features/catalog/curriculum.tsx` and keep its educational definition in `features/sorting/lessonDefinitions.ts`. Do not add parallel slug checks to `App.tsx`, progress storage, or navigation components; those consumers must continue deriving their behavior from the registry.
+
 Every lesson should also include a prediction checkpoint that tests the algorithm's invariant or decision process. Avoid syntax trivia and questions that can be answered without understanding the visualization.
 
 ## Event quality checklist
