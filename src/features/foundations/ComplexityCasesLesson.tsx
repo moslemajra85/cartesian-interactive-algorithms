@@ -6,6 +6,7 @@ import type { LessonComponentProps } from '../sorting/SortLesson'
 import { createComplexityCaseSteps } from './complexityCases'
 import { complexityCasesLesson as definition } from './complexityCasesLessonDefinition'
 import { FoundationLessonNavigation } from './FoundationLessonNavigation'
+import { InputSizeExperiment } from './InputSizeExperiment'
 
 const cases = [
   { id: 'best', label: 'Best case', detail: 'Target is first', notation: 'Ω(1)' },
@@ -47,6 +48,7 @@ export function ComplexityCasesLesson({ lessons, onBack, onOpenLesson, onComplet
       <section className="growth-workspace case-workspace">
         <div className="growth-panel">
           <div className="panel-label"><span>LINEAR SEARCH · n = {step.inputSize}</span><i>Comparison count</i></div>
+          <InputSizeExperiment value={step.inputSize} min={1} max={steps.length} onChange={(value) => playback.moveTo(value - 1)} />
           <div
             className="growth-bars case-bars"
             aria-label={`At input ${step.inputSize}: best case ${step.best}, average case ${formatCount(step.average)}, worst case ${step.worst} comparisons`}

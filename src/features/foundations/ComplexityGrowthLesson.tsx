@@ -6,6 +6,7 @@ import type { LessonComponentProps } from '../sorting/SortLesson'
 import { createComplexityGrowthSteps, type GrowthRateId } from './complexityGrowth'
 import { complexityGrowthLesson as definition } from './complexityGrowthLessonDefinition'
 import { FoundationLessonNavigation } from './FoundationLessonNavigation'
+import { InputSizeExperiment } from './InputSizeExperiment'
 
 const growthRates: readonly { id: GrowthRateId; label: string; notation: string; detail: string }[] = [
   { id: 'constant', label: 'Constant', notation: 'O(1)', detail: 'One action regardless of input size' },
@@ -45,6 +46,7 @@ export function ComplexityGrowthLesson({ lessons, onBack, onOpenLesson, onComple
       <section className="growth-workspace">
         <div className="growth-panel">
           <div className="panel-label"><span>WORK UNITS AT INPUT n = {step.inputSize}</span><i>Relative scale</i></div>
+          <InputSizeExperiment value={step.inputSize} min={1} max={steps.length} onChange={(value) => playback.moveTo(value - 1)} />
           <div className="growth-bars" aria-label={`Operation counts for input size ${step.inputSize}`}>
             {growthRates.map((rate) => {
               const count = step.operations[rate.id]

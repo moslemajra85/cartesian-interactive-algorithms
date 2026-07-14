@@ -6,6 +6,7 @@ import type { LessonComponentProps } from '../sorting/SortLesson'
 import { createOperationCountingSteps } from './countingOperations'
 import { countingOperationsLesson as definition } from './countingOperationsLessonDefinition'
 import { FoundationLessonNavigation } from './FoundationLessonNavigation'
+import { InputSizeExperiment } from './InputSizeExperiment'
 
 export function CountingOperationsLesson({ lessons, onBack, onOpenLesson, onCompleteLesson }: LessonComponentProps) {
   const steps = useMemo(() => createOperationCountingSteps(), [])
@@ -37,6 +38,7 @@ export function CountingOperationsLesson({ lessons, onBack, onOpenLesson, onComp
       <section className="growth-workspace operation-workspace">
         <div className="growth-panel">
           <div className="panel-label"><span>EXACT WORK · n = {step.inputSize}</span><i>2n + 3 operations</i></div>
+          <InputSizeExperiment value={step.inputSize} min={1} max={steps.length} onChange={(value) => playback.moveTo(value - 1)} />
           <div className="operation-stage">
             <div className="operation-total" aria-label={`${step.total} total operations: ${step.setup} setup, ${step.firstPass} first pass, ${step.secondPass} second pass`}>
               <div><span>Exact count</span><strong>{step.total}</strong><code>2({step.inputSize}) + 3</code></div>

@@ -4,6 +4,7 @@ import { PredictionCheckpoint } from '../learning/PredictionCheckpoint'
 import { useStepPlayback } from '../learning/useStepPlayback'
 import type { LessonComponentProps } from '../sorting/SortLesson'
 import { FoundationLessonNavigation } from './FoundationLessonNavigation'
+import { InputSizeExperiment } from './InputSizeExperiment'
 import { createSpaceComplexitySteps } from './spaceComplexity'
 import { spaceComplexityLesson as definition } from './spaceComplexityLessonDefinition'
 
@@ -45,6 +46,7 @@ export function SpaceComplexityLesson({ lessons, onBack, onOpenLesson, onComplet
       <section className="growth-workspace space-workspace">
         <div className="growth-panel">
           <div className="panel-label"><span>MEMORY CELLS · n = {step.inputSize}</span><i>Auxiliary space comparison</i></div>
+          <InputSizeExperiment value={step.inputSize} min={1} max={steps.length} onChange={(value) => playback.moveTo(value - 1)} />
           <div
             className="memory-stage"
             aria-label={`Input uses ${step.inputCells} cells. In-place workspace uses ${step.inPlaceExtraCells} extra cell. Copying workspace uses ${step.copiedExtraCells} extra cells.`}

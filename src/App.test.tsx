@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { cleanup, render, screen, waitFor } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from './App'
 
@@ -37,6 +37,10 @@ describe('application routing', () => {
     await user.click(screen.getByRole('button', { name: '04 · Cases & Guarantees' }))
     expect(window.location.hash).toBe('#complexity-cases')
     expect(screen.getByRole('heading', { level: 1, name: 'Cases & Guarantees' })).toBeTruthy()
+
+    fireEvent.change(screen.getByRole('slider', { name: 'Experiment with input size' }), { target: { value: '8' } })
+    expect(screen.getByText('LINEAR SEARCH · n = 8')).toBeTruthy()
+    expect(screen.getByRole('slider').getAttribute('aria-valuetext')).toBe('8 items')
   })
 
   it('opens the catalogue and lesson from registry-derived navigation', async () => {
