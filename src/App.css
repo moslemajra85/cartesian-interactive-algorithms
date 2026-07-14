@@ -193,6 +193,22 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 .operation-conclusion em { border-color: var(--coral); background: var(--coral); color: white; }
 .operation-code ol { margin-top: 28px; }
 .operation-code li { min-height: 90px; }
+.memory-stage { min-height: 390px; padding: 36px 34px; display: grid; align-content: center; gap: 17px; background-image: linear-gradient(rgba(54,68,86,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(54,68,86,.05) 1px, transparent 1px); background-size: 23px 23px; }
+.memory-row { display: grid; grid-template-columns: 105px minmax(0, 1fr) 30px; align-items: center; gap: 13px; }
+.memory-row > div:first-child { display: grid; gap: 5px; }
+.memory-row strong { font-size: 10px; }
+.memory-row code { color: #747983; background: transparent; font: 7px var(--mono); text-transform: uppercase; }
+.memory-row > b { font: 11px var(--mono); text-align: right; }
+.memory-cells { min-height: 44px; display: flex; align-items: stretch; gap: 4px; }
+.memory-cells i { min-width: 20px; flex: 0 1 46px; display: grid; place-items: center; border: 1px solid var(--ink); background: var(--cell-color); color: var(--cell-text, var(--ink)); font: 7px var(--mono); font-style: normal; animation: memory-cell-in 280ms ease-out both; }
+.memory-cells i:nth-child(2) { animation-delay: 25ms; }.memory-cells i:nth-child(3) { animation-delay: 50ms; }.memory-cells i:nth-child(4) { animation-delay: 75ms; }.memory-cells i:nth-child(5) { animation-delay: 100ms; }.memory-cells i:nth-child(6) { animation-delay: 125ms; }.memory-cells i:nth-child(7) { animation-delay: 150ms; }.memory-cells i:nth-child(8) { animation-delay: 175ms; }
+.memory-cells.tone-input { --cell-color: #e7e2d8; }
+.memory-cells.tone-constant { --cell-color: #65aa84; --cell-text: white; }
+.memory-cells.tone-linear { --cell-color: var(--coral); --cell-text: white; }
+.memory-divider { display: flex; align-items: center; gap: 12px; color: #747983; font: 7px var(--mono); letter-spacing: .1em; }
+.memory-divider::before, .memory-divider::after { content: ''; height: 1px; flex: 1; background: var(--line); }
+.input-memory { opacity: .72; }
+.space-guide li { min-height: 90px; }
 
 .not-found-page { min-height: calc(100vh - 227px); padding: 100px clamp(24px, 9vw, 145px); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; background-color: var(--paper-deep); background-image: linear-gradient(rgba(54,68,86,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(54,68,86,.035) 1px, transparent 1px); background-size: 32px 32px; }
 .not-found-code { color: var(--coral); font: 12px var(--mono); letter-spacing: .18em; }
@@ -368,6 +384,7 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 @keyframes playback-pulse { to { box-shadow: 0 0 0 7px rgba(255,101,92,0); } }
 @keyframes playing-mark { to { opacity: .45; } }
 @keyframes midpoint-focus { from { transform: translateY(2px) scale(.94); } 65% { transform: translateY(-12px) scale(1.04); } to { transform: translateY(-8px) scale(1); } }
+@keyframes memory-cell-in { from { opacity: .35; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 
 @media (max-width: 980px) {
   .hero-section { min-height: auto; grid-template-columns: 1fr; padding-top: 65px; }
@@ -425,6 +442,11 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
   .operation-stage { min-height: 360px; padding: 38px 18px; gap: 38px; }
   .operation-conclusion { gap: 4px; }
   .operation-conclusion span, .operation-conclusion strong, .operation-conclusion em { padding: 7px 5px; font-size: 8px; }
+  .memory-stage { min-height: 360px; padding: 30px 16px; }
+  .memory-row { grid-template-columns: 78px minmax(0, 1fr) 22px; gap: 7px; }
+  .memory-row strong { font-size: 8px; }
+  .memory-cells { gap: 2px; }
+  .memory-cells i { min-width: 10px; font-size: 6px; }
   .lesson-catalogue-card, .lesson-catalogue-card:last-child:nth-child(odd) { grid-column: auto; min-height: 370px; }
   .catalogue-note { grid-template-columns: 1fr; gap: 12px; }
   .not-found-page { min-height: calc(100vh - 215px); padding: 75px 22px; }
