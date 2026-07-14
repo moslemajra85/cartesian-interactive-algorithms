@@ -14,11 +14,24 @@ beforeEach(() => {
 afterEach(cleanup)
 
 describe('application routing', () => {
+  it('opens the Foundations catalogue and its first lesson', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByRole('button', { name: 'Start chapter: The Foundations' }))
+    expect(window.location.hash).toBe('#foundations')
+    expect(screen.getByRole('heading', { level: 1, name: 'The Foundations' })).toBeTruthy()
+
+    await user.click(screen.getByRole('button', { name: 'Start Growth of Work' }))
+    expect(window.location.hash).toBe('#complexity-growth')
+    expect(screen.getByRole('heading', { level: 1, name: 'Growth of Work' })).toBeTruthy()
+  })
+
   it('opens the catalogue and lesson from registry-derived navigation', async () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByRole('button', { name: 'Start chapter' }))
+    await user.click(screen.getByRole('button', { name: 'Start chapter: Arrays & Sorting' }))
     const catalogueHeading = screen.getByRole('heading', { level: 1, name: 'Arrays & Sorting' })
     expect(window.location.hash).toBe('#arrays')
     expect(document.title).toBe('Arrays & Sorting — Cartesian')
@@ -50,5 +63,39 @@ describe('application routing', () => {
     expect(screen.getByText('#unknown-lesson')).toBeTruthy()
     await waitFor(() => expect(document.title).toBe('Page not found — Cartesian'))
     expect(window.localStorage.getItem('cartesian.learning-progress.v1')).toContain('"lastLessonSlug":null')
+  })
+})
+
+describe('lesson search', () => {
+  it('filters lessons and opens the selected result', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByRole('button', { name: 'Search lessons' }))
+    const searchInput = screen.getByRole('searchbox', { name: 'Search by algorithm or idea' })
+    expect(document.activeElement).toBe(searchInput)
+
+    await user.type(searchInput, 'merge')
+    expect(screen.getByRole('button', { name: /Merge Sort/ })).toBeTruthy()
+    expect(screen.queryByRole('button', { name: /Bubble Sort/ })).toBeNull()
+
+    await user.click(screen.getByRole('button', { name: /Merge Sort/ }))
+    expect(window.location.hash).toBe('#merge-sort')
+    expect(screen.getByRole('heading', { level: 1, name: 'Merge Sort' })).toBeTruthy()
+    expect(screen.queryByRole('searchbox')).toBeNull()
+  })
+
+  it('closes with Escape and restores focus without triggering the menu shortcut while typing', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    const searchButton = screen.getByRole('button', { name: 'Search lessons' })
+    await user.click(searchButton)
+    await user.type(screen.getByRole('searchbox'), 'm')
+    expect(screen.getByRole('button', { name: 'Chapters' }).getAttribute('aria-expanded')).toBe('false')
+
+    await user.keyboard('{Escape}')
+    await waitFor(() => expect(document.activeElement).toBe(searchButton))
+    expect(screen.queryByRole('searchbox')).toBeNull()
   })
 })

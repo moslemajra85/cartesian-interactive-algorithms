@@ -18,7 +18,8 @@ describe('curriculum registry', () => {
 
   it('keeps catalogue ordering aligned with educational lesson labels', () => {
     for (const lesson of lessonCatalog) {
-      expect(lesson.definition.lessonLabel).toBe(`LESSON 02.${lesson.order}`)
+      const chapter = chapterCatalog.find((candidate) => candidate.id === lesson.chapterId)!
+      expect(lesson.definition.lessonLabel).toBe(`LESSON ${chapter.number}.${lesson.order}`)
     }
   })
 })

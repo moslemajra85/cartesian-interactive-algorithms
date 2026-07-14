@@ -4,11 +4,13 @@ import { LessonCatalogue } from './features/catalog/LessonCatalogue'
 import { NotFoundScreen } from './features/catalog/NotFoundScreen'
 import {
   chapterCatalog,
+  findChapter,
   findLesson,
   isLessonSlug,
   lessonCatalog,
   lessonSlugs,
   type ChapterDefinition,
+  type ChapterId,
 } from './features/catalog/curriculum'
 import { hashForRoute, routeFromHash, titleForRoute, type AppRoute } from './features/catalog/routing'
 import {
@@ -21,7 +23,7 @@ import {
 } from './features/progress/learningProgress'
 import type { LessonLink } from './features/sorting/SortLesson'
 
-const sortingLessons: LessonLink[] = [
+const availableLessons: LessonLink[] = [
   ...lessonCatalog.map((lesson) => ({
     slug: lesson.definition.slug,
     label: `${lesson.order} · ${lesson.definition.title}`,
@@ -94,6 +96,12 @@ function HeroIllustration() {
 }
 
 function ChapterCard({ chapter, onOpen }: { chapter: ChapterView; onOpen: () => void }) {
+  const action = chapter.status === 'locked'
+    ? 'Coming in a future milestone'
+    : chapter.progress === 100 ? 'Review chapter'
+    : chapter.progress ? 'Continue chapter'
+    : 'Start chapter'
+
   return (
     <article className={`chapter-card tone-${chapter.tone}`}>
       <div className="chapter-card-top">
@@ -113,8 +121,8 @@ function ChapterCard({ chapter, onOpen }: { chapter: ChapterView; onOpen: () => 
       <div className="progress-track" aria-label={`${chapter.progress}% complete`}>
         <span style={{ width: `${chapter.progress}%` }} />
       </div>
-      <button className="card-link" type="button" disabled={chapter.status === 'locked'} onClick={chapter.id === 'arrays' ? onOpen : undefined}>
-        {chapter.status === 'locked' ? 'Coming in a future milestone' : chapter.progress === 100 ? 'Review chapter' : chapter.progress ? 'Continue chapter' : 'Start chapter'}
+      <button className="card-link" type="button" disabled={chapter.status === 'locked'} onClick={chapter.status !== 'locked' ? onOpen : undefined} aria-label={`${action}: ${chapter.title}`}>
+        {action}
         <span aria-hidden="true">→</span>
       </button>
     </article>
@@ -123,34 +131,56 @@ function ChapterCard({ chapter, onOpen }: { chapter: ChapterView; onOpen: () => 
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const [route, setRoute] = useState<AppRoute>(() => routeFromHash(window.location.hash))
   const [progress, setProgress] = useState(loadBrowserProgress)
   const shouldFocusRoute = useRef(false)
+  const searchButtonRef = useRef<HTMLButtonElement>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
   const completedLessonCount = progress.completedLessonSlugs.length
-  const sortingProgress = Math.round((completedLessonCount / sortingLessons.length) * 100)
-  const chaptersWithProgress: ChapterView[] = chapterCatalog.map((chapter) => ({
-    ...chapter,
-    lessons: chapter.id === 'arrays'
-      ? lessonCatalog.filter((lesson) => lesson.chapterId === chapter.id).length
-      : chapter.plannedLessonCount,
-    progress: chapter.id === 'arrays' ? sortingProgress : 0,
-    status: chapter.availability === 'locked'
-      ? 'locked'
-      : sortingProgress === 100 ? 'completed' : 'current',
-  }))
-  const lessonsWithProgress = sortingLessons.map((lesson) => ({
-    ...lesson,
-    completed: progress.completedLessonSlugs.includes(lesson.slug),
-  }))
+  const chaptersWithProgress: ChapterView[] = chapterCatalog.map((chapter) => {
+    const chapterLessons = lessonCatalog.filter((lesson) => lesson.chapterId === chapter.id)
+    const chapterCompletedCount = chapterLessons.filter((lesson) => progress.completedLessonSlugs.includes(lesson.definition.slug)).length
+    const chapterProgress = chapterLessons.length ? Math.round((chapterCompletedCount / chapterLessons.length) * 100) : 0
+
+    return {
+      ...chapter,
+      lessons: chapter.availability === 'available' ? chapterLessons.length : chapter.plannedLessonCount,
+      progress: chapterProgress,
+      status: chapter.availability === 'locked'
+        ? 'locked'
+        : chapterProgress === 100 ? 'completed' : 'current',
+    }
+  })
   const lastUnfinishedLesson = progress.lastLessonSlug
     && !progress.completedLessonSlugs.includes(progress.lastLessonSlug)
-    ? sortingLessons.find((lesson) => lesson.slug === progress.lastLessonSlug)
+    ? availableLessons.find((lesson) => lesson.slug === progress.lastLessonSlug)
     : null
   const nextLesson = lastUnfinishedLesson
-    ?? sortingLessons.find((lesson) => !progress.completedLessonSlugs.includes(lesson.slug))
-    ?? sortingLessons.at(-1)!
+    ?? availableLessons.find((lesson) => !progress.completedLessonSlugs.includes(lesson.slug))
+    ?? availableLessons.at(-1)!
   const currentLesson = route.kind === 'lesson' ? findLesson(route.slug) : undefined
   const CurrentLesson = currentLesson?.component
+  const currentChapterLessons = currentLesson
+    ? lessonCatalog
+      .filter((lesson) => lesson.chapterId === currentLesson.chapterId)
+      .map((lesson) => ({
+        slug: lesson.definition.slug,
+        label: `${lesson.order} · ${lesson.definition.title}`,
+        completed: progress.completedLessonSlugs.includes(lesson.definition.slug),
+      }))
+    : []
+  const selectedChapter = route.kind === 'catalogue' ? findChapter(route.chapterId) : undefined
+  const selectedChapterLessons = route.kind === 'catalogue'
+    ? lessonCatalog.filter((lesson) => lesson.chapterId === route.chapterId)
+    : []
+  const normalizedSearchQuery = searchQuery.trim().toLowerCase()
+  const searchResults = lessonCatalog.filter(({ definition }) => (
+    !normalizedSearchQuery
+    || definition.title.toLowerCase().includes(normalizedSearchQuery)
+    || definition.tagline.toLowerCase().includes(normalizedSearchQuery)
+  ))
 
   useEffect(() => {
     try {
@@ -176,10 +206,13 @@ function App() {
   }
 
   const openLesson = (requestedSlug: string) => {
-    if (isLessonSlug(requestedSlug)) navigate({ kind: 'lesson', slug: requestedSlug })
+    if (isLessonSlug(requestedSlug)) {
+      setSearchOpen(false)
+      navigate({ kind: 'lesson', slug: requestedSlug })
+    }
   }
 
-  const openCatalogue = () => navigate({ kind: 'catalogue', chapterId: 'arrays' })
+  const openCatalogue = (chapterId: ChapterId) => navigate({ kind: 'catalogue', chapterId })
   const openHome = () => navigate({ kind: 'home' })
 
   const completeLesson = useCallback((slug: string) => {
@@ -196,15 +229,43 @@ function App() {
     setProgress(createEmptyProgress())
   }
 
+  const openSearch = () => {
+    setMenuOpen(false)
+    setSearchQuery('')
+    setSearchOpen(true)
+  }
+
+  const closeSearch = (restoreFocus = true) => {
+    setSearchOpen(false)
+    if (restoreFocus) window.setTimeout(() => searchButtonRef.current?.focus(), 0)
+  }
+
+  useEffect(() => {
+    if (searchOpen) searchInputRef.current?.focus()
+  }, [searchOpen])
+
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key.toLowerCase() === 'm') setMenuOpen((current) => !current)
-      if (event.key === 'Escape') setMenuOpen(false)
+      if (event.key === 'Escape') {
+        if (searchOpen) closeSearch()
+        setMenuOpen(false)
+        return
+      }
+
+      const target = event.target
+      const hasInteractiveFocus = target instanceof Element
+        && target.closest('button, a, input, textarea, select, [contenteditable="true"]') !== null
+      if (hasInteractiveFocus || event.ctrlKey || event.metaKey || event.altKey) return
+
+      if (event.key.toLowerCase() === 'm') {
+        setSearchOpen(false)
+        setMenuOpen((current) => !current)
+      }
     }
 
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [])
+  }, [searchOpen])
 
   useEffect(() => {
     document.title = titleForRoute(route)
@@ -239,14 +300,26 @@ function App() {
         </a>
 
         <nav className="top-actions" aria-label="Primary navigation">
-          <span className="progress-copy"><b>{completedLessonCount}</b> of {sortingLessons.length} lessons</span>
-          <button className="icon-button" type="button" aria-label="Open search">
+          <span className="progress-copy"><b>{completedLessonCount}</b> of {availableLessons.length} lessons</span>
+          <button
+            className="icon-button"
+            type="button"
+            aria-label="Search lessons"
+            aria-expanded={searchOpen}
+            aria-controls="lesson-search"
+            onClick={searchOpen ? () => closeSearch() : openSearch}
+            ref={searchButtonRef}
+          >
             <span aria-hidden="true">⌕</span>
           </button>
           <button
             className="menu-button"
             type="button"
-            onClick={() => setMenuOpen((current) => !current)}
+            aria-label="Chapters"
+            onClick={() => {
+              setSearchOpen(false)
+              setMenuOpen((current) => !current)
+            }}
             aria-expanded={menuOpen}
             aria-controls="chapter-menu"
           >
@@ -256,6 +329,42 @@ function App() {
           </button>
         </nav>
       </header>
+
+      {searchOpen && (
+        <section id="lesson-search" className="lesson-search" aria-label="Search lessons">
+          <div className="lesson-search-heading">
+            <div>
+              <span>FIND A LESSON</span>
+              <strong>What do you want to understand?</strong>
+            </div>
+            <button type="button" onClick={() => closeSearch()} aria-label="Close lesson search">×</button>
+          </div>
+          <label htmlFor="lesson-search-input">Search by algorithm or idea</label>
+          <input
+            id="lesson-search-input"
+            type="search"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            placeholder="Try “merge” or “search”"
+            autoComplete="off"
+            ref={searchInputRef}
+          />
+          {searchResults.length > 0 ? (
+            <ul aria-label="Matching lessons">
+              {searchResults.map(({ order, definition }) => (
+                <li key={definition.slug}>
+                  <button type="button" onClick={() => openLesson(definition.slug)}>
+                    <span>{order}</span>
+                    <span><strong>{definition.title}</strong><small>{definition.tagline}</small></span>
+                    <i aria-hidden="true">→</i>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : <p role="status">No lesson matches “{searchQuery.trim()}”.</p>}
+        </section>
+      )}
+      {searchOpen && <button className="search-backdrop" type="button" aria-label="Close lesson search" onClick={() => closeSearch()} />}
 
       <aside id="chapter-menu" className={`chapter-drawer ${menuOpen ? 'is-open' : ''}`} aria-hidden={!menuOpen}>
         <div className="drawer-heading">
@@ -268,9 +377,9 @@ function App() {
               <button
                 type="button"
                 disabled={chapter.status === 'locked'}
-                onClick={chapter.id === 'arrays' ? () => {
+                onClick={chapter.availability === 'available' ? () => {
                   setMenuOpen(false)
-                  openCatalogue()
+                  openCatalogue(chapter.id)
                 } : undefined}
               >
                 <span>{chapter.number}</span>
@@ -288,17 +397,23 @@ function App() {
       {menuOpen && <button className="drawer-backdrop" type="button" aria-label="Close menu" onClick={() => setMenuOpen(false)} />}
 
       {CurrentLesson ? (
-        <CurrentLesson lessons={lessonsWithProgress} onBack={openCatalogue} onOpenLesson={openLesson} onCompleteLesson={completeLesson} />
-      ) : route.kind === 'catalogue' ? (
+        <CurrentLesson
+          lessons={currentChapterLessons}
+          onBack={() => openCatalogue(currentLesson.chapterId)}
+          onOpenLesson={openLesson}
+          onCompleteLesson={completeLesson}
+        />
+      ) : route.kind === 'catalogue' && selectedChapter ? (
         <LessonCatalogue
-          lessons={lessonCatalog}
+          chapter={selectedChapter}
+          lessons={selectedChapterLessons}
           completedLessonSlugs={progress.completedLessonSlugs}
           lastLessonSlug={progress.lastLessonSlug}
           onBack={openHome}
           onOpenLesson={openLesson}
         />
       ) : route.kind === 'not-found' ? (
-        <NotFoundScreen requestedPath={route.requestedPath} onOpenCatalogue={openCatalogue} onOpenHome={openHome} />
+        <NotFoundScreen requestedPath={route.requestedPath} onOpenCatalogue={() => openCatalogue('arrays')} onOpenHome={openHome} />
       ) : <main id="top">
         <section className="hero-section">
           <div className="hero-copy">
@@ -312,7 +427,7 @@ function App() {
                 {completedLessonCount ? 'Continue learning' : 'Start learning'} <span aria-hidden="true">→</span>
               </button>
               <span className="resume-note">
-                <b>{lastUnfinishedLesson ? 'Resume' : completedLessonCount === sortingLessons.length ? 'Review' : 'Up next'}</b>
+                <b>{lastUnfinishedLesson ? 'Resume' : completedLessonCount === availableLessons.length ? 'Review' : 'Up next'}</b>
                 {nextLesson.label.replace(/^\d+ · /, '')}
               </span>
             </div>
@@ -326,10 +441,10 @@ function App() {
               <p className="eyebrow"><span /> YOUR LEARNING PATH</p>
               <h2 id="path-title">From first principles to graph thinking.</h2>
             </div>
-            <p>Five connected chapters. Forty-nine visual lessons. One stronger problem-solving mind.</p>
+            <p>Five connected chapters. Forty-five visual lessons. One stronger problem-solving mind.</p>
           </div>
           <div className="chapter-grid">
-            {chaptersWithProgress.map((chapter) => <ChapterCard chapter={chapter} onOpen={openCatalogue} key={chapter.id} />)}
+            {chaptersWithProgress.map((chapter) => <ChapterCard chapter={chapter} onOpen={() => openCatalogue(chapter.id)} key={chapter.id} />)}
           </div>
         </section>
 

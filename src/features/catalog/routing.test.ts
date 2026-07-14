@@ -7,7 +7,9 @@ describe('catalogue routing', () => {
   })
 
   it('maps the chapter catalogue and preserves existing lesson hashes', () => {
+    expect(routeFromHash('#foundations')).toEqual({ kind: 'catalogue', chapterId: 'foundations' })
     expect(routeFromHash('#arrays')).toEqual({ kind: 'catalogue', chapterId: 'arrays' })
+    expect(routeFromHash('#complexity-growth')).toEqual({ kind: 'lesson', slug: 'complexity-growth' })
     expect(routeFromHash('#bubble-sort')).toEqual({ kind: 'lesson', slug: 'bubble-sort' })
     expect(routeFromHash('#/selection-sort/')).toEqual({ kind: 'lesson', slug: 'selection-sort' })
     expect(routeFromHash('#merge-sort')).toEqual({ kind: 'lesson', slug: 'merge-sort' })
@@ -20,16 +22,19 @@ describe('catalogue routing', () => {
 
   it('serializes navigable routes', () => {
     expect(hashForRoute({ kind: 'home' })).toBe('')
+    expect(hashForRoute({ kind: 'catalogue', chapterId: 'foundations' })).toBe('#foundations')
     expect(hashForRoute({ kind: 'catalogue', chapterId: 'arrays' })).toBe('#arrays')
     expect(hashForRoute({ kind: 'lesson', slug: 'insertion-sort' })).toBe('#insertion-sort')
   })
 
   it('derives document titles from the catalogue', () => {
     expect(titleForRoute({ kind: 'home' })).toBe('Cartesian — Interactive Algorithms')
+    expect(titleForRoute({ kind: 'catalogue', chapterId: 'foundations' })).toBe('The Foundations — Cartesian')
     expect(titleForRoute({ kind: 'catalogue', chapterId: 'arrays' })).toBe('Arrays & Sorting — Cartesian')
     expect(titleForRoute({ kind: 'lesson', slug: 'selection-sort' })).toBe('Selection Sort — Cartesian')
     expect(titleForRoute({ kind: 'lesson', slug: 'merge-sort' })).toBe('Merge Sort — Cartesian')
     expect(titleForRoute({ kind: 'lesson', slug: 'binary-search' })).toBe('Binary Search — Cartesian')
+    expect(titleForRoute({ kind: 'lesson', slug: 'complexity-growth' })).toBe('Growth of Work — Cartesian')
     expect(titleForRoute({ kind: 'not-found', requestedPath: 'missing' })).toBe('Page not found — Cartesian')
   })
 })

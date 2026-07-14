@@ -50,7 +50,7 @@ Responsibilities:
 
 It must not import React, access the DOM, start timers, or choose colors.
 
-### Shared playback and array visualization
+### Shared playback and visualization
 
 Locations: `src/features/learning/useStepPlayback.ts`, `src/features/sorting/ArrayVisualizer.tsx`, and `src/features/sorting/SortLesson.tsx`
 
@@ -62,7 +62,7 @@ Responsibilities:
 - Render common semantic array state in memory-tape and magnitude-bar views
 - Keep visualization, pseudocode, and narration synchronized
 
-Bubble Sort, Selection Sort, Insertion Sort, and Merge Sort use the configurable `SortLesson`. Binary Search has a dedicated lesson shell because it owns a target as well as an array, but reuses the same playback hook and `ArrayVisualizer`. This second concrete use case justified extracting those smaller primitives without forcing unlike input models into one oversized component.
+Bubble Sort, Selection Sort, Insertion Sort, and Merge Sort use the configurable `SortLesson`. Binary Search has a dedicated lesson shell because it owns a target as well as an array, but reuses the same playback hook and `ArrayVisualizer`. The Foundations growth-rate lesson also reuses playback while rendering a different work-unit comparison. These concrete use cases keep time control shared without forcing unlike visual models into one oversized component.
 
 The algorithm-specific wrapper components contain educational content rather than playback mechanics. This keeps lesson configuration explicit while preventing duplicated visualization code.
 
@@ -108,7 +108,7 @@ Responsibilities:
 
 Route parsing and serialization live in `src/features/catalog/routing.ts`. The application uses a discriminated union rather than arbitrary route strings, so only catalogue-validated lesson slugs can reach lesson rendering or progress persistence. Existing `#bubble-sort`-style links remain valid, while `#arrays` addresses the chapter catalogue and unknown hashes render an explicit recovery screen.
 
-The typed curriculum registry in `src/features/catalog/curriculum.tsx` is the source for lesson routes, switcher labels, chapter counts, progress validation, catalogue cards, and component selection. Educational definitions remain in the sorting feature rather than moving into the routing layer.
+The typed curriculum registry in `src/features/catalog/curriculum.tsx` is the source for available chapter routes, lesson routes, switcher labels, chapter counts, progress validation, catalogue copy, cards, and component selection. Each chapter catalogue is rendered from the same component and filtered registry; adding a chapter does not add another App-level route branch. Educational definitions remain in their feature folders rather than moving into the routing layer.
 
 ## Event design
 
@@ -226,9 +226,7 @@ Current foundations:
 
 Known gaps:
 
-- Bar-state changes need richer screen-reader descriptions.
-- Focus should move predictably when navigating between lessons.
-- Color states should gain shape or label redundancy in the visualization itself.
+- Screen-reader behavior still needs manual verification with multiple browser and assistive-technology combinations.
 
 ## Performance
 

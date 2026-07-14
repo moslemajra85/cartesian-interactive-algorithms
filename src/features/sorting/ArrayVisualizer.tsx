@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import { describeArrayStep } from './describeArrayStep'
 import type { SortStep } from './sortStep'
 
 export type ArrayVisualizationMode = 'in-place' | 'merge' | 'search'
@@ -24,6 +25,12 @@ export function ArrayVisualizer({ step, playing, mode = 'in-place' }: ArrayVisua
     const arrivesFromRight = swapped && index === step.swapped?.[0]
     const arrivesFromLeft = swapped && index === step.swapped?.[1]
     const swapDistance = step.swapped ? Math.abs(step.swapped[1] - step.swapped[0]) * 112 : 0
+    const stateLabel = sorted
+      ? mode === 'search' ? 'FOUND' : 'ORDERED'
+      : swapped ? 'MOVED'
+      : merged ? 'MERGED'
+      : compared ? mode === 'search' ? 'MID' : 'CHECK'
+      : !inActiveRange && mode === 'search' ? 'OUT' : null
 
     return {
       classes: [
@@ -37,6 +44,7 @@ export function ArrayVisualizer({ step, playing, mode = 'in-place' }: ArrayVisua
         sorted && 'is-sorted',
       ].filter(Boolean).join(' '),
       startsRightHalf,
+      stateLabel,
       style: {
         '--item-index': index,
         '--swap-from': `${arrivesFromRight ? swapDistance : arrivesFromLeft ? -swapDistance : 0}%`,
@@ -69,16 +77,19 @@ export function ArrayVisualizer({ step, playing, mode = 'in-place' }: ArrayVisua
           })}
         </div>
       </div>
-      <div className="sort-bars" aria-label={`Current array: ${step.values.join(', ')}`}>
+      <div className="sort-bars" role="img" aria-label={describeArrayStep(step)}>
         {step.values.map((value, index) => {
           const visualState = visualStateFor(index)
 
           return (
-            <div className={`bar-slot ${visualState.startsRightHalf ? 'starts-right-half' : ''}`} key={index}>
+            <div className={`bar-slot ${visualState.startsRightHalf ? 'starts-right-half' : ''}`} aria-hidden="true" key={index}>
               <div
                 className={`sort-bar ${visualState.classes}`.trim()}
                 style={{ ...visualState.style, height: `${30 + (value / maxValue) * 68}%` }}
-              ><strong>{value}</strong></div>
+              >
+                <strong>{value}</strong>
+                {visualState.stateLabel && <small className="bar-state-marker">{visualState.stateLabel}</small>}
+              </div>
               <span>{index}</span>
             </div>
           )
