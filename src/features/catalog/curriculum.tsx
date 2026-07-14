@@ -15,6 +15,8 @@ import { BinarySearchLesson } from '../searching/BinarySearchLesson'
 import { binarySearchLesson } from '../searching/binarySearchLessonDefinition'
 import { LinkedInsertionLesson } from '../linked/LinkedInsertionLesson'
 import { linkedInsertionLesson } from '../linked/linkedInsertionLessonDefinition'
+import { LinkedDeletionLesson } from '../linked/LinkedDeletionLesson'
+import { linkedDeletionLesson } from '../linked/linkedDeletionLessonDefinition'
 import { BubbleSortLesson } from '../sorting/BubbleSortLesson'
 import { InsertionSortLesson } from '../sorting/InsertionSortLesson'
 import { MergeSortLesson } from '../sorting/MergeSortLesson'
@@ -88,6 +90,7 @@ const catalogEntries = [
   { order: '06', chapterId: 'arrays', definition: mergeSortLesson, component: MergeSortLesson },
   { order: '07', chapterId: 'arrays', definition: binarySearchLesson, component: BinarySearchLesson },
   { order: '01', chapterId: 'linked-lists', definition: linkedInsertionLesson, component: LinkedInsertionLesson },
+  { order: '02', chapterId: 'linked-lists', definition: linkedDeletionLesson, component: LinkedDeletionLesson },
 ] as const satisfies readonly {
   order: string
   chapterId: string

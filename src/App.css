@@ -333,6 +333,7 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 .linked-experiment select, .linked-experiment input { width: 100%; height: 33px; padding: 0 8px; border: 1px solid #999; background: var(--paper); color: var(--ink); font: 9px var(--mono); }
 .linked-experiment > button { height: 33px; border: 1px solid var(--ink); background: var(--ink); color: white; cursor: pointer; font: 8px var(--mono); text-transform: uppercase; }
 .linked-experiment > p { grid-column: 2 / -1; margin: 0; color: #b43e36; font: 8px var(--mono); }
+.linked-delete-experiment { grid-template-columns: minmax(180px, 1fr) 150px 70px; }
 .linked-stage { position: relative; min-height: 390px; padding: 78px 25px 30px; overflow-x: auto; background-image: linear-gradient(rgba(54,68,86,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(54,68,86,.05) 1px, transparent 1px); background-size: 23px 23px; }
 .linked-head { position: absolute; top: 36px; left: 28px; color: var(--coral); font: 8px var(--mono); }
 .linked-chain { min-width: max-content; display: flex; align-items: center; gap: 8px; }
@@ -571,6 +572,7 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
   .linked-experiment > div { grid-column: 1 / -1; }
   .linked-experiment > button { align-self: end; }
   .linked-experiment > p { grid-column: 1 / -1; }
+  .linked-delete-experiment { grid-template-columns: 1fr 70px; }
   .linked-stage { min-height: 410px; padding-left: 18px; }
   .sort-bars { height: 220px; gap: 7px; }
   .array-tape { left: 13px; gap: 0; }

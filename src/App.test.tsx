@@ -147,5 +147,14 @@ describe('Linked Structures chapter', () => {
 
     expect(screen.getByRole('img').getAttribute('aria-label')).toContain('1 detached nodes')
     expect(screen.getByText('Allocate node 88')).toBeTruthy()
+
+    await user.click(screen.getByRole('button', { name: '02 · Linked List Deletion' }))
+    expect(window.location.hash).toBe('#linked-deletion')
+    await user.selectOptions(screen.getByLabelText('Remove stop'), '3')
+    await user.click(screen.getByRole('button', { name: 'Apply' }))
+    await user.click(screen.getByRole('button', { name: 'Next step' }))
+    await user.click(screen.getByRole('button', { name: 'Next step' }))
+    expect(screen.getByText('Bypass 62')).toBeTruthy()
+    expect(screen.getByRole('img').getAttribute('aria-label')).toContain('1 detached nodes')
   })
 })
