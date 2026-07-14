@@ -5,6 +5,7 @@ import { useStepPlayback } from '../learning/useStepPlayback'
 import type { LessonComponentProps } from '../sorting/SortLesson'
 import { createComplexityGrowthSteps, type GrowthRateId } from './complexityGrowth'
 import { complexityGrowthLesson as definition } from './complexityGrowthLessonDefinition'
+import { FoundationLessonNavigation } from './FoundationLessonNavigation'
 
 const growthRates: readonly { id: GrowthRateId; label: string; notation: string; detail: string }[] = [
   { id: 'constant', label: 'Constant', notation: 'O(1)', detail: 'One action regardless of input size' },
@@ -26,26 +27,9 @@ export function ComplexityGrowthLesson({ lessons, onBack, onOpenLesson, onComple
 
   return (
     <main className="lesson-page foundation-lesson">
-      <div className="lesson-crumbs">
-        <button type="button" onClick={onBack}>← Lesson catalogue</button>
-        <span>/</span><span>The Foundations</span><span>/</span><strong>{definition.title}</strong>
-      </div>
-
-      <nav className="lesson-switcher" aria-label="Foundation lessons">
-        {lessons.map((lesson) => (
-          <button
-            className={`${lesson.slug === definition.slug ? 'is-current' : ''} ${lesson.completed ? 'is-complete' : ''}`.trim()}
-            type="button"
-            onClick={() => onOpenLesson(lesson.slug)}
-            aria-current={lesson.slug === definition.slug ? 'page' : undefined}
-            aria-label={`${lesson.label}${lesson.completed ? ', completed' : ''}`}
-            key={lesson.slug}
-          >
-            {lesson.label}
-            {lesson.completed && <span className="lesson-check" aria-hidden="true">✓</span>}
-          </button>
-        ))}
-      </nav>
+      <FoundationLessonNavigation
+        currentSlug={definition.slug} title={definition.title} lessons={lessons} onBack={onBack} onOpenLesson={onOpenLesson}
+      />
 
       <section className="lesson-heading">
         <div>

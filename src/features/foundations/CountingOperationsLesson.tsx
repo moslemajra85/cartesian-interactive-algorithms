@@ -5,6 +5,7 @@ import { useStepPlayback } from '../learning/useStepPlayback'
 import type { LessonComponentProps } from '../sorting/SortLesson'
 import { createOperationCountingSteps } from './countingOperations'
 import { countingOperationsLesson as definition } from './countingOperationsLessonDefinition'
+import { FoundationLessonNavigation } from './FoundationLessonNavigation'
 
 export function CountingOperationsLesson({ lessons, onBack, onOpenLesson, onCompleteLesson }: LessonComponentProps) {
   const steps = useMemo(() => createOperationCountingSteps(), [])
@@ -18,24 +19,9 @@ export function CountingOperationsLesson({ lessons, onBack, onOpenLesson, onComp
 
   return (
     <main className="lesson-page foundation-lesson">
-      <div className="lesson-crumbs">
-        <button type="button" onClick={onBack}>← Lesson catalogue</button>
-        <span>/</span><span>The Foundations</span><span>/</span><strong>{definition.title}</strong>
-      </div>
-
-      <nav className="lesson-switcher" aria-label="Foundation lessons">
-        {lessons.map((lesson) => (
-          <button
-            className={`${lesson.slug === definition.slug ? 'is-current' : ''} ${lesson.completed ? 'is-complete' : ''}`.trim()}
-            type="button" onClick={() => onOpenLesson(lesson.slug)}
-            aria-current={lesson.slug === definition.slug ? 'page' : undefined}
-            aria-label={`${lesson.label}${lesson.completed ? ', completed' : ''}`}
-            key={lesson.slug}
-          >
-            {lesson.label}{lesson.completed && <span className="lesson-check" aria-hidden="true">✓</span>}
-          </button>
-        ))}
-      </nav>
+      <FoundationLessonNavigation
+        currentSlug={definition.slug} title={definition.title} lessons={lessons} onBack={onBack} onOpenLesson={onOpenLesson}
+      />
 
       <section className="lesson-heading">
         <div>

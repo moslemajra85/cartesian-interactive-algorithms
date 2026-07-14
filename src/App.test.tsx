@@ -33,6 +33,10 @@ describe('application routing', () => {
     await user.click(screen.getByRole('button', { name: '03 · Space Complexity' }))
     expect(window.location.hash).toBe('#space-complexity')
     expect(screen.getByRole('heading', { level: 1, name: 'Space Complexity' })).toBeTruthy()
+
+    await user.click(screen.getByRole('button', { name: '04 · Cases & Guarantees' }))
+    expect(window.location.hash).toBe('#complexity-cases')
+    expect(screen.getByRole('heading', { level: 1, name: 'Cases & Guarantees' })).toBeTruthy()
   })
 
   it('opens the catalogue and lesson from registry-derived navigation', async () => {
