@@ -132,6 +132,19 @@ Merge Sort keeps the visible segment unchanged while comparing the front candida
 
 `activeRange` dims unrelated recursion branches, `splitAt` identifies the boundary between the two halves, and `mergedRange` identifies a newly ordered result. The React view decides how those meanings look; the generator never emits opacity, spacing, or colors.
 
+### Motion and dual array representation
+
+The shared player renders every array in two synchronized forms:
+
+- The memory tape emphasizes fixed indices and value storage.
+- The bars emphasize relative magnitude and movement.
+
+Both derive from the same immutable `SortStep`; neither owns algorithm state. Comparison, swapped, merged, sorted, and inactive-range classes are calculated once per index and applied to both representations.
+
+Directional swap motion is derived from the semantic pair `[left, right]`. The view computes a signed starting offset, so the new value at the left index arrives from the right and vice versa. Merge events use their index position only to stagger a settling animation across the committed range. These are presentation calculations: event generators still know nothing about distance, duration, easing, or color.
+
+Narration remounts by timeline index so each explanation enters as a distinct beat, while the current pseudocode line receives a short emphasis transition. A play-state pulse communicates that time is advancing. The global `prefers-reduced-motion` rule reduces all animations and transitions to effectively instantaneous state changes.
+
 ## State model
 
 ```mermaid
@@ -194,6 +207,8 @@ Current foundations:
 - Protection for native browser shortcuts and focused interactive elements
 - Labeled custom-array field with described constraints and live validation errors
 - Visible shortcut reference in every sorting lesson
+- Indexed memory tape paired with magnitude bars for visual redundancy
+- Reduced-motion fallback for swaps, merges, narration, code emphasis, and playback pulses
 - Live prediction feedback with retryable answers
 - Disabled answer state only after a correct response
 - Reduced-motion media query
@@ -223,7 +238,7 @@ Pull requests run the same quality gate but cannot upload or deploy the site. Ac
 ## Deferred decisions
 
 - **Global state library:** local state is sufficient today.
-- **Animation library:** CSS transitions cover the current choreography.
+- **Animation library:** CSS keyframes and transitions cover the current semantic choreography. Revisit this only when interruptible or layout-measured timelines become difficult to coordinate reliably.
 - **Backend:** progress can begin in local storage.
 - **Content management:** typed local lesson modules are simpler at the current scale.
 - **Routing library:** the typed hash layer supports the current flat catalogue and works without server fallback configuration on GitHub Pages. A dependency becomes justified for nested layouts, route loaders, or URL parameters.

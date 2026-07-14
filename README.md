@@ -33,6 +33,8 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - Three playback speeds
 - Random input generation
 - User-defined arrays with inline validation and duplicate-value support
+- Dual array representation with indexed memory cells and magnitude bars
+- Directional swap motion, staggered merge settling, and animated step narration
 - Synchronized pseudocode highlighting
 - Step-specific explanations and pass tracking
 - Direct lesson links for each implemented algorithm
@@ -50,7 +52,7 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 <details>
 <summary>Recursive Merge Sort lesson</summary>
 
-Merge Sort adds semantic split boundaries, active recursive ranges, cross-half comparisons, and committed merged ranges without coupling the algorithm to pixel positions.
+Merge Sort adds semantic split boundaries, active recursive ranges, cross-half comparisons, and committed merged ranges. The memory tape keeps indices visible while staggered bars show the merge settling into place—without coupling the algorithm to pixel positions.
 
 | Desktop | Mobile |
 | --- | --- |
@@ -158,7 +160,7 @@ This boundary keeps the algorithm testable without a browser and allows the UI t
 - Oxlint
 - CSS animations and responsive layout
 
-No visualization or animation library is currently required. That is intentional: the current sorting interactions remain small enough for browser-native transitions, and a dependency should only be introduced when it solves a demonstrated orchestration problem.
+No visualization or animation library is currently required. Semantic event metadata drives browser-native transitions: swap pairs produce directional travel, merge ranges produce staggered settling, and comparison/range states update both the memory tape and bars. A dependency should only be introduced when timelines require interruption, shared layout measurement, or choreography that CSS can no longer express clearly.
 
 ## Getting started
 

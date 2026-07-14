@@ -52,6 +52,8 @@ Do not emit pixel positions, colors, or animation delays from algorithm code.
 
 Recursive lessons should describe structural meaning with ranges and boundaries. When auxiliary storage is involved, ensure a comparison event still refers to the values visible at its referenced indices; do not emit partially overwritten snapshots that tell a false visual story.
 
+Motion must be derived from semantic events rather than embedded in algorithm output. Verify the settled state, at least one mid-transition frame, mobile layout, keyboard stepping, and `prefers-reduced-motion`. Avoid adding animation dependencies for effects that CSS can express without hidden state or layout measurement.
+
 ## Commit style
 
 Use focused conventional commits:
