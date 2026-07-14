@@ -241,6 +241,23 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 .case-average { --rate-color: var(--gold); }
 .case-worst { --rate-color: var(--coral); }
 .case-guide li { min-height: 90px; }
+.recursion-stage { min-height: 410px; padding: 30px 34px; display: grid; grid-template-columns: minmax(130px, .45fr) minmax(220px, 1fr); align-items: center; gap: 30px; background-image: linear-gradient(rgba(54,68,86,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(54,68,86,.05) 1px, transparent 1px); background-size: 23px 23px; }
+.folder-depth { display: grid; gap: 6px; }
+.folder-depth span { min-height: 29px; padding: 0 10px; display: flex; align-items: center; border: 1px dashed #9da0a3; background: rgba(255,253,248,.65); color: #8a8e94; font: 8px var(--mono); transition: transform 220ms ease, background 220ms ease, color 220ms ease; }
+.folder-depth span.is-visited { border-style: solid; border-color: var(--blue); background: var(--blue); color: white; transform: translateX(6px); }
+.call-stack { display: grid; gap: 7px; }
+.call-stack > strong, .call-stack > em { color: #747983; font: 7px var(--mono); font-style: normal; letter-spacing: .1em; text-align: center; }
+.call-stack > div { min-height: 265px; padding: 8px; display: flex; flex-direction: column; justify-content: flex-start; gap: 5px; border: 2px solid var(--ink); border-top: 0; background: rgba(255,253,248,.82); box-shadow: 5px 5px 0 rgba(25,32,43,.12); }
+.call-stack > div > span { min-height: 42px; padding: 7px 10px; display: grid; gap: 3px; border: 1px solid var(--ink); background: #e6e1d7; animation: memory-cell-in 260ms ease-out both; }
+.call-stack > div > span b { font: 8px var(--mono); }
+.call-stack > div > span small { color: #71767e; font-size: 7px; }
+.call-stack > div > span.is-active { border-width: 2px; background: var(--gold); transform: translateX(5px); }
+.call-stack > div > span.phase-base { background: #65aa84; color: white; }
+.call-stack > div > span.phase-base small { color: white; }
+.call-stack > div > span.phase-unwind { background: var(--coral); color: white; }
+.call-stack > div > span.phase-unwind small { color: white; }
+.call-stack > div > i { margin: auto; color: #8a8e94; font: 9px var(--mono); font-style: normal; }
+.recursion-guide li { min-height: 90px; }
 
 .not-found-page { min-height: calc(100vh - 227px); padding: 100px clamp(24px, 9vw, 145px); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; background-color: var(--paper-deep); background-image: linear-gradient(rgba(54,68,86,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(54,68,86,.035) 1px, transparent 1px); background-size: 32px 32px; }
 .not-found-code { color: var(--coral); font: 12px var(--mono); letter-spacing: .18em; }
@@ -493,6 +510,9 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
   .memory-row strong { font-size: 8px; }
   .memory-cells { gap: 2px; }
   .memory-cells i { min-width: 10px; font-size: 6px; }
+  .recursion-stage { min-height: 410px; padding: 25px 16px; grid-template-columns: 80px minmax(0, 1fr); gap: 15px; }
+  .call-stack > div > span { padding: 6px; }
+  .call-stack > div > span b { font-size: 7px; }
   .lesson-catalogue-card, .lesson-catalogue-card:last-child:nth-child(odd) { grid-column: auto; min-height: 370px; }
   .catalogue-note { grid-template-columns: 1fr; gap: 12px; }
   .not-found-page { min-height: calc(100vh - 215px); padding: 75px 22px; }

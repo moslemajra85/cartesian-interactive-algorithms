@@ -7,6 +7,8 @@ import { CountingOperationsLesson } from '../foundations/CountingOperationsLesso
 import { countingOperationsLesson } from '../foundations/countingOperationsLessonDefinition'
 import { SpaceComplexityLesson } from '../foundations/SpaceComplexityLesson'
 import { spaceComplexityLesson } from '../foundations/spaceComplexityLessonDefinition'
+import { RecursionStackLesson } from '../foundations/RecursionStackLesson'
+import { recursionStackLesson } from '../foundations/recursionStackLessonDefinition'
 import { BinarySearchLesson } from '../searching/BinarySearchLesson'
 import { binarySearchLesson } from '../searching/binarySearchLessonDefinition'
 import { BubbleSortLesson } from '../sorting/BubbleSortLesson'
@@ -74,6 +76,7 @@ const catalogEntries = [
   { order: '02', chapterId: 'foundations', definition: countingOperationsLesson, component: CountingOperationsLesson },
   { order: '03', chapterId: 'foundations', definition: spaceComplexityLesson, component: SpaceComplexityLesson },
   { order: '04', chapterId: 'foundations', definition: complexityCasesLesson, component: ComplexityCasesLesson },
+  { order: '05', chapterId: 'foundations', definition: recursionStackLesson, component: RecursionStackLesson },
   { order: '03', chapterId: 'arrays', definition: bubbleSortLesson, component: BubbleSortLesson },
   { order: '04', chapterId: 'arrays', definition: selectionSortLesson, component: SelectionSortLesson },
   { order: '05', chapterId: 'arrays', definition: insertionSortLesson, component: InsertionSortLesson },

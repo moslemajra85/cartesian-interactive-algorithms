@@ -2,7 +2,7 @@
 
 An interactive, visual learning environment for understanding data structures and algorithms through animated execution, synchronized pseudocode, and step-by-step reasoning.
 
-> **Project status:** Active development. The application currently includes the complete handbook shell, four interactive complexity foundations, four sorting lessons, and Binary Search backed by shared playback primitives.
+> **Project status:** Active development. The application currently includes the complete handbook shell, five interactive foundations, four sorting lessons, and Binary Search backed by shared playback primitives.
 
 [![CI and deploy](https://github.com/moslemajra85/cartesian-interactive-algorithms/actions/workflows/ci-and-deploy.yml/badge.svg)](https://github.com/moslemajra85/cartesian-interactive-algorithms/actions/workflows/ci-and-deploy.yml)
 [![Live site](https://img.shields.io/badge/live-GitHub%20Pages-222?logo=github)](https://moslemajra85.github.io/cartesian-interactive-algorithms/)
@@ -31,6 +31,7 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - Operation-counting lesson that distinguishes sequential addition from nested multiplication
 - Auxiliary-space lesson contrasting fixed in-place workspace with input-sized copying
 - Best/average/worst-case lesson that separates observed runs from upper-bound guarantees
+- Recursion lesson with adjustable depth and visible call-stack descent and unwinding
 - Typed lesson catalogue with a dedicated Arrays & Sorting chapter screen
 - Keyboard-accessible lesson search derived from the typed curriculum registry
 - Keyboard-accessible navigation drawer (`M` to toggle, `Escape` to close)
@@ -207,6 +208,7 @@ http://localhost:5173/#complexity-growth
 http://localhost:5173/#counting-operations
 http://localhost:5173/#space-complexity
 http://localhost:5173/#complexity-cases
+http://localhost:5173/#recursion-stack
 http://localhost:5173/#bubble-sort
 http://localhost:5173/#selection-sort
 http://localhost:5173/#insertion-sort

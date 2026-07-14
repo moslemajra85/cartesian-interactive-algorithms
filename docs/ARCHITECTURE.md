@@ -38,7 +38,7 @@ The arrows show ownership: the lesson owns the input, the algorithm owns event c
 
 ### Algorithm event generators
 
-Locations: `src/features/sorting/*.ts` and `src/features/searching/binarySearch.ts`
+Locations: `src/features/sorting/*.ts`, `src/features/searching/binarySearch.ts`, and pure models in `src/features/foundations/*.ts`
 
 Responsibilities:
 
@@ -47,6 +47,8 @@ Responsibilities:
 - Execute the real algorithm
 - Record meaningful semantic snapshots
 - Return deterministic output
+
+Foundation models follow the same rule even when their events are not array snapshots. The recursion lesson, for example, emits immutable call-stack frames for descent, base-case, and unwind phases; React only decides how those frames look.
 
 It must not import React, access the DOM, start timers, or choose colors.
 

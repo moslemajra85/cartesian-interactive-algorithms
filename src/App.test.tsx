@@ -43,6 +43,12 @@ describe('application routing', () => {
     fireEvent.change(screen.getByRole('slider', { name: 'Experiment with input size' }), { target: { value: '8' } })
     expect(screen.getByText('LINEAR SEARCH · n = 8')).toBeTruthy()
     expect(screen.getByRole('slider').getAttribute('aria-valuetext')).toBe('8 items')
+
+    await user.click(screen.getByRole('button', { name: '05 · Recursion & the Stack' }))
+    expect(window.location.hash).toBe('#recursion-stack')
+    expect(screen.getByRole('heading', { level: 1, name: 'Recursion & the Stack' })).toBeTruthy()
+    fireEvent.change(screen.getByRole('slider', { name: 'Experiment with recursion depth' }), { target: { value: '6' } })
+    expect(screen.getByText('CALL STACK · DEPTH 6')).toBeTruthy()
   })
 
   it('opens the catalogue and lesson from registry-derived navigation', async () => {
