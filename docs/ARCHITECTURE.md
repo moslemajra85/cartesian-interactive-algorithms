@@ -62,7 +62,7 @@ Responsibilities:
 - Render common semantic array state in memory-tape and magnitude-bar views
 - Keep visualization, pseudocode, and narration synchronized
 
-Bubble Sort, Selection Sort, Insertion Sort, and Merge Sort use the configurable `SortLesson`. Binary Search has a dedicated lesson shell because it owns a target as well as an array, but reuses the same playback hook and `ArrayVisualizer`. The Foundations growth-rate lesson also reuses playback while rendering a different work-unit comparison. These concrete use cases keep time control shared without forcing unlike visual models into one oversized component.
+Bubble Sort, Selection Sort, Insertion Sort, and Merge Sort use the configurable `SortLesson`. Binary Search has a dedicated lesson shell because it owns a target as well as an array, but reuses the same playback hook and `ArrayVisualizer`. The Foundations lessons also reuse playback while rendering growth-rate and exact-operation comparisons. `PlaybackControls` owns the consistent buttons, timeline, and shortcut reference; `useStepPlayback` owns their state transitions. These concrete use cases keep time control shared without forcing unlike visual models into one oversized component.
 
 The algorithm-specific wrapper components contain educational content rather than playback mechanics. This keeps lesson configuration explicit while preventing duplicated visualization code.
 

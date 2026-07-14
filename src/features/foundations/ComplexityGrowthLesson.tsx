@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { PredictionCheckpoint } from '../learning/PredictionCheckpoint'
+import { PlaybackControls } from '../learning/PlaybackControls'
 import { useStepPlayback } from '../learning/useStepPlayback'
 import type { LessonComponentProps } from '../sorting/SortLesson'
 import { createComplexityGrowthSteps, type GrowthRateId } from './complexityGrowth'
@@ -79,17 +80,11 @@ export function ComplexityGrowthLesson({ lessons, onBack, onOpenLesson, onComple
             <div><strong>{step.title}</strong><p>{step.explanation}</p></div>
           </div>
 
-          <div className="player-controls">
-            <button className="control-button" type="button" onClick={playback.restart} aria-label="Restart">↺</button>
-            <button className="control-button" type="button" onClick={() => playback.moveTo(stepIndex - 1)} disabled={stepIndex === 0} aria-label="Previous step">←</button>
-            <button className={`play-button ${playing ? 'is-playing' : ''}`} type="button" onClick={playback.togglePlayback}>
-              <span aria-hidden="true">{isComplete ? '↺' : playing ? 'Ⅱ' : '▶'}</span>
-              {isComplete ? 'Replay' : playing ? 'Pause' : 'Play'}
-            </button>
-            <button className="control-button" type="button" onClick={() => playback.moveTo(stepIndex + 1)} disabled={isComplete} aria-label="Next step">→</button>
-            <button className="speed-button" type="button" onClick={playback.cycleSpeed}>{speedIndex + 1}× speed</button>
-          </div>
-          <div className="timeline" aria-label={`Input ${step.inputSize} of ${steps.length}`}><span style={{ width: `${(stepIndex / (steps.length - 1)) * 100}%` }} /></div>
+          <PlaybackControls
+            stepIndex={stepIndex} stepCount={steps.length} playing={playing} speedIndex={speedIndex} isComplete={isComplete}
+            onRestart={playback.restart} onMoveTo={playback.moveTo} onTogglePlayback={playback.togglePlayback} onCycleSpeed={playback.cycleSpeed}
+            timelineLabel={`Input ${step.inputSize} of ${steps.length}`}
+          />
         </div>
 
         <aside className="growth-guide">

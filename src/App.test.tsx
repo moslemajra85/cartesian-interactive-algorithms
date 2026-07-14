@@ -25,6 +25,10 @@ describe('application routing', () => {
     await user.click(screen.getByRole('button', { name: 'Start Growth of Work' }))
     expect(window.location.hash).toBe('#complexity-growth')
     expect(screen.getByRole('heading', { level: 1, name: 'Growth of Work' })).toBeTruthy()
+
+    await user.click(screen.getByRole('button', { name: '02 · Counting Operations' }))
+    expect(window.location.hash).toBe('#counting-operations')
+    expect(screen.getByRole('heading', { level: 1, name: 'Counting Operations' })).toBeTruthy()
   })
 
   it('opens the catalogue and lesson from registry-derived navigation', async () => {

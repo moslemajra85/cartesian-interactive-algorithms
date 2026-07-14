@@ -1,6 +1,8 @@
 import type { ComponentType } from 'react'
 import { ComplexityGrowthLesson } from '../foundations/ComplexityGrowthLesson'
 import { complexityGrowthLesson } from '../foundations/complexityGrowthLessonDefinition'
+import { CountingOperationsLesson } from '../foundations/CountingOperationsLesson'
+import { countingOperationsLesson } from '../foundations/countingOperationsLessonDefinition'
 import { BinarySearchLesson } from '../searching/BinarySearchLesson'
 import { binarySearchLesson } from '../searching/binarySearchLessonDefinition'
 import { BubbleSortLesson } from '../sorting/BubbleSortLesson'
@@ -65,6 +67,7 @@ export const chapterCatalog: readonly ChapterDefinition[] = [
 
 const catalogEntries = [
   { order: '01', chapterId: 'foundations', definition: complexityGrowthLesson, component: ComplexityGrowthLesson },
+  { order: '02', chapterId: 'foundations', definition: countingOperationsLesson, component: CountingOperationsLesson },
   { order: '03', chapterId: 'arrays', definition: bubbleSortLesson, component: BubbleSortLesson },
   { order: '04', chapterId: 'arrays', definition: selectionSortLesson, component: SelectionSortLesson },
   { order: '05', chapterId: 'arrays', definition: insertionSortLesson, component: InsertionSortLesson },

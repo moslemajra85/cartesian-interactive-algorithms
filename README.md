@@ -2,7 +2,7 @@
 
 An interactive, visual learning environment for understanding data structures and algorithms through animated execution, synchronized pseudocode, and step-by-step reasoning.
 
-> **Project status:** Active development. The application currently includes the complete handbook shell, an interactive complexity-growth lesson, four sorting lessons, and Binary Search backed by shared playback primitives.
+> **Project status:** Active development. The application currently includes the complete handbook shell, two interactive complexity foundations, four sorting lessons, and Binary Search backed by shared playback primitives.
 
 [![CI and deploy](https://github.com/moslemajra85/cartesian-interactive-algorithms/actions/workflows/ci-and-deploy.yml/badge.svg)](https://github.com/moslemajra85/cartesian-interactive-algorithms/actions/workflows/ci-and-deploy.yml)
 [![Live site](https://img.shields.io/badge/live-GitHub%20Pages-222?logo=github)](https://moslemajra85.github.io/cartesian-interactive-algorithms/)
@@ -26,6 +26,7 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - Responsive, book-inspired learning interface
 - Chapter navigation and progress presentation
 - Interactive Foundations chapter introduction comparing constant through quadratic growth
+- Operation-counting lesson that distinguishes sequential addition from nested multiplication
 - Typed lesson catalogue with a dedicated Arrays & Sorting chapter screen
 - Keyboard-accessible lesson search derived from the typed curriculum registry
 - Keyboard-accessible navigation drawer (`M` to toggle, `Escape` to close)
@@ -199,6 +200,7 @@ Open any implemented lesson directly at:
 http://localhost:5173/#arrays
 http://localhost:5173/#foundations
 http://localhost:5173/#complexity-growth
+http://localhost:5173/#counting-operations
 http://localhost:5173/#bubble-sort
 http://localhost:5173/#selection-sort
 http://localhost:5173/#insertion-sort
