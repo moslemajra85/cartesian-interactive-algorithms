@@ -326,6 +326,23 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 .search-input-actions button { height: 34px; padding: 0 9px; border: 1px solid var(--ink); border-radius: 3px; background: var(--ink); color: white; cursor: pointer; font: 8px var(--mono); text-transform: uppercase; }
 .search-input-actions button:last-child { border-color: var(--line); background: transparent; color: var(--ink); }
 .search-input-panel .array-input-error { grid-column: 2 / -1; margin: 0; }
+.linked-experiment { min-height: 76px; padding: 12px 18px; display: grid; grid-template-columns: minmax(155px, 1fr) 125px 110px 65px; align-items: end; gap: 10px; border-bottom: 1px solid var(--line); background: #f6f2e9; }
+.linked-experiment > div { align-self: center; display: grid; gap: 4px; }
+.linked-experiment > div strong { font-size: 9px; }.linked-experiment > div span { color: #747983; font: 7px var(--mono); }
+.linked-experiment label { display: grid; gap: 5px; color: #747983; font: 7px var(--mono); text-transform: uppercase; }
+.linked-experiment select, .linked-experiment input { width: 100%; height: 33px; padding: 0 8px; border: 1px solid #999; background: var(--paper); color: var(--ink); font: 9px var(--mono); }
+.linked-experiment > button { height: 33px; border: 1px solid var(--ink); background: var(--ink); color: white; cursor: pointer; font: 8px var(--mono); text-transform: uppercase; }
+.linked-experiment > p { grid-column: 2 / -1; margin: 0; color: #b43e36; font: 8px var(--mono); }
+.linked-stage { position: relative; min-height: 390px; padding: 78px 25px 30px; overflow-x: auto; background-image: linear-gradient(rgba(54,68,86,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(54,68,86,.05) 1px, transparent 1px); background-size: 23px 23px; }
+.linked-head { position: absolute; top: 36px; left: 28px; color: var(--coral); font: 8px var(--mono); }
+.linked-chain { min-width: max-content; display: flex; align-items: center; gap: 8px; }
+.linked-node-group { display: flex; align-items: center; gap: 8px; }
+.linked-chain > b, .linked-node-group > b { color: var(--blue); font: 19px var(--mono); }
+.linked-stage article { width: 105px; min-height: 112px; padding: 12px; display: grid; grid-template-columns: 1fr auto; align-content: center; gap: 8px; border: 1px solid var(--ink); background: var(--paper); box-shadow: 4px 5px 0 rgba(25,32,43,.13); transition: transform 220ms ease, background 220ms ease; }
+.linked-stage article > span { grid-column: 1 / -1; font: 24px var(--mono); }.linked-stage article small { color: #747983; font: 6px var(--mono); }.linked-stage article code { color: var(--ink); background: transparent; font: 6px var(--mono); }
+.linked-stage article.is-active { border-width: 2px; background: var(--gold); transform: translateY(-7px); }.linked-stage article.is-new { border-style: dashed; border-color: var(--coral); }
+.detached-nodes { margin-top: 48px; padding-top: 22px; display: flex; align-items: center; gap: 18px; border-top: 1px dashed #999; }.detached-nodes > span { width: 105px; color: #747983; font: 7px/1.5 var(--mono); }
+.linked-code ol { margin-top: 45px; }.linked-code li { min-height: 60px; }
 .sort-stage { position: relative; height: 390px; padding: 58px 42px 25px; overflow: hidden; background-image: linear-gradient(rgba(54,68,86,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(54,68,86,.05) 1px, transparent 1px); background-size: 23px 23px; }
 .pass-indicator { position: absolute; top: 18px; right: 20px; padding: 5px 8px; background: var(--ink); color: white; font: 8px var(--mono); letter-spacing: .1em; }
 .sort-stage.is-playing .pass-indicator::before { content: ''; width: 5px; height: 5px; margin-right: 6px; display: inline-block; border-radius: 50%; background: var(--coral); box-shadow: 0 0 0 0 rgba(255,101,92,.6); animation: playback-pulse 1.1s ease-out infinite; }
@@ -550,6 +567,11 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
   .search-input-panel label:first-of-type { grid-column: 1 / -1; }
   .search-input-actions { grid-column: 1 / -1; }
   .search-input-panel .array-input-error { grid-column: 1 / -1; }
+  .linked-experiment { grid-template-columns: 1fr 1fr; }
+  .linked-experiment > div { grid-column: 1 / -1; }
+  .linked-experiment > button { align-self: end; }
+  .linked-experiment > p { grid-column: 1 / -1; }
+  .linked-stage { min-height: 410px; padding-left: 18px; }
   .sort-bars { height: 220px; gap: 7px; }
   .array-tape { left: 13px; gap: 0; }
   .array-tape > span { display: none; }

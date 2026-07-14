@@ -13,6 +13,8 @@ import { TimeSpaceTradeoffLesson } from '../foundations/TimeSpaceTradeoffLesson'
 import { timeSpaceTradeoffLesson } from '../foundations/timeSpaceTradeoffLessonDefinition'
 import { BinarySearchLesson } from '../searching/BinarySearchLesson'
 import { binarySearchLesson } from '../searching/binarySearchLessonDefinition'
+import { LinkedInsertionLesson } from '../linked/LinkedInsertionLesson'
+import { linkedInsertionLesson } from '../linked/linkedInsertionLessonDefinition'
 import { BubbleSortLesson } from '../sorting/BubbleSortLesson'
 import { InsertionSortLesson } from '../sorting/InsertionSortLesson'
 import { MergeSortLesson } from '../sorting/MergeSortLesson'
@@ -55,7 +57,7 @@ export const chapterCatalog: readonly ChapterDefinition[] = [
     description: 'Follow references through lists, stacks, and queues.', plannedLessonCount: 8,
     catalogueDescription: 'Follow references through lists, stacks, and queues.',
     learningNote: 'Track ownership and links before thinking about syntax.',
-    tone: 'blue', availability: 'locked',
+    tone: 'blue', availability: 'available',
   },
   {
     id: 'trees', number: '04', title: 'Trees & Heaps', shortTitle: 'Trees & Heaps',
@@ -85,6 +87,7 @@ const catalogEntries = [
   { order: '05', chapterId: 'arrays', definition: insertionSortLesson, component: InsertionSortLesson },
   { order: '06', chapterId: 'arrays', definition: mergeSortLesson, component: MergeSortLesson },
   { order: '07', chapterId: 'arrays', definition: binarySearchLesson, component: BinarySearchLesson },
+  { order: '01', chapterId: 'linked-lists', definition: linkedInsertionLesson, component: LinkedInsertionLesson },
 ] as const satisfies readonly {
   order: string
   chapterId: string

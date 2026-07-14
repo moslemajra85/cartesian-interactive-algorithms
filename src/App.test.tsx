@@ -127,3 +127,25 @@ describe('lesson search', () => {
     expect(screen.queryByRole('searchbox')).toBeNull()
   })
 })
+
+describe('Linked Structures chapter', () => {
+  it('opens the chapter and lets a learner configure an insertion', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByRole('button', { name: 'Start chapter: Linked Structures' }))
+    expect(window.location.hash).toBe('#linked-lists')
+    await user.click(screen.getByRole('button', { name: 'Start Linked List Insertion' }))
+    expect(window.location.hash).toBe('#linked-insertion')
+
+    await user.selectOptions(screen.getByLabelText('Insert after'), '2')
+    const valueInput = screen.getByLabelText('New value')
+    await user.clear(valueInput)
+    await user.type(valueInput, '88')
+    await user.click(screen.getByRole('button', { name: 'Apply' }))
+    await user.click(screen.getByRole('button', { name: 'Next step' }))
+
+    expect(screen.getByRole('img').getAttribute('aria-label')).toContain('1 detached nodes')
+    expect(screen.getByText('Allocate node 88')).toBeTruthy()
+  })
+})

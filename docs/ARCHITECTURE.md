@@ -104,6 +104,12 @@ Every curriculum definition includes a concrete problem brief with a scenario, a
 
 Scenarios must make the algorithm honest. Bubble Sort is presented for an adjacent-exchange mechanism, Selection Sort for write-limited memory, and Insertion Sort for small nearly ordered windows—not as interchangeable recommendations for general production sorting.
 
+### Linked structures
+
+Location: `src/features/linked/`
+
+Linked-list timelines store stable node IDs and semantic `nextId` references. The insertion generator snapshots allocation, successor preservation, and predecessor redirection as separate immutable events. Rendering derives reachability by traversing from `headId`; detached allocation is therefore visible without pretending it already belongs to the list. The O(1) claim explicitly assumes the predecessor is known—searching for it remains O(n).
+
 ### Application shell
 
 Location: `src/App.tsx`
