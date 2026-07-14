@@ -30,6 +30,8 @@ All three commands must pass.
 7. Check reduced-motion behavior and keyboard access.
 8. Update the roadmap and documentation if project behavior changes.
 
+Sorting event generators may support broader numeric inputs than the interface. The current visualization contract is intentionally narrower: 2–8 whole numbers from 1–99. Change `arrayInput.ts`, its tests, the visible guidance, and responsive bar verification together if that product boundary changes.
+
 Every lesson should also include a prediction checkpoint that tests the algorithm's invariant or decision process. Avoid syntax trivia and questions that can be answered without understanding the visualization.
 
 ## Event quality checklist

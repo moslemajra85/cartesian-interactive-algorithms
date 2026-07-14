@@ -1,4 +1,5 @@
 .app-shell { min-height: 100vh; overflow: hidden; background: var(--paper); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .topbar { height: 82px; padding: 0 clamp(24px, 5vw, 76px); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); position: relative; z-index: 20; background: rgba(255, 253, 248, 0.94); backdrop-filter: blur(14px); }
 .brand { color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; gap: 12px; }
 .brand-mark { width: 38px; height: 38px; fill: none; stroke: currentColor; stroke-width: 1.7; }
@@ -126,6 +127,19 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 .panel-label { height: 48px; padding: 0 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); color: #727781; font: 9px var(--mono); letter-spacing: .1em; }
 .panel-label button { padding: 5px 8px; border: 1px solid var(--line); border-radius: 3px; background: transparent; color: var(--ink); cursor: pointer; font: 8px var(--mono); text-transform: uppercase; }
 .panel-label i { font-style: normal; letter-spacing: 0; text-transform: none; }
+.panel-actions { display: flex; gap: 6px; }
+.panel-actions button[aria-expanded="true"] { border-color: var(--ink); background: var(--ink); color: white; }
+.array-input-panel { padding: 15px 18px; display: grid; grid-template-columns: minmax(170px, .6fr) minmax(280px, 1fr); column-gap: 18px; align-items: center; border-bottom: 1px solid var(--line); background: #f6f2e9; }
+.array-input-copy { display: grid; gap: 4px; }
+.array-input-copy label { color: var(--ink); font-size: 10px; font-weight: 700; }
+.array-input-copy span { color: #747983; font: 8px/1.5 var(--mono); }
+.array-input-field { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 6px; }
+.array-input-field input { min-width: 0; height: 34px; padding: 0 10px; border: 1px solid #a8a8a2; border-radius: 3px; background: var(--paper); color: var(--ink); font: 10px var(--mono); }
+.array-input-field input:focus { outline: 2px solid var(--blue); outline-offset: 1px; }
+.array-input-field input[aria-invalid="true"] { border-color: var(--coral); }
+.array-input-field button { height: 34px; padding: 0 10px; border: 1px solid var(--ink); border-radius: 3px; background: var(--ink); color: white; cursor: pointer; font: 8px var(--mono); text-transform: uppercase; }
+.array-input-field button:last-child { border-color: var(--line); background: transparent; color: var(--ink); }
+.array-input-error { grid-column: 2; margin: 7px 0 0; color: #b43e36; font: 8px/1.5 var(--mono); }
 .sort-stage { position: relative; height: 390px; padding: 38px 42px 25px; overflow: hidden; background-image: linear-gradient(rgba(54,68,86,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(54,68,86,.05) 1px, transparent 1px); background-size: 23px 23px; }
 .pass-indicator { position: absolute; top: 18px; right: 20px; padding: 5px 8px; background: var(--ink); color: white; font: 8px var(--mono); letter-spacing: .1em; }
 .sort-bars { height: 278px; display: flex; align-items: flex-end; justify-content: center; gap: clamp(7px, 1.4vw, 17px); border-bottom: 2px solid var(--ink); }
@@ -249,6 +263,13 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
   .complexity-stamp { width: 92px; height: 92px; }
   .complexity-stamp strong { font-size: 18px; }
   .sort-stage { height: 330px; padding: 38px 18px 20px; }
+  .panel-label { padding: 0 12px; }
+  .panel-actions { gap: 4px; }
+  .panel-label button { padding: 5px 6px; }
+  .array-input-panel { padding: 14px 12px; grid-template-columns: 1fr; gap: 10px; }
+  .array-input-field { grid-template-columns: minmax(0, 1fr) auto; }
+  .array-input-field button:last-child { grid-column: 1 / -1; }
+  .array-input-error { grid-column: 1; margin-top: 0; }
   .sort-bars { height: 220px; gap: 7px; }
   .visual-legend { gap: 9px; }
   .player-controls { gap: 5px; }

@@ -22,7 +22,8 @@ sequenceDiagram
     participant Player as Playback state
     participant View as Visualization and code
 
-    Learner->>Lesson: Choose or shuffle input
+    Learner->>Lesson: Enter, choose, or shuffle input
+    Lesson->>Lesson: Validate size, type, and range
     Lesson->>Algorithm: createSteps(input)
     Algorithm-->>Lesson: Immutable step timeline
     Learner->>Player: Play, pause, or seek
@@ -64,6 +65,14 @@ Responsibilities:
 Bubble Sort, Selection Sort, and Insertion Sort provide typed lesson definitions and pure event generators to the shared player. The extraction happened only after Selection Sort demonstrated the common API: playback state, semantic bars, pseudocode highlighting, narration, speed controls, and lesson navigation.
 
 The algorithm-specific wrapper components contain educational content rather than playback mechanics. This keeps lesson configuration explicit while preventing duplicated visualization code.
+
+### Custom array input
+
+Locations: `src/features/sorting/ArrayInputControls.tsx` and `src/features/sorting/arrayInput.ts`
+
+The control owns temporary form state; the lesson owns the accepted array. A pure parser converts comma- or whitespace-separated text into normalized numeric values before the lesson can replace its timeline input.
+
+The parser accepts 2–8 whole numbers from 1–99 and preserves duplicates. These are product constraints rather than algorithm constraints: positive values keep bar geometry and labels meaningful, while eight bars remain readable at the smallest supported viewport. Invalid text never reaches an event generator. Applying valid values pauses playback and returns the cursor to the initial event; shuffling preserves the chosen array length.
 
 ### Prediction checkpoint
 
@@ -131,7 +140,7 @@ The visualization does not own a separate copy of algorithm state. It derives ev
 
 ## Testing boundaries
 
-Unit tests cover event generators and persistence because they contain correctness-sensitive transformations. Component tests now cover prediction interaction and feedback. The next useful test layers are:
+Unit tests cover event generators, custom-input parsing, and persistence because they contain correctness-sensitive transformations. Component tests cover prediction interaction and custom-array form behavior. The next useful test layers are:
 
 1. Shared player interaction tests for button and timer behavior.
 2. Browser-level focus and accessible-state tests.
@@ -171,6 +180,7 @@ Current foundations:
 - Live narration region for step changes
 - Keyboard playback bindings for play/pause, stepping, restart, and speed
 - Protection for native browser shortcuts and focused interactive elements
+- Labeled custom-array field with described constraints and live validation errors
 - Visible shortcut reference in every sorting lesson
 - Live prediction feedback with retryable answers
 - Disabled answer state only after a correct response
@@ -187,7 +197,7 @@ Known gaps:
 
 The current timelines are intentionally precomputed. For small teaching inputs, this makes seeking and replay simple while memory use remains negligible.
 
-For algorithms that generate very large traces, possible strategies include input-size limits, event compression, checkpoints, or lazy generation. None is currently justified by the six-value educational examples.
+For algorithms that generate very large traces, possible strategies include input-size limits, event compression, checkpoints, or lazy generation. None is currently justified by the input limit of eight educational values.
 
 ## Deferred decisions
 
@@ -195,6 +205,6 @@ For algorithms that generate very large traces, possible strategies include inpu
 - **Animation library:** CSS transitions cover the current choreography.
 - **Backend:** progress can begin in local storage.
 - **Content management:** typed local lesson modules are simpler at the current scale.
-- **Router:** hash navigation is sufficient for one implemented lesson.
+- **Router:** direct hash navigation is sufficient for the current lesson family.
 
 These are deliberate deferrals, not missing architecture. Each should be revisited when a concrete feature makes the current solution painful.

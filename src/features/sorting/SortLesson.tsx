@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { PredictionCheckpoint, type PredictionCheckpointDefinition } from '../learning/PredictionCheckpoint'
+import { ArrayInputControls } from './ArrayInputControls'
 import { getPlaybackCommand } from './playbackShortcuts'
 import type { SortStep } from './sortStep'
 
@@ -77,7 +78,13 @@ export function SortLesson({ definition, lessons, onBack, onOpenLesson, onComple
   const shuffle = () => {
     setPlaying(false)
     setStepIndex(0)
-    setValues(randomValues(definition.initialValues.length))
+    setValues(randomValues(values.length))
+  }
+
+  const applyValues = (nextValues: number[]) => {
+    setPlaying(false)
+    setStepIndex(0)
+    setValues(nextValues)
   }
 
   useEffect(() => {
@@ -162,7 +169,7 @@ export function SortLesson({ definition, lessons, onBack, onOpenLesson, onComple
 
       <section className="lesson-workspace">
         <div className="visualizer-panel">
-          <div className="panel-label"><span>LIVE VISUALIZATION</span><button type="button" onClick={shuffle}>Shuffle values</button></div>
+          <ArrayInputControls values={values} onApply={applyValues} onShuffle={shuffle} />
           <div className="sort-stage">
             <div className="pass-indicator">{step.pass ? `PASS ${step.pass}` : 'READY'}</div>
             <div className="sort-bars" aria-label={`Current array: ${step.values.join(', ')}`}>

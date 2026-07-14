@@ -28,6 +28,7 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - Keyboard playback controls with visible shortcut guidance
 - Three playback speeds
 - Random input generation
+- User-defined arrays with inline validation and duplicate-value support
 - Synchronized pseudocode highlighting
 - Step-specific explanations and pass tracking
 - Direct lesson links for each implemented algorithm
@@ -47,6 +48,17 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 | Learning path | Bubble Sort lesson |
 | --- | --- |
 | ![Cartesian home on mobile](docs/images/home-mobile.png) | ![Bubble Sort lesson on mobile](docs/images/bubble-sort-mobile.png) |
+
+</details>
+
+<details>
+<summary>Custom visualization inputs</summary>
+
+Learners can run every sorting lesson against 2–8 whole numbers from 1–99. The shared editor accepts commas or spaces, explains invalid input inline, and preserves duplicate values.
+
+| Desktop | Mobile |
+| --- | --- |
+| ![Insertion Sort with the custom array editor open](docs/images/custom-array-desktop.png) | ![Custom array editor adapted for a mobile lesson](docs/images/custom-array-mobile.png) |
 
 </details>
 
@@ -78,7 +90,8 @@ Cartesian separates algorithm execution from rendering. An algorithm produces im
 
 ```mermaid
 flowchart LR
-    Input[Lesson input] --> Algorithm[Pure algorithm]
+    Input[Lesson input] --> Validation[Input validation]
+    Validation --> Algorithm[Pure algorithm]
     Algorithm --> Events[Immutable event timeline]
     Events --> Player[Playback state]
     Player --> Visualization[Visual state]
@@ -86,7 +99,7 @@ flowchart LR
     Player --> Explanation[Step narration]
 ```
 
-Both sorting algorithms emit snapshots with the same semantic contract:
+All sorting algorithms emit snapshots with the same semantic contract:
 
 ```ts
 type SortStep = {
@@ -181,10 +194,12 @@ cartesian-interactive-algorithms/
 │   │   │   ├── learningProgress.ts
 │   │   │   └── learningProgress.test.ts
 │   │   └── sorting/
+│   │       ├── ArrayInputControls.tsx
 │   │       ├── BubbleSortLesson.tsx
 │   │       ├── InsertionSortLesson.tsx
 │   │       ├── SelectionSortLesson.tsx
 │   │       ├── SortLesson.tsx
+│   │       ├── arrayInput.ts
 │   │       ├── sortStep.ts
 │   │       ├── bubbleSort.ts
 │   │       ├── bubbleSort.test.ts
@@ -216,8 +231,9 @@ Pure event-generator tests protect algorithm correctness. They verify:
 - Complete sorted-index metadata
 - Keyboard-command mapping and modified-shortcut protection
 - Progress schema validation, deduplication, storage failures, save, and reset behavior
+- Custom-array parsing, normalization, size limits, value limits, and duplicate preservation
 
-Component tests exercise prediction attempts, retry behavior, correct-answer locking, explanatory feedback, and reset. The next useful UI layer is shared-player coverage for timer behavior and the browser-level keyboard listener around real focused elements.
+Component tests exercise prediction attempts, retry behavior, correct-answer locking, explanatory feedback, custom-array apply/cancel flows, accessible validation, and shuffle delegation. The current suite contains 60 passing tests. The next useful UI layer is shared-player coverage for timer behavior and the browser-level keyboard listener around real focused elements.
 
 ## Roadmap
 
@@ -239,7 +255,7 @@ Component tests exercise prediction attempts, retry behavior, correct-answer loc
 - [x] Lesson completion and local progress persistence
 - [x] Accessible keyboard playback controls
 - [ ] Lesson catalogue and routing
-- [ ] User-provided visualization inputs
+- [x] User-provided visualization inputs
 
 ### Curriculum
 
