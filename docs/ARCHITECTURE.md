@@ -199,6 +199,15 @@ The current timelines are intentionally precomputed. For small teaching inputs, 
 
 For algorithms that generate very large traces, possible strategies include input-size limits, event compression, checkpoints, or lazy generation. None is currently justified by the input limit of eight educational values.
 
+## Delivery pipeline
+
+The GitHub Actions workflow has two responsibility boundaries:
+
+1. The quality job installs the lockfile exactly, then runs tests, static analysis, and the production build.
+2. The deployment job runs only for a verified `main` build and receives the `pages: write` and OpenID Connect permissions required by GitHub Pages.
+
+Pull requests run the same quality gate but cannot upload or deploy the site. Actions are pinned to full commit SHAs to reduce the risk of a mutable third-party tag changing the pipeline unexpectedly. Vite prefixes production assets with `/cartesian-interactive-algorithms/`; local development stays at `/`.
+
 ## Deferred decisions
 
 - **Global state library:** local state is sufficient today.

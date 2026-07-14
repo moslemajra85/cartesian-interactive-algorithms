@@ -19,6 +19,8 @@ npm run build
 
 All three commands must pass.
 
+GitHub Actions repeats these checks for pull requests and pushes to `main`. Successful `main` builds deploy automatically to GitHub Pages, so a red quality job is a release blocker rather than an advisory signal.
+
 ## Adding an algorithm lesson
 
 1. Implement a pure event generator.

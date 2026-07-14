@@ -4,6 +4,9 @@ An interactive, visual learning environment for understanding data structures an
 
 > **Project status:** Active development. The application currently includes the complete handbook shell and three production-quality sorting lessons backed by a shared visualization player.
 
+[![CI and deploy](https://github.com/moslemajra85/cartesian-interactive-algorithms/actions/workflows/ci-and-deploy.yml/badge.svg)](https://github.com/moslemajra85/cartesian-interactive-algorithms/actions/workflows/ci-and-deploy.yml)
+[![Live site](https://img.shields.io/badge/live-GitHub%20Pages-222?logo=github)](https://moslemajra85.github.io/cartesian-interactive-algorithms/)
+
 ![Cartesian interactive handbook home](docs/images/home-desktop.png)
 
 ## Why Cartesian exists
@@ -147,12 +150,25 @@ npm run dev
 
 Vite prints the local development URL after startup.
 
-Open either implemented lesson directly at:
+Open any implemented lesson directly at:
 
 ```text
 http://localhost:5173/#bubble-sort
 http://localhost:5173/#selection-sort
 http://localhost:5173/#insertion-sort
+```
+
+## Deployment
+
+The production site is available at [moslemajra85.github.io/cartesian-interactive-algorithms](https://moslemajra85.github.io/cartesian-interactive-algorithms/).
+
+The `.github/workflows/ci-and-deploy.yml` workflow runs tests, lint, and a production build for pull requests and pushes to `main`. A successful `main` build is packaged and deployed through GitHub Pages. Pull requests receive read-only permissions and never deploy.
+
+Vite uses `/` during local development and `/cartesian-interactive-algorithms/` for production builds. This distinction is required because the Pages site is hosted under a repository path. To inspect the exact production paths locally:
+
+```bash
+npm run build
+npm run preview
 ```
 
 ## Available commands
@@ -213,6 +229,7 @@ cartesian-interactive-algorithms/
 │   ├── App.css                 # Product and lesson styling
 │   ├── index.css               # Global tokens and defaults
 │   └── main.tsx                # React entry point
+├── .github/workflows/          # Quality gate and Pages deployment
 ├── index.html
 ├── package.json
 └── vite.config.ts
@@ -246,8 +263,8 @@ Component tests exercise prediction attempts, retry behavior, correct-answer loc
 - [x] Selection Sort lesson and shared sorting player
 - [x] Insertion Sort lesson
 - [x] Algorithm unit tests
-- [ ] Continuous integration
-- [ ] Static deployment
+- [x] Continuous integration
+- [x] Static deployment
 
 ### Learning experience
 
