@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { PredictionCheckpoint } from '../learning/PredictionCheckpoint'
 import { PlaybackControls } from '../learning/PlaybackControls'
+import { ProblemBrief } from '../learning/ProblemBrief'
 import { useStepPlayback } from '../learning/useStepPlayback'
 import { ArrayVisualizer } from '../sorting/ArrayVisualizer'
 import type { LessonComponentProps } from '../sorting/SortLesson'
@@ -70,6 +71,8 @@ export function BinarySearchLesson({ lessons, onBack, onOpenLesson, onCompleteLe
           <small>TIME</small><strong className="is-long">{definition.timeComplexity}</strong><span>SPACE {definition.spaceComplexity}</span>
         </div>
       </section>
+
+      <ProblemBrief definition={definition.problem} headingId={`${definition.slug}-problem`} />
 
       <section className="lesson-workspace">
         <div className="visualizer-panel">

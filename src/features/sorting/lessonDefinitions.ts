@@ -8,6 +8,12 @@ export const bubbleSortLesson = {
   slug: 'bubble-sort', title: 'Bubble Sort', lessonLabel: 'LESSON 02.03', duration: '8 MIN',
   tagline: 'Compare neighbors. Swap disorder. Repeat until every value finds its place.',
   timeComplexity: 'O(n²)', spaceComplexity: 'O(1)', initialValues: [7, 3, 9, 2, 6, 4],
+  problem: {
+    title: 'Reorder a physical queue with adjacent moves',
+    scenario: 'A warehouse conveyor holds a short queue of priority-coded packages. Its mechanism can exchange only neighboring packages before dispatch.',
+    constraints: ['Only adjacent packages can swap.', 'The queue is intentionally small.', 'Operators need to see each correction happen.'],
+    question: 'How can repeated local exchanges guarantee that the highest-priority remaining package reaches the dispatch boundary?',
+  },
   createSteps: createBubbleSortSteps,
   codeLines: [
     'bubbleSort(values)', '  for end from last index down to 1',
@@ -35,6 +41,12 @@ export const selectionSortLesson = {
   slug: 'selection-sort', title: 'Selection Sort', lessonLabel: 'LESSON 02.04', duration: '9 MIN',
   tagline: 'Find the smallest. Put it next. Grow a sorted region from left to right.',
   timeComplexity: 'O(n²)', spaceComplexity: 'O(1)', initialValues: [7, 3, 9, 2, 6, 4],
+  problem: {
+    title: 'Order records when writes are expensive',
+    scenario: 'A small embedded controller stores calibration records in write-limited memory. Reads are cheap, but unnecessary swaps shorten the device’s useful life.',
+    constraints: ['The batch is small enough for a full scan.', 'Memory writes matter more than comparisons.', 'Only constant extra workspace is available.'],
+    question: 'How can the controller identify each next record completely, then place it with at most one swap per pass?',
+  },
   createSteps: createSelectionSortSteps,
   codeLines: [
     'selectionSort(values)', '  for start from 0 to last index - 1', '    minimum = start',
@@ -62,6 +74,12 @@ export const insertionSortLesson = {
   slug: 'insertion-sort', title: 'Insertion Sort', lessonLabel: 'LESSON 02.05', duration: '9 MIN',
   tagline: 'Pick the next value. Slide it left. Grow an ordered region one insertion at a time.',
   timeComplexity: 'O(n²)', spaceComplexity: 'O(1)', initialValues: [7, 3, 9, 2, 6, 4],
+  problem: {
+    title: 'Maintain order in a nearly sorted event window',
+    scenario: 'A monitoring service receives a small batch of timestamped events that are usually ordered, except for occasional network-delayed arrivals.',
+    constraints: ['Most events are already near their correct position.', 'The batch must be updated in place.', 'New arrivals should move only as far as necessary.'],
+    question: 'How can the service reuse the ordered prefix instead of sorting the entire window from scratch?',
+  },
   createSteps: createInsertionSortSteps,
   codeLines: [
     'insertionSort(values)', '  for current from 1 to last index', '    position = current',
@@ -89,6 +107,12 @@ export const mergeSortLesson = {
   slug: 'merge-sort', title: 'Merge Sort', lessonLabel: 'LESSON 02.06', duration: '11 MIN',
   tagline: 'Divide the problem. Order the pieces. Merge small certainties into one solution.',
   timeComplexity: 'O(n log n)', spaceComplexity: 'O(n)', initialValues: [8, 3, 6, 2, 7, 4, 1],
+  problem: {
+    title: 'Combine independently ordered data batches',
+    scenario: 'Two workers produce timestamp-ordered log batches. An ingestion service must combine them into one ordered stream without repeatedly searching the whole dataset.',
+    constraints: ['Each incoming half is already ordered.', 'The combined result must preserve every record.', 'Linear auxiliary storage is acceptable for predictable throughput.'],
+    question: 'How can the service use the guarantees of both ordered halves to choose each next record once?',
+  },
   createSteps: createMergeSortSteps,
   codeLines: [
     'mergeSort(values, start, end)', '  if start >= end: return',

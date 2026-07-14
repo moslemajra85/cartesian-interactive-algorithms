@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { PlaybackControls } from '../learning/PlaybackControls'
 import { PredictionCheckpoint } from '../learning/PredictionCheckpoint'
+import { ProblemBrief } from '../learning/ProblemBrief'
 import { useStepPlayback } from '../learning/useStepPlayback'
 import type { LessonComponentProps } from '../sorting/SortLesson'
 import { createComplexityCaseSteps } from './complexityCases'
@@ -44,6 +45,8 @@ export function ComplexityCasesLesson({ lessons, onBack, onOpenLesson, onComplet
           <small>WORST CASE</small><strong>O(n)</strong><span>NOT EVERY RUN</span>
         </div>
       </section>
+
+      <ProblemBrief definition={definition.problem} headingId={`${definition.slug}-problem`} />
 
       <section className="growth-workspace case-workspace">
         <div className="growth-panel">

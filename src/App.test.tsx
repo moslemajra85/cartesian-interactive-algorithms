@@ -37,6 +37,8 @@ describe('application routing', () => {
     await user.click(screen.getByRole('button', { name: '04 · Cases & Guarantees' }))
     expect(window.location.hash).toBe('#complexity-cases')
     expect(screen.getByRole('heading', { level: 1, name: 'Cases & Guarantees' })).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 2, name: 'Set a latency budget for customer lookup' })).toBeTruthy()
+    expect(screen.getByText('The on-call team needs a defensible response-time ceiling.')).toBeTruthy()
 
     fireEvent.change(screen.getByRole('slider', { name: 'Experiment with input size' }), { target: { value: '8' } })
     expect(screen.getByText('LINEAR SEARCH · n = 8')).toBeTruthy()
@@ -58,6 +60,7 @@ describe('application routing', () => {
     expect(window.location.hash).toBe('#bubble-sort')
     expect(document.title).toBe('Bubble Sort — Cartesian')
     expect(document.activeElement).toBe(lessonHeading)
+    expect(screen.getByRole('heading', { level: 2, name: 'Reorder a physical queue with adjacent moves' })).toBeTruthy()
   })
 
   it('responds to browser history route events', async () => {

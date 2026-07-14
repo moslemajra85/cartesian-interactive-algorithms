@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { PlaybackControls } from '../learning/PlaybackControls'
 import { PredictionCheckpoint } from '../learning/PredictionCheckpoint'
+import { ProblemBrief } from '../learning/ProblemBrief'
 import { useStepPlayback } from '../learning/useStepPlayback'
 import type { LessonComponentProps } from '../sorting/SortLesson'
 import { createOperationCountingSteps } from './countingOperations'
@@ -34,6 +35,8 @@ export function CountingOperationsLesson({ lessons, onBack, onOpenLesson, onComp
           <small>TIME</small><strong>O(n)</strong><span>SPACE O(1)</span>
         </div>
       </section>
+
+      <ProblemBrief definition={definition.problem} headingId={`${definition.slug}-problem`} />
 
       <section className="growth-workspace operation-workspace">
         <div className="growth-panel">

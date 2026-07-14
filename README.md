@@ -27,6 +27,7 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - Chapter navigation and progress presentation
 - Interactive Foundations chapter introduction comparing constant through quadratic growth
 - Direct input-size experiments with sliders and precise increment/decrement controls
+- Concrete problem briefs with actors, operational constraints, and an engineering decision in every lesson
 - Operation-counting lesson that distinguishes sequential addition from nested multiplication
 - Auxiliary-space lesson contrasting fixed in-place workspace with input-sized copying
 - Best/average/worst-case lesson that separates observed runs from upper-bound guarantees

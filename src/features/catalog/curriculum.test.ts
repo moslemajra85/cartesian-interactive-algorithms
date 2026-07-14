@@ -22,4 +22,13 @@ describe('curriculum registry', () => {
       expect(lesson.definition.lessonLabel).toBe(`LESSON ${chapter.number}.${lesson.order}`)
     }
   })
+
+  it('gives every lesson a concrete problem, constraints, and engineering question', () => {
+    for (const lesson of lessonCatalog) {
+      expect(lesson.definition.problem.title.length).toBeGreaterThan(0)
+      expect(lesson.definition.problem.scenario.length).toBeGreaterThan(0)
+      expect(lesson.definition.problem.constraints.length).toBeGreaterThanOrEqual(2)
+      expect(lesson.definition.problem.question.length).toBeGreaterThan(0)
+    }
+  })
 })

@@ -1,4 +1,5 @@
 import type { PredictionCheckpointDefinition } from '../learning/PredictionCheckpoint'
+import type { ProblemBriefDefinition } from '../learning/ProblemBrief'
 
 type BinarySearchLessonDefinition = {
   slug: 'binary-search'
@@ -15,6 +16,7 @@ type BinarySearchLessonDefinition = {
   conceptTitle: string
   conceptExplanation: string
   prediction: PredictionCheckpointDefinition
+  problem: ProblemBriefDefinition
 }
 
 export const binarySearchLesson = {
@@ -25,6 +27,12 @@ export const binarySearchLesson = {
   tagline: 'Inspect the middle. Trust the order. Eliminate half the possibilities at every decision.',
   timeComplexity: 'O(log n)',
   spaceComplexity: 'O(1)',
+  problem: {
+    title: 'Find a product in a growing catalogue',
+    scenario: 'A support dashboard receives a sorted list of product IDs and must locate one ID while an agent waits for the result.',
+    constraints: ['The catalogue may contain millions of IDs.', 'A missing ID is a normal outcome.', 'The sorted order is guaranteed before the request begins.'],
+    question: 'How can one comparison rule out more than one candidate while preserving a predictable latency bound?',
+  },
   initialValues: [2, 5, 8, 12, 16, 21, 27, 33],
   initialTarget: 21,
   codeLines: [

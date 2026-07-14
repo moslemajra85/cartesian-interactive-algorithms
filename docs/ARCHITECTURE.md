@@ -94,6 +94,14 @@ Responsibilities:
 
 Checkpoint definitions live beside lesson content. They do not inspect timeline events or duplicate algorithm execution. This keeps the question pedagogically intentional and allows the component to be reused by future trees, graphs, and problem-solving lessons.
 
+### Problem context
+
+Location: `src/features/learning/ProblemBrief.tsx`
+
+Every curriculum definition includes a concrete problem brief with a scenario, at least two constraints, and an engineering question. The shared renderer places context before technique so the visualization answers a stated decision rather than presenting an algorithm in isolation. Curriculum tests enforce this content contract for every registered lesson.
+
+Scenarios must make the algorithm honest. Bubble Sort is presented for an adjacent-exchange mechanism, Selection Sort for write-limited memory, and Insertion Sort for small nearly ordered windows—not as interchangeable recommendations for general production sorting.
+
 ### Application shell
 
 Location: `src/App.tsx`

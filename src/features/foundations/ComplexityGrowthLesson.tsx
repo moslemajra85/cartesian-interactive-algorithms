@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { PredictionCheckpoint } from '../learning/PredictionCheckpoint'
 import { PlaybackControls } from '../learning/PlaybackControls'
+import { ProblemBrief } from '../learning/ProblemBrief'
 import { useStepPlayback } from '../learning/useStepPlayback'
 import type { LessonComponentProps } from '../sorting/SortLesson'
 import { createComplexityGrowthSteps, type GrowthRateId } from './complexityGrowth'
@@ -42,6 +43,8 @@ export function ComplexityGrowthLesson({ lessons, onBack, onOpenLesson, onComple
           <small>COMPARE</small><strong className="is-long">O(1)…O(n²)</strong><span>INPUT → WORK</span>
         </div>
       </section>
+
+      <ProblemBrief definition={definition.problem} headingId={`${definition.slug}-problem`} />
 
       <section className="growth-workspace">
         <div className="growth-panel">

@@ -8,6 +8,12 @@ export const countingOperationsLesson = {
   tagline: 'Translate code into work. Separate fixed cost from repeated cost. Keep the term that controls growth.',
   timeComplexity: 'O(n)',
   spaceComplexity: 'O(1)',
+  problem: {
+    title: 'Estimate work in an analytics pipeline',
+    scenario: 'A reporting job initializes three counters, scans every order to total revenue, then scans the same orders again to count refunds.',
+    constraints: ['Both scans are required.', 'The loops run sequentially, not inside one another.', 'The order volume changes every day.'],
+    question: 'What exact operation expression should guide capacity estimates, and which growth class describes it at scale?',
+  },
   prediction: {
     question: 'Why are two separate loops over n items O(n), rather than O(n²)?',
     options: [

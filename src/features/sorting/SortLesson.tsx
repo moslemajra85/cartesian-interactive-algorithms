@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { PredictionCheckpoint, type PredictionCheckpointDefinition } from '../learning/PredictionCheckpoint'
 import { PlaybackControls } from '../learning/PlaybackControls'
+import { ProblemBrief, type ProblemBriefDefinition } from '../learning/ProblemBrief'
 import { useStepPlayback } from '../learning/useStepPlayback'
 import { ArrayInputControls } from './ArrayInputControls'
 import { ArrayVisualizer, type ArrayVisualizationMode } from './ArrayVisualizer'
@@ -21,6 +22,7 @@ export type SortLessonDefinition = {
   conceptTitle: string
   conceptExplanation: string
   prediction: PredictionCheckpointDefinition
+  problem: ProblemBriefDefinition
   visualMode?: ArrayVisualizationMode
 }
 
@@ -99,6 +101,8 @@ export function SortLesson({ definition, lessons, onBack, onOpenLesson, onComple
           <small>TIME</small><strong className={definition.timeComplexity.length > 6 ? 'is-long' : undefined}>{definition.timeComplexity}</strong><span>SPACE {definition.spaceComplexity}</span>
         </div>
       </section>
+
+      <ProblemBrief definition={definition.problem} headingId={`${definition.slug}-problem`} />
 
       <section className="lesson-workspace">
         <div className="visualizer-panel">

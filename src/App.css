@@ -154,6 +154,23 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 .catalogue-note span { color: var(--coral); font: 8px var(--mono); letter-spacing: .12em; }
 .catalogue-note p { margin: 0; color: #646a73; font-size: 11px; line-height: 1.75; }
 
+.problem-brief { margin: 0 0 32px; display: grid; grid-template-columns: 145px minmax(240px, 1.2fr) minmax(220px, .8fr); border: 1px solid var(--ink); border-top: 4px solid var(--coral); background: var(--paper); box-shadow: 7px 8px 0 rgba(25,32,43,.1); }
+.problem-brief-label { padding: 22px 18px; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid var(--line); background: var(--ink); color: white; }
+.problem-brief-label span, .problem-brief-constraints > strong, .problem-brief-question span { font: 8px var(--mono); letter-spacing: .11em; }
+.problem-brief-label span { color: var(--coral); }
+.problem-brief-label i { color: #adb3bb; font: 8px/1.5 var(--mono); font-style: normal; }
+.problem-brief-story { padding: 24px 26px; border-right: 1px solid var(--line); }
+.problem-brief-story h2 { margin: 0 0 12px; font-size: 20px; letter-spacing: -.03em; }
+.problem-brief-story p, .problem-brief-question p { margin: 0; color: #646a73; font-size: 10px; line-height: 1.7; }
+.problem-brief-constraints { padding: 22px; }
+.problem-brief-constraints > strong { color: #747983; }
+.problem-brief-constraints ul { margin: 12px 0 0; padding: 0; display: grid; gap: 8px; list-style: none; }
+.problem-brief-constraints li { position: relative; padding-left: 13px; color: #626872; font-size: 9px; line-height: 1.45; }
+.problem-brief-constraints li::before { content: '×'; position: absolute; left: 0; color: var(--coral); font: 9px var(--mono); }
+.problem-brief-question { grid-column: 2 / -1; padding: 17px 24px; display: grid; grid-template-columns: 155px 1fr; align-items: center; gap: 18px; border-top: 1px solid var(--line); background: #f5f0e7; }
+.problem-brief-question span { color: var(--coral); }
+.problem-brief-question p { color: var(--ink); font-weight: 700; }
+
 .growth-workspace { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(320px, .75fr); border: 1px solid rgba(25,32,43,.26); background: var(--paper); box-shadow: 11px 12px 0 var(--ink); }
 .growth-panel { min-width: 0; border-right: 1px solid var(--line); }
 .input-size-experiment { min-height: 68px; padding: 11px 18px; display: grid; grid-template-columns: minmax(175px, .8fr) 32px minmax(130px, 1fr) 32px 58px; align-items: center; gap: 9px; border-bottom: 1px solid var(--line); background: #f6f2e9; }
@@ -418,6 +435,11 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
   .lesson-concept > p { grid-column: 2; }
   .checkpoint-heading { grid-template-columns: 60px 1fr; }
   .prediction-checkpoint fieldset, .checkpoint-feedback { margin-left: 115px; }
+  .problem-brief { grid-template-columns: 125px 1fr; }
+  .problem-brief-story { border-right: 0; }
+  .problem-brief-constraints { grid-column: 1 / -1; border-top: 1px solid var(--line); }
+  .problem-brief-constraints ul { grid-template-columns: repeat(3, 1fr); }
+  .problem-brief-question { grid-column: 1 / -1; }
 }
 
 @media (max-width: 680px) {
@@ -450,6 +472,13 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
   .catalogue-heading h1 { font-size: 53px; }
   .catalogue-progress { width: 170px; }
   .lesson-catalogue-grid { grid-template-columns: 1fr; }
+  .problem-brief { grid-template-columns: 1fr; }
+  .problem-brief-label { min-height: 68px; padding: 15px 18px; flex-direction: row; align-items: center; border-right: 0; }
+  .problem-brief-story, .problem-brief-constraints, .problem-brief-question { grid-column: 1; }
+  .problem-brief-story { padding: 20px; }
+  .problem-brief-constraints { padding: 18px 20px; }
+  .problem-brief-constraints ul { grid-template-columns: 1fr; }
+  .problem-brief-question { padding: 18px 20px; grid-template-columns: 1fr; gap: 8px; }
   .growth-bars { min-height: 360px; padding: 30px 18px; gap: 25px; }
   .input-size-experiment { grid-template-columns: 32px minmax(0, 1fr) 32px 54px; padding: 12px 14px; }
   .input-size-experiment > div { grid-column: 1 / -1; }

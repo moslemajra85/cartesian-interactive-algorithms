@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { PlaybackControls } from '../learning/PlaybackControls'
 import { PredictionCheckpoint } from '../learning/PredictionCheckpoint'
+import { ProblemBrief } from '../learning/ProblemBrief'
 import { useStepPlayback } from '../learning/useStepPlayback'
 import type { LessonComponentProps } from '../sorting/SortLesson'
 import { FoundationLessonNavigation } from './FoundationLessonNavigation'
@@ -42,6 +43,8 @@ export function SpaceComplexityLesson({ lessons, onBack, onOpenLesson, onComplet
           <small>EXTRA SPACE</small><strong className="is-long">O(1)…O(n)</strong><span>INPUT EXCLUDED</span>
         </div>
       </section>
+
+      <ProblemBrief definition={definition.problem} headingId={`${definition.slug}-problem`} />
 
       <section className="growth-workspace space-workspace">
         <div className="growth-panel">

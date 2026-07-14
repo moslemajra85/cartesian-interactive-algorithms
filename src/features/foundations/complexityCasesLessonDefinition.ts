@@ -8,6 +8,12 @@ export const complexityCasesLesson = {
   tagline: 'Separate lucky runs from typical behavior and hard guarantees. Learn what a worst-case bound really promises.',
   timeComplexity: 'O(n)',
   spaceComplexity: 'O(1)',
+  problem: {
+    title: 'Set a latency budget for customer lookup',
+    scenario: 'An incident tool scans an unsorted list of active customers by ID. Some lookups match immediately; missing IDs require checking the entire list.',
+    constraints: ['Missing IDs are valid requests.', 'Customer order is not guaranteed.', 'The on-call team needs a defensible response-time ceiling.'],
+    question: 'Should capacity planning use the lucky first match, the expected match position, or the maximum comparisons a request may require?',
+  },
   prediction: {
     question: 'What does a worst-case O(n) bound for linear search guarantee?',
     options: [

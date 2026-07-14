@@ -8,6 +8,12 @@ export const complexityGrowthLesson = {
   tagline: 'Change the input. Watch the work grow. Learn what Big O is actually comparing.',
   timeComplexity: 'O(1)…O(n²)',
   spaceComplexity: '—',
+  problem: {
+    title: 'Protect a fraud check as transaction volume grows',
+    scenario: 'A payment team is choosing between fraud checks that inspect one rule, halve a candidate set, scan every transaction, or compare every transaction pair.',
+    constraints: ['Daily volume is expected to grow tenfold.', 'The response must stay within a fixed processing window.', 'Current small-scale timings look similar.'],
+    question: 'Which growth pattern will dominate capacity as the input expands, even if every option feels fast today?',
+  },
   prediction: {
     question: 'If the input size doubles, which strategy’s work grows by roughly four times?',
     options: [
