@@ -258,6 +258,15 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 .call-stack > div > span.phase-unwind small { color: white; }
 .call-stack > div > i { margin: auto; color: #8a8e94; font: 9px var(--mono); font-style: normal; }
 .recursion-guide li { min-height: 90px; }
+.tradeoff-stage { min-height: 410px; padding: 45px 34px; display: grid; grid-template-columns: 1fr 34px 1fr; align-items: center; gap: 14px; background-image: linear-gradient(rgba(54,68,86,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(54,68,86,.05) 1px, transparent 1px); background-size: 23px 23px; }
+.tradeoff-stage > b { font: 9px var(--mono); text-align: center; }
+.tradeoff-stage article { min-height: 230px; padding: 22px; display: flex; flex-direction: column; border: 1px solid var(--ink); background: var(--paper); opacity: .66; transition: transform 220ms ease, box-shadow 220ms ease, opacity 220ms ease; }
+.tradeoff-stage article.is-recommended { opacity: 1; transform: translateY(-7px); box-shadow: 7px 8px 0 var(--coral); }
+.tradeoff-stage article > span { color: var(--coral); font: 7px var(--mono); letter-spacing: .1em; }
+.tradeoff-stage h3 { margin: 12px 0 25px; font-size: 16px; }
+.tradeoff-stage article > strong { font: 38px var(--mono); }
+.tradeoff-stage article > strong small { display: block; color: #747983; font: 7px var(--mono); }
+.tradeoff-stage article > p { margin: auto 0 0; color: #646a73; font: 8px var(--mono); }
 
 .not-found-page { min-height: calc(100vh - 227px); padding: 100px clamp(24px, 9vw, 145px); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; background-color: var(--paper-deep); background-image: linear-gradient(rgba(54,68,86,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(54,68,86,.035) 1px, transparent 1px); background-size: 32px 32px; }
 .not-found-code { color: var(--coral); font: 12px var(--mono); letter-spacing: .18em; }
@@ -513,6 +522,8 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
   .recursion-stage { min-height: 410px; padding: 25px 16px; grid-template-columns: 80px minmax(0, 1fr); gap: 15px; }
   .call-stack > div > span { padding: 6px; }
   .call-stack > div > span b { font-size: 7px; }
+  .tradeoff-stage { min-height: 560px; padding: 28px 18px; grid-template-columns: 1fr; }
+  .tradeoff-stage article { min-height: 190px; }
   .lesson-catalogue-card, .lesson-catalogue-card:last-child:nth-child(odd) { grid-column: auto; min-height: 370px; }
   .catalogue-note { grid-template-columns: 1fr; gap: 12px; }
   .not-found-page { min-height: calc(100vh - 215px); padding: 75px 22px; }

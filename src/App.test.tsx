@@ -49,6 +49,9 @@ describe('application routing', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Recursion & the Stack' })).toBeTruthy()
     fireEvent.change(screen.getByRole('slider', { name: 'Experiment with recursion depth' }), { target: { value: '6' } })
     expect(screen.getByText('CALL STACK · DEPTH 6')).toBeTruthy()
+    await user.click(screen.getByRole('button', { name: '06 · Time–Space Trade-offs' }))
+    expect(window.location.hash).toBe('#time-space-tradeoff')
+    expect(screen.getByRole('heading', { level: 1, name: 'Time–Space Trade-offs' })).toBeTruthy()
   })
 
   it('opens the catalogue and lesson from registry-derived navigation', async () => {

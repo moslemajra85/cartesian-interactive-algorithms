@@ -1,0 +1,8 @@
+import type { PredictionCheckpointDefinition } from '../learning/PredictionCheckpoint'
+
+export const timeSpaceTradeoffLesson = {
+  slug: 'time-space-tradeoff', title: 'Time–Space Trade-offs', lessonLabel: 'LESSON 01.06', duration: '10 MIN', timeComplexity: 'IT DEPENDS', spaceComplexity: 'IT DEPENDS',
+  tagline: 'Compare total workload, not one operation. Spend memory only when the repeated work justifies it.',
+  problem: { title: 'Serve repeated inventory lookups', scenario: 'A warehouse API receives product-ID lookups against ten unsorted inventory records. The team can scan on every request or build an in-memory index once.', constraints: ['The index consumes one extra cell per record.', 'Request volume varies by deployment.', 'Building the index also requires one pass over the records.'], question: 'At what request volume does spending O(n) memory reduce enough repeated work to be worthwhile?' },
+  prediction: { question: 'Why can an index be a poor choice for one lookup but a strong choice for many lookups?', options: [{ id: 'amortize', label: 'Many lookups amortize the one-time build cost.' }, { id: 'free', label: 'Index memory becomes free after the first lookup.' }, { id: 'scan-grows', label: 'The dataset grows after every scan.' }, { id: 'complexity-changes', label: 'Big O changes randomly between requests.' }], correctOptionId: 'amortize', hint: 'Separate the one-time setup cost from the cost paid for every request.', explanation: 'An index pays O(n) work and memory once, then makes each lookup cheap. Reusing it across many requests spreads that setup cost while repeated scans keep paying O(n) per request.' } satisfies PredictionCheckpointDefinition,
+} as const

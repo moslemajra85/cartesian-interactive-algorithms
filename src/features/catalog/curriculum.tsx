@@ -9,6 +9,8 @@ import { SpaceComplexityLesson } from '../foundations/SpaceComplexityLesson'
 import { spaceComplexityLesson } from '../foundations/spaceComplexityLessonDefinition'
 import { RecursionStackLesson } from '../foundations/RecursionStackLesson'
 import { recursionStackLesson } from '../foundations/recursionStackLessonDefinition'
+import { TimeSpaceTradeoffLesson } from '../foundations/TimeSpaceTradeoffLesson'
+import { timeSpaceTradeoffLesson } from '../foundations/timeSpaceTradeoffLessonDefinition'
 import { BinarySearchLesson } from '../searching/BinarySearchLesson'
 import { binarySearchLesson } from '../searching/binarySearchLessonDefinition'
 import { BubbleSortLesson } from '../sorting/BubbleSortLesson'
@@ -77,6 +79,7 @@ const catalogEntries = [
   { order: '03', chapterId: 'foundations', definition: spaceComplexityLesson, component: SpaceComplexityLesson },
   { order: '04', chapterId: 'foundations', definition: complexityCasesLesson, component: ComplexityCasesLesson },
   { order: '05', chapterId: 'foundations', definition: recursionStackLesson, component: RecursionStackLesson },
+  { order: '06', chapterId: 'foundations', definition: timeSpaceTradeoffLesson, component: TimeSpaceTradeoffLesson },
   { order: '03', chapterId: 'arrays', definition: bubbleSortLesson, component: BubbleSortLesson },
   { order: '04', chapterId: 'arrays', definition: selectionSortLesson, component: SelectionSortLesson },
   { order: '05', chapterId: 'arrays', definition: insertionSortLesson, component: InsertionSortLesson },
