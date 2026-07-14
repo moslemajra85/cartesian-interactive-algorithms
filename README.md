@@ -32,6 +32,7 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - Step-specific explanations and pass tracking
 - Direct lesson links for each implemented algorithm
 - Versioned local progress, completion marks, resume behavior, and reset controls
+- Algorithm-specific prediction checkpoints with retryable hints and invariant explanations
 - Reduced-motion support
 
 ![Bubble Sort visualization with synchronized pseudocode](docs/images/bubble-sort-lesson.png)
@@ -46,6 +47,17 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 | Learning path | Bubble Sort lesson |
 | --- | --- |
 | ![Cartesian home on mobile](docs/images/home-mobile.png) | ![Bubble Sort lesson on mobile](docs/images/bubble-sort-mobile.png) |
+
+</details>
+
+<details>
+<summary>Prediction checkpoint</summary>
+
+Each implemented lesson ends with a reasoning question tied to the algorithm's invariant—not syntax recall.
+
+| Desktop | Mobile |
+| --- | --- |
+| ![Insertion Sort prediction checkpoint](docs/images/prediction-checkpoint-desktop.png) | ![Insertion Sort prediction checkpoint on mobile](docs/images/prediction-checkpoint-mobile.png) |
 
 </details>
 
@@ -97,6 +109,8 @@ This boundary keeps the algorithm testable without a browser and allows the UI t
 - TypeScript 6
 - Vite 8
 - Vitest
+- Testing Library and user-event
+- jsdom for component interaction tests
 - Oxlint
 - CSS animations and responsive layout
 
@@ -160,6 +174,9 @@ cartesian-interactive-algorithms/
 │   └── CONTRIBUTING.md         # Development workflow
 ├── src/
 │   ├── features/
+│   │   ├── learning/
+│   │   │   ├── PredictionCheckpoint.tsx
+│   │   │   └── PredictionCheckpoint.test.tsx
 │   │   ├── progress/
 │   │   │   ├── learningProgress.ts
 │   │   │   └── learningProgress.test.ts
@@ -188,7 +205,7 @@ cartesian-interactive-algorithms/
 
 ## Testing strategy
 
-The current tests target the pure event generator because it carries the correctness risk. They verify:
+Pure event-generator tests protect algorithm correctness. They verify:
 
 - Correct final ordering
 - Input immutability
@@ -200,7 +217,7 @@ The current tests target the pure event generator because it carries the correct
 - Keyboard-command mapping and modified-shortcut protection
 - Progress schema validation, deduplication, storage failures, save, and reset behavior
 
-The second lesson justified extracting a shared sorting player. Component interaction tests are now the next useful layer for protecting timer behavior and verifying the browser-level keyboard listener around real focused elements.
+Component tests exercise prediction attempts, retry behavior, correct-answer locking, explanatory feedback, and reset. The next useful UI layer is shared-player coverage for timer behavior and the browser-level keyboard listener around real focused elements.
 
 ## Roadmap
 
@@ -218,7 +235,7 @@ The second lesson justified extracting a shared sorting player. Component intera
 
 ### Learning experience
 
-- [ ] Prediction checkpoints
+- [x] Prediction checkpoints
 - [x] Lesson completion and local progress persistence
 - [x] Accessible keyboard playback controls
 - [ ] Lesson catalogue and routing

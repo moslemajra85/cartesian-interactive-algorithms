@@ -65,6 +65,20 @@ Bubble Sort, Selection Sort, and Insertion Sort provide typed lesson definitions
 
 The algorithm-specific wrapper components contain educational content rather than playback mechanics. This keeps lesson configuration explicit while preventing duplicated visualization code.
 
+### Prediction checkpoint
+
+Location: `src/features/learning/PredictionCheckpoint.tsx`
+
+Responsibilities:
+
+- Render an algorithm-specific reasoning question
+- Allow repeated attempts after an incorrect answer
+- Reveal a targeted hint without exposing the correct option
+- Lock options and explain the invariant after a correct answer
+- Reset independently from algorithm playback
+
+Checkpoint definitions live beside lesson content. They do not inspect timeline events or duplicate algorithm execution. This keeps the question pedagogically intentional and allows the component to be reused by future trees, graphs, and problem-solving lessons.
+
 ### Application shell
 
 Location: `src/App.tsx`
@@ -117,7 +131,7 @@ The visualization does not own a separate copy of algorithm state. It derives ev
 
 ## Testing boundaries
 
-Unit tests currently cover the event generator because it contains correctness-sensitive transformations. The next useful test layers are:
+Unit tests cover event generators and persistence because they contain correctness-sensitive transformations. Component tests now cover prediction interaction and feedback. The next useful test layers are:
 
 1. Shared player interaction tests for button and timer behavior.
 2. Browser-level focus and accessible-state tests.
@@ -158,6 +172,8 @@ Current foundations:
 - Keyboard playback bindings for play/pause, stepping, restart, and speed
 - Protection for native browser shortcuts and focused interactive elements
 - Visible shortcut reference in every sorting lesson
+- Live prediction feedback with retryable answers
+- Disabled answer state only after a correct response
 - Reduced-motion media query
 - Responsive layouts that preserve content order
 

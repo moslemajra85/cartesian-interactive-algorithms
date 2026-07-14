@@ -23,6 +23,18 @@ const bubbleSortLesson: SortLessonDefinition = {
   insight: 'After every pass, at least one value reaches its final position. That shrinks the unsorted region from the right.',
   conceptTitle: 'The largest value has nowhere to hide.',
   conceptExplanation: 'Every comparison pushes the larger neighbor one position to the right. A complete pass therefore carries the largest unsorted value all the way to the boundary.',
+  prediction: {
+    question: 'What is guaranteed after one complete Bubble Sort pass?',
+    options: [
+      { id: 'array-sorted', label: 'The entire array is sorted.' },
+      { id: 'largest-settled', label: 'The largest unsorted value reaches the right boundary.' },
+      { id: 'smallest-first', label: 'The smallest value reaches index zero.' },
+      { id: 'half-comparisons', label: 'The next pass needs half as many comparisons.' },
+    ],
+    correctOptionId: 'largest-settled',
+    hint: 'Track what happens to the larger value in every adjacent comparison as the scan moves right.',
+    explanation: 'Each comparison sends the larger neighbor right. Repeating that operation across the unsorted region carries its maximum to the boundary.',
+  },
 }
 
 type BubbleSortLessonProps = {

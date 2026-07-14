@@ -24,6 +24,18 @@ const selectionSortLesson: SortLessonDefinition = {
   insight: 'Selection Sort performs at most one swap per pass. It spends its work searching, then places the chosen value directly into position.',
   conceptTitle: 'Each position earns a proof.',
   conceptExplanation: 'Before filling an index, Selection Sort inspects every remaining candidate. The chosen minimum therefore cannot be improved by any value to its right.',
+  prediction: {
+    question: 'Why does Selection Sort need at most one swap during a pass?',
+    options: [
+      { id: 'single-comparison', label: 'It performs only one comparison per pass.' },
+      { id: 'choose-first', label: 'It finishes finding the minimum before placing it.' },
+      { id: 'adjacent-only', label: 'It can swap only adjacent values.' },
+      { id: 'prefix-frozen', label: 'Every unsorted value is already near its destination.' },
+    ],
+    correctOptionId: 'choose-first',
+    hint: 'Separate the search phase from the placement phase. When does any movement actually happen?',
+    explanation: 'The scan only remembers the smallest candidate. After the scan proves which value is minimum, one swap places that value into the next sorted position.',
+  },
 }
 
 type SelectionSortLessonProps = {

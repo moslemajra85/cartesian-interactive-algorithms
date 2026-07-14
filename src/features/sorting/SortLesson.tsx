@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { PredictionCheckpoint, type PredictionCheckpointDefinition } from '../learning/PredictionCheckpoint'
 import { getPlaybackCommand } from './playbackShortcuts'
 import type { SortStep } from './sortStep'
 
@@ -18,6 +19,7 @@ export type SortLessonDefinition = {
   insight: string
   conceptTitle: string
   conceptExplanation: string
+  prediction: PredictionCheckpointDefinition
 }
 
 export type LessonLink = {
@@ -225,6 +227,8 @@ export function SortLesson({ definition, lessons, onBack, onOpenLesson, onComple
         <div><p className="eyebrow"><span /> WHY IT WORKS</p><h2>{definition.conceptTitle}</h2></div>
         <p>{definition.conceptExplanation}</p>
       </section>
+
+      <PredictionCheckpoint definition={definition.prediction} />
     </main>
   )
 }

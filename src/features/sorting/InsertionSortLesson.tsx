@@ -23,6 +23,18 @@ const insertionSortLesson: SortLessonDefinition = {
   insight: 'Insertion Sort is adaptive. When values are already close to their correct positions, the inner loop stops early and performs very little movement.',
   conceptTitle: 'Order grows from what you already know.',
   conceptExplanation: 'Before each pass, the prefix is ordered. Moving the next value left until its neighbor is no larger restores that invariant for a prefix that is one element longer.',
+  prediction: {
+    question: 'When can Insertion Sort stop moving the current value left?',
+    options: [
+      { id: 'original-index', label: 'When it returns to its original index.' },
+      { id: 'right-scanned', label: 'After every value to its right has been inspected.' },
+      { id: 'left-not-larger', label: 'When its left neighbor is no larger, or it reaches index zero.' },
+      { id: 'maximum-found', label: 'When the largest value in the array has been found.' },
+    ],
+    correctOptionId: 'left-not-larger',
+    hint: 'The prefix was already ordered before insertion. What local comparison proves the new value fits?',
+    explanation: 'Once the left neighbor is no larger, everything further left is also no larger because the prefix is ordered. The value has reached a valid insertion point.',
+  },
 }
 
 type InsertionSortLessonProps = {

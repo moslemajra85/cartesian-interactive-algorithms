@@ -30,6 +30,8 @@ All three commands must pass.
 7. Check reduced-motion behavior and keyboard access.
 8. Update the roadmap and documentation if project behavior changes.
 
+Every lesson should also include a prediction checkpoint that tests the algorithm's invariant or decision process. Avoid syntax trivia and questions that can be answered without understanding the visualization.
+
 ## Event quality checklist
 
 An event should answer at least one of these questions:

@@ -171,6 +171,31 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 .concept-number { color: rgba(25,32,43,.17); font: 52px var(--mono); }
 .lesson-concept h2 { max-width: 500px; margin: 0; font-size: clamp(30px, 3.6vw, 48px); line-height: 1.04; letter-spacing: -.045em; }
 .lesson-concept > p { margin: 0; color: #686e77; font-size: 13px; line-height: 1.8; }
+.prediction-checkpoint { margin-top: 22px; padding: 58px 7%; border: 1px solid #17202b; background: #17202b; color: white; }
+.checkpoint-heading { display: grid; grid-template-columns: 80px 1fr; gap: 55px; align-items: start; }
+.checkpoint-number { color: rgba(255,255,255,.2); font: 52px var(--mono); }
+.checkpoint-heading .eyebrow { margin-bottom: 14px; color: #aeb5be; }
+.checkpoint-heading h2 { margin: 0; color: white; font-size: clamp(30px, 3.6vw, 48px); line-height: 1.04; letter-spacing: -.045em; }
+.checkpoint-heading > div > p:last-child { margin: 13px 0 0; color: #abb2bb; font-size: 12px; }
+.prediction-checkpoint fieldset { margin: 45px 0 0 135px; padding: 0; border: 0; }
+.prediction-checkpoint legend { max-width: 760px; margin-bottom: 22px; color: white; font-size: 17px; font-weight: 700; line-height: 1.5; }
+.prediction-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.prediction-options button { min-height: 62px; padding: 12px 15px; display: grid; grid-template-columns: 27px 1fr 22px; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.035); color: #dce0e5; cursor: pointer; text-align: left; font-size: 10px; line-height: 1.5; transition: border-color 160ms ease, background 160ms ease, transform 160ms ease; }
+.prediction-options button:hover:not(:disabled) { border-color: rgba(255,255,255,.65); transform: translateY(-2px); }
+.prediction-options button > span { width: 25px; height: 25px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.25); color: #aeb5be; font: 9px var(--mono); }
+.prediction-options button i { width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%; font-style: normal; }
+.prediction-options button.is-wrong { border-color: var(--coral); background: rgba(255,101,92,.1); }
+.prediction-options button.is-wrong i { background: var(--coral); color: white; }
+.prediction-options button.is-correct { border-color: #65aa84; background: rgba(101,170,132,.14); color: white; }
+.prediction-options button.is-correct i { background: #65aa84; color: white; }
+.prediction-options button:disabled { cursor: default; opacity: .52; }
+.prediction-options button.is-correct:disabled { opacity: 1; }
+.checkpoint-feedback { margin: 14px 0 0 135px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 30px; border-left: 3px solid; background: rgba(255,255,255,.05); }
+.checkpoint-feedback.is-hint { border-color: var(--gold); }
+.checkpoint-feedback.is-success { border-color: #65aa84; }
+.checkpoint-feedback strong { display: block; color: white; font-size: 11px; }
+.checkpoint-feedback p { margin: 6px 0 0; color: #b8bec6; font-size: 10px; line-height: 1.6; }
+.checkpoint-feedback > button { flex: 0 0 auto; padding: 8px 10px; border: 1px solid rgba(255,255,255,.3); background: transparent; color: white; cursor: pointer; font: 8px var(--mono); text-transform: uppercase; }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes pulse { 75%,100% { box-shadow: 0 0 0 10px rgba(84,163,120,0); } }
@@ -187,6 +212,8 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
   .code-panel { min-height: 500px; }
   .lesson-concept { grid-template-columns: 60px 1fr; }
   .lesson-concept > p { grid-column: 2; }
+  .checkpoint-heading { grid-template-columns: 60px 1fr; }
+  .prediction-checkpoint fieldset, .checkpoint-feedback { margin-left: 115px; }
 }
 
 @media (max-width: 680px) {
@@ -230,4 +257,11 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
   .lesson-concept { grid-template-columns: 1fr; gap: 25px; padding: 50px 28px; }
   .lesson-concept > p { grid-column: auto; }
   .concept-number { font-size: 38px; }
+  .prediction-checkpoint { padding: 48px 22px; }
+  .checkpoint-heading { grid-template-columns: 1fr; gap: 20px; }
+  .checkpoint-number { font-size: 38px; }
+  .prediction-checkpoint fieldset { margin: 35px 0 0; }
+  .prediction-checkpoint legend { font-size: 15px; }
+  .prediction-options { grid-template-columns: 1fr; }
+  .checkpoint-feedback { margin: 12px 0 0; align-items: flex-start; flex-direction: column; gap: 15px; }
 }
