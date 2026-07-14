@@ -10,6 +10,7 @@ describe('catalogue routing', () => {
     expect(routeFromHash('#arrays')).toEqual({ kind: 'catalogue', chapterId: 'arrays' })
     expect(routeFromHash('#bubble-sort')).toEqual({ kind: 'lesson', slug: 'bubble-sort' })
     expect(routeFromHash('#/selection-sort/')).toEqual({ kind: 'lesson', slug: 'selection-sort' })
+    expect(routeFromHash('#merge-sort')).toEqual({ kind: 'lesson', slug: 'merge-sort' })
   })
 
   it('keeps an unknown path available for a useful not-found screen', () => {
@@ -26,6 +27,7 @@ describe('catalogue routing', () => {
     expect(titleForRoute({ kind: 'home' })).toBe('Cartesian — Interactive Algorithms')
     expect(titleForRoute({ kind: 'catalogue', chapterId: 'arrays' })).toBe('Arrays & Sorting — Cartesian')
     expect(titleForRoute({ kind: 'lesson', slug: 'selection-sort' })).toBe('Selection Sort — Cartesian')
+    expect(titleForRoute({ kind: 'lesson', slug: 'merge-sort' })).toBe('Merge Sort — Cartesian')
     expect(titleForRoute({ kind: 'not-found', requestedPath: 'missing' })).toBe('Page not found — Cartesian')
   })
 })

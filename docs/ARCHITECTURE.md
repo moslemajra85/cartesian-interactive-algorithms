@@ -38,7 +38,7 @@ The arrows show ownership: the lesson owns the input, the algorithm owns event c
 
 ### Algorithm event generator
 
-Locations: `src/features/sorting/bubbleSort.ts`, `src/features/sorting/selectionSort.ts`, and `src/features/sorting/insertionSort.ts`
+Locations: `src/features/sorting/bubbleSort.ts`, `src/features/sorting/selectionSort.ts`, `src/features/sorting/insertionSort.ts`, and `src/features/sorting/mergeSort.ts`
 
 Responsibilities:
 
@@ -62,7 +62,7 @@ Responsibilities:
 - Render semantic event state
 - Keep visualization, pseudocode, and narration synchronized
 
-Bubble Sort, Selection Sort, and Insertion Sort provide typed lesson definitions and pure event generators to the shared player. The extraction happened only after Selection Sort demonstrated the common API: playback state, semantic bars, pseudocode highlighting, narration, speed controls, and lesson navigation.
+Bubble Sort, Selection Sort, Insertion Sort, and Merge Sort provide typed lesson definitions and pure event generators to the shared player. Merge Sort extends the shared semantic contract with optional range metadata while retaining the same playback, input, pseudocode, narration, and navigation infrastructure.
 
 The algorithm-specific wrapper components contain educational content rather than playback mechanics. This keeps lesson configuration explicit while preventing duplicated visualization code.
 
@@ -114,6 +114,9 @@ Good event fields:
 - `swapped: [left, right]`
 - `sortedIndices: number[]`
 - `line: number`
+- `activeRange: [start, end]`
+- `splitAt: middle`
+- `mergedRange: [start, end]`
 
 Avoid fields such as:
 
@@ -122,6 +125,12 @@ Avoid fields such as:
 - `waitMilliseconds: 400`
 
 The first group survives a redesign. The second couples algorithm correctness to a particular layout and animation speed.
+
+### Recursive merge events
+
+Merge Sort keeps the visible segment unchanged while comparing the front candidates of two ordered halves. It builds the merged result in auxiliary algorithm state, then commits the complete range in one immutable event. This matters because writing one value at a time would overwrite bars that later comparison events still need to reference, making the visual comparison semantically false.
+
+`activeRange` dims unrelated recursion branches, `splitAt` identifies the boundary between the two halves, and `mergedRange` identifies a newly ordered result. The React view decides how those meanings look; the generator never emits opacity, spacing, or colors.
 
 ## State model
 
@@ -200,7 +209,7 @@ Known gaps:
 
 The current timelines are intentionally precomputed. For small teaching inputs, this makes seeking and replay simple while memory use remains negligible.
 
-For algorithms that generate very large traces, possible strategies include input-size limits, event compression, checkpoints, or lazy generation. None is currently justified by the input limit of eight educational values.
+For algorithms that generate very large traces, possible strategies include input-size limits, event compression, checkpoints, or lazy generation. Merge Sort now creates recursive split, comparison, and merge events, but none of those strategies is justified by the input limit of eight educational values.
 
 ## Delivery pipeline
 

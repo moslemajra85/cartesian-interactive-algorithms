@@ -2,7 +2,7 @@
 
 An interactive, visual learning environment for understanding data structures and algorithms through animated execution, synchronized pseudocode, and step-by-step reasoning.
 
-> **Project status:** Active development. The application currently includes the complete handbook shell and three production-quality sorting lessons backed by a shared visualization player.
+> **Project status:** Active development. The application currently includes the complete handbook shell and four production-quality sorting lessons backed by a shared visualization player.
 
 [![CI and deploy](https://github.com/moslemajra85/cartesian-interactive-algorithms/actions/workflows/ci-and-deploy.yml/badge.svg)](https://github.com/moslemajra85/cartesian-interactive-algorithms/actions/workflows/ci-and-deploy.yml)
 [![Live site](https://img.shields.io/badge/live-GitHub%20Pages-222?logo=github)](https://moslemajra85.github.io/cartesian-interactive-algorithms/)
@@ -27,7 +27,7 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - Chapter navigation and progress presentation
 - Typed lesson catalogue with a dedicated Arrays & Sorting chapter screen
 - Keyboard-accessible navigation drawer (`M` to toggle, `Escape` to close)
-- Interactive Bubble Sort, Selection Sort, and Insertion Sort lessons
+- Interactive Bubble Sort, Selection Sort, Insertion Sort, and Merge Sort lessons
 - Play, pause, replay, previous-step, and next-step controls
 - Keyboard playback controls with visible shortcut guidance
 - Three playback speeds
@@ -46,6 +46,17 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 ![Selection Sort visualization using the shared lesson player](docs/images/selection-sort-lesson.png)
 
 ![Insertion Sort visualization with an ordered prefix](docs/images/insertion-sort-lesson.png)
+
+<details>
+<summary>Recursive Merge Sort lesson</summary>
+
+Merge Sort adds semantic split boundaries, active recursive ranges, cross-half comparisons, and committed merged ranges without coupling the algorithm to pixel positions.
+
+| Desktop | Mobile |
+| --- | --- |
+| ![Merge Sort comparing the front values of two ordered halves](docs/images/merge-sort-lesson.png) | ![Merge Sort recursive range visualization on mobile](docs/images/merge-sort-mobile.png) |
+
+</details>
 
 <details>
 <summary>Mobile experience</summary>
@@ -127,6 +138,10 @@ type SortStep = {
   pass: number
   title: string
   explanation: string
+  activeRange?: [number, number] | null
+  splitAt?: number | null
+  mergedRange?: [number, number] | null
+  phaseLabel?: string
 }
 ```
 
@@ -170,6 +185,7 @@ http://localhost:5173/#arrays
 http://localhost:5173/#bubble-sort
 http://localhost:5173/#selection-sort
 http://localhost:5173/#insertion-sort
+http://localhost:5173/#merge-sort
 ```
 
 ## Deployment
@@ -232,6 +248,7 @@ cartesian-interactive-algorithms/
 │   │       ├── ArrayInputControls.tsx
 │   │       ├── BubbleSortLesson.tsx
 │   │       ├── InsertionSortLesson.tsx
+│   │       ├── MergeSortLesson.tsx
 │   │       ├── SelectionSortLesson.tsx
 │   │       ├── SortLesson.tsx
 │   │       ├── arrayInput.ts
@@ -241,6 +258,8 @@ cartesian-interactive-algorithms/
 │   │       ├── bubbleSort.test.ts
 │   │       ├── insertionSort.ts
 │   │       ├── insertionSort.test.ts
+│   │       ├── mergeSort.ts
+│   │       ├── mergeSort.test.ts
 │   │       ├── playbackShortcuts.ts
 │   │       ├── playbackShortcuts.test.ts
 │   │       ├── selectionSort.ts
@@ -266,12 +285,13 @@ Pure event-generator tests protect algorithm correctness. They verify:
 - Empty and singleton inputs
 - Adjacent-only swap events
 - Complete sorted-index metadata
+- Valid recursive splits, cross-half comparisons, and ordered merge-range snapshots
 - Keyboard-command mapping and modified-shortcut protection
 - Progress schema validation, deduplication, storage failures, save, and reset behavior
 - Custom-array parsing, normalization, size limits, value limits, and duplicate preservation
 - Route parsing, serialization, document titles, unknown paths, and legacy direct links
 
-Component tests exercise prediction attempts, retry behavior, custom-array flows, catalogue navigation, browser history events, route focus, document titles, and not-found behavior. Registry tests protect route uniqueness, chapter availability, and lesson numbering. The current suite contains 74 passing tests. The next useful UI layer is shared-player coverage for timer behavior and the browser-level keyboard listener around real focused elements.
+Component tests exercise prediction attempts, retry behavior, custom-array flows, catalogue navigation, browser history events, route focus, document titles, and not-found behavior. Registry tests protect route uniqueness, chapter availability, and lesson numbering. The current suite contains 82 passing tests. The next useful UI layer is shared-player coverage for timer behavior and the browser-level keyboard listener around real focused elements.
 
 ## Roadmap
 
@@ -297,7 +317,7 @@ Component tests exercise prediction attempts, retry behavior, custom-array flows
 
 ### Curriculum
 
-- [ ] Merge Sort
+- [x] Merge Sort
 - [ ] Binary Search
 - [ ] Linked lists, stacks, and queues
 - [ ] Tree traversal

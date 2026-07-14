@@ -7,6 +7,10 @@ export type SortStep = {
   pass: number
   title: string
   explanation: string
+  activeRange?: [number, number] | null
+  splitAt?: number | null
+  mergedRange?: [number, number] | null
+  phaseLabel?: string
 }
 
 export function createSortStep(

@@ -1,9 +1,10 @@
 import type { ComponentType } from 'react'
 import { BubbleSortLesson } from '../sorting/BubbleSortLesson'
 import { InsertionSortLesson } from '../sorting/InsertionSortLesson'
+import { MergeSortLesson } from '../sorting/MergeSortLesson'
 import { SelectionSortLesson } from '../sorting/SelectionSortLesson'
 import type { LessonComponentProps } from '../sorting/SortLesson'
-import { bubbleSortLesson, insertionSortLesson, selectionSortLesson } from '../sorting/lessonDefinitions'
+import { bubbleSortLesson, insertionSortLesson, mergeSortLesson, selectionSortLesson } from '../sorting/lessonDefinitions'
 
 export type ChapterTone = 'coral' | 'blue' | 'gold' | 'violet'
 
@@ -26,7 +27,7 @@ export const chapterCatalog: readonly ChapterDefinition[] = [
   },
   {
     id: 'arrays', number: '02', title: 'Arrays & Sorting', shortTitle: 'Arrays & Sorting',
-    description: 'See data move, compare, and settle into order.', plannedLessonCount: 3,
+    description: 'See data move, compare, and settle into order.', plannedLessonCount: 4,
     tone: 'coral', availability: 'available',
   },
   {
@@ -50,6 +51,7 @@ const catalogEntries = [
   { order: '03', chapterId: 'arrays', definition: bubbleSortLesson, component: BubbleSortLesson },
   { order: '04', chapterId: 'arrays', definition: selectionSortLesson, component: SelectionSortLesson },
   { order: '05', chapterId: 'arrays', definition: insertionSortLesson, component: InsertionSortLesson },
+  { order: '06', chapterId: 'arrays', definition: mergeSortLesson, component: MergeSortLesson },
 ] as const satisfies readonly {
   order: string
   chapterId: string

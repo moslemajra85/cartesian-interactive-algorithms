@@ -23,7 +23,7 @@ export function LessonCatalogue({ lessons, completedLessonSlugs, lastLessonSlug,
         <div>
           <p className="eyebrow"><span /> CHAPTER 02 · LESSON CATALOGUE</p>
           <h1 data-route-heading tabIndex={-1}>Arrays &amp; Sorting</h1>
-          <p>Compare three ways to create order, then inspect every decision at your own pace.</p>
+          <p>Compare four ways to create order, then inspect every decision at your own pace.</p>
         </div>
         <div className="catalogue-progress" aria-label={`${completedCount} of ${lessons.length} lessons complete`}>
           <span>{String(completedCount).padStart(2, '0')} / {String(lessons.length).padStart(2, '0')}</span>

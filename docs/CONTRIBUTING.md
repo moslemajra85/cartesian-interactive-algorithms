@@ -50,6 +50,8 @@ An event should answer at least one of these questions:
 
 Do not emit pixel positions, colors, or animation delays from algorithm code.
 
+Recursive lessons should describe structural meaning with ranges and boundaries. When auxiliary storage is involved, ensure a comparison event still refers to the values visible at its referenced indices; do not emit partially overwritten snapshots that tell a false visual story.
+
 ## Commit style
 
 Use focused conventional commits:

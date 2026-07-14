@@ -21,6 +21,7 @@ export type SortLessonDefinition = {
   conceptTitle: string
   conceptExplanation: string
   prediction: PredictionCheckpointDefinition
+  visualMode?: 'in-place' | 'merge'
 }
 
 export type LessonLink = {
@@ -166,7 +167,7 @@ export function SortLesson({ definition, lessons, onBack, onOpenLesson, onComple
           <p>{definition.tagline}</p>
         </div>
         <div className="complexity-stamp" aria-label={`${definition.title} time complexity`}>
-          <small>TIME</small><strong>{definition.timeComplexity}</strong><span>SPACE {definition.spaceComplexity}</span>
+          <small>TIME</small><strong className={definition.timeComplexity.length > 6 ? 'is-long' : undefined}>{definition.timeComplexity}</strong><span>SPACE {definition.spaceComplexity}</span>
         </div>
       </section>
 
@@ -174,16 +175,28 @@ export function SortLesson({ definition, lessons, onBack, onOpenLesson, onComple
         <div className="visualizer-panel">
           <ArrayInputControls values={values} onApply={applyValues} onShuffle={shuffle} />
           <div className="sort-stage">
-            <div className="pass-indicator">{step.pass ? `PASS ${step.pass}` : 'READY'}</div>
+            <div className="pass-indicator">{step.phaseLabel ?? (step.pass ? `PASS ${step.pass}` : 'READY')}</div>
             <div className="sort-bars" aria-label={`Current array: ${step.values.join(', ')}`}>
               {step.values.map((value, index) => {
                 const compared = step.compared?.includes(index)
                 const swapped = step.swapped?.includes(index)
                 const sorted = step.sortedIndices.includes(index)
-                const classNames = ['sort-bar', compared && 'is-compared', swapped && 'is-swapped', sorted && 'is-sorted'].filter(Boolean).join(' ')
+                const activeRange = step.activeRange
+                const inActiveRange = !activeRange || (index >= activeRange[0] && index <= activeRange[1])
+                const mergedRange = step.mergedRange
+                const merged = mergedRange && index >= mergedRange[0] && index <= mergedRange[1]
+                const startsRightHalf = step.splitAt !== null && step.splitAt !== undefined && index === step.splitAt + 1
+                const classNames = [
+                  'sort-bar',
+                  !inActiveRange && 'is-range-inactive',
+                  merged && 'is-merged',
+                  compared && 'is-compared',
+                  swapped && 'is-swapped',
+                  sorted && 'is-sorted',
+                ].filter(Boolean).join(' ')
 
                 return (
-                  <div className="bar-slot" key={index}>
+                  <div className={`bar-slot ${startsRightHalf ? 'starts-right-half' : ''}`} key={index}>
                     <div className={classNames} style={{ height: `${30 + (value / maxValue) * 68}%` }}><strong>{value}</strong></div>
                     <span>{index}</span>
                   </div>
@@ -191,9 +204,19 @@ export function SortLesson({ definition, lessons, onBack, onOpenLesson, onComple
               })}
             </div>
             <div className="visual-legend">
-              <span><i className="legend-compare" /> Inspecting</span>
-              <span><i className="legend-swap" /> Swapped</span>
-              <span><i className="legend-sorted" /> Ordered</span>
+              {definition.visualMode === 'merge' ? (
+                <>
+                  <span><i className="legend-compare" /> Comparing halves</span>
+                  <span><i className="legend-merged" /> Merged range</span>
+                  <span><i className="legend-sorted" /> Fully ordered</span>
+                </>
+              ) : (
+                <>
+                  <span><i className="legend-compare" /> Inspecting</span>
+                  <span><i className="legend-swap" /> Swapped</span>
+                  <span><i className="legend-sorted" /> Ordered</span>
+                </>
+              )}
             </div>
           </div>
 

@@ -1,6 +1,7 @@
 import type { SortLessonDefinition } from './SortLesson'
 import { createBubbleSortSteps } from './bubbleSort'
 import { createInsertionSortSteps } from './insertionSort'
+import { createMergeSortSteps } from './mergeSort'
 import { createSelectionSortSteps } from './selectionSort'
 
 export const bubbleSortLesson = {
@@ -82,4 +83,33 @@ export const insertionSortLesson = {
     hint: 'The prefix was already ordered before insertion. What local comparison proves the new value fits?',
     explanation: 'Once the left neighbor is no larger, everything further left is also no larger because the prefix is ordered. The value has reached a valid insertion point.',
   },
+} satisfies SortLessonDefinition
+
+export const mergeSortLesson = {
+  slug: 'merge-sort', title: 'Merge Sort', lessonLabel: 'LESSON 02.06', duration: '11 MIN',
+  tagline: 'Divide the problem. Order the pieces. Merge small certainties into one solution.',
+  timeComplexity: 'O(n log n)', spaceComplexity: 'O(n)', initialValues: [8, 3, 6, 2, 7, 4, 1],
+  createSteps: createMergeSortSteps,
+  codeLines: [
+    'mergeSort(values, start, end)', '  if start >= end: return',
+    '  middle = floor((start + end) / 2)', '  mergeSort(values, start, middle)',
+    '  mergeSort(values, middle + 1, end)', '  merge the two ordered halves',
+    '  return the ordered range',
+  ],
+  insight: 'The merge step never has to search an unordered range. It compares only the front values of two halves that recursion has already ordered.',
+  conceptTitle: 'Large order grows from small guarantees.',
+  conceptExplanation: 'A one-value range is already sorted. Once recursion returns two sorted halves, choosing the smaller front value repeatedly creates a larger sorted range. That argument holds at every level until the whole array is ordered.',
+  prediction: {
+    question: 'What must be true before Merge Sort can merge two ranges correctly?',
+    options: [
+      { id: 'equal-size', label: 'The two ranges must contain the same number of values.' },
+      { id: 'halves-ordered', label: 'Each range must already be ordered.' },
+      { id: 'no-duplicates', label: 'Neither range may contain duplicate values.' },
+      { id: 'in-final-place', label: 'Every value must already occupy its final array index.' },
+    ],
+    correctOptionId: 'halves-ordered',
+    hint: 'Why is comparing only the front remaining value of each half sufficient?',
+    explanation: 'Because both halves are ordered, each front value is the smallest remaining candidate in its half. The smaller front is therefore the smallest value remaining across both halves.',
+  },
+  visualMode: 'merge',
 } satisfies SortLessonDefinition
