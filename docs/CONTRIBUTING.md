@@ -32,9 +32,9 @@ GitHub Actions repeats these checks for pull requests and pushes to `main`. Succ
 7. Check reduced-motion behavior and keyboard access.
 8. Update the roadmap and documentation if project behavior changes.
 
-Sorting event generators may support broader numeric inputs than the interface. The current visualization contract is intentionally narrower: 2–8 whole numbers from 1–99. Change `arrayInput.ts`, its tests, the visible guidance, and responsive bar verification together if that product boundary changes.
+Array event generators may support broader numeric inputs than the interface. The current visualization contract is intentionally narrower: 2–8 whole numbers from 1–99. Change `arrayInput.ts`, its tests, the visible guidance, and responsive bar verification together if that product boundary changes. Search lessons must enforce structural preconditions such as ordering inside the pure generator as well as guiding or normalizing input in the interface.
 
-Register a new lesson once in `features/catalog/curriculum.tsx` and keep its educational definition in `features/sorting/lessonDefinitions.ts`. Do not add parallel slug checks to `App.tsx`, progress storage, or navigation components; those consumers must continue deriving their behavior from the registry.
+Register a new lesson once in `features/catalog/curriculum.tsx` and keep its educational definition beside the owning algorithm feature. Do not add parallel slug checks to `App.tsx`, progress storage, or navigation components; those consumers must continue deriving their behavior from the registry.
 
 Every lesson should also include a prediction checkpoint that tests the algorithm's invariant or decision process. Avoid syntax trivia and questions that can be answered without understanding the visualization.
 

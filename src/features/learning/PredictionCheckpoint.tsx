@@ -7,7 +7,7 @@ export type PredictionOption = {
 
 export type PredictionCheckpointDefinition = {
   question: string
-  options: PredictionOption[]
+  options: readonly PredictionOption[]
   correctOptionId: string
   hint: string
   explanation: string

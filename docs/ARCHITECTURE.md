@@ -24,7 +24,7 @@ sequenceDiagram
 
     Learner->>Lesson: Enter, choose, or shuffle input
     Lesson->>Lesson: Validate size, type, and range
-    Lesson->>Algorithm: createSteps(input)
+    Lesson->>Algorithm: createSteps(input, optional target)
     Algorithm-->>Lesson: Immutable step timeline
     Learner->>Player: Play, pause, or seek
     Player->>Player: Select step index
@@ -36,9 +36,9 @@ The arrows show ownership: the lesson owns the input, the algorithm owns event c
 
 ## Responsibility boundaries
 
-### Algorithm event generator
+### Algorithm event generators
 
-Locations: `src/features/sorting/bubbleSort.ts`, `src/features/sorting/selectionSort.ts`, `src/features/sorting/insertionSort.ts`, and `src/features/sorting/mergeSort.ts`
+Locations: `src/features/sorting/*.ts` and `src/features/searching/binarySearch.ts`
 
 Responsibilities:
 
@@ -50,19 +50,19 @@ Responsibilities:
 
 It must not import React, access the DOM, start timers, or choose colors.
 
-### Shared sorting lesson player
+### Shared playback and array visualization
 
-Location: `src/features/sorting/SortLesson.tsx`
+Locations: `src/features/learning/useStepPlayback.ts`, `src/features/sorting/ArrayVisualizer.tsx`, and `src/features/sorting/SortLesson.tsx`
 
 Responsibilities:
 
-- Own the selected input and timeline cursor
-- Schedule automatic playback
+- Let each lesson own its accepted input and generated timeline
+- Own the timeline cursor and schedule automatic playback
 - Convert learner actions into cursor changes
-- Render semantic event state
+- Render common semantic array state in memory-tape and magnitude-bar views
 - Keep visualization, pseudocode, and narration synchronized
 
-Bubble Sort, Selection Sort, Insertion Sort, and Merge Sort provide typed lesson definitions and pure event generators to the shared player. Merge Sort extends the shared semantic contract with optional range metadata while retaining the same playback, input, pseudocode, narration, and navigation infrastructure.
+Bubble Sort, Selection Sort, Insertion Sort, and Merge Sort use the configurable `SortLesson`. Binary Search has a dedicated lesson shell because it owns a target as well as an array, but reuses the same playback hook and `ArrayVisualizer`. This second concrete use case justified extracting those smaller primitives without forcing unlike input models into one oversized component.
 
 The algorithm-specific wrapper components contain educational content rather than playback mechanics. This keeps lesson configuration explicit while preventing duplicated visualization code.
 
@@ -73,6 +73,12 @@ Locations: `src/features/sorting/ArrayInputControls.tsx` and `src/features/sorti
 The control owns temporary form state; the lesson owns the accepted array. A pure parser converts comma- or whitespace-separated text into normalized numeric values before the lesson can replace its timeline input.
 
 The parser accepts 2–8 whole numbers from 1–99 and preserves duplicates. These are product constraints rather than algorithm constraints: positive values keep bar geometry and labels meaningful, while eight bars remain readable at the smallest supported viewport. Invalid text never reaches an event generator. Applying valid values pauses playback and returns the cursor to the initial event; shuffling preserves the chosen array length.
+
+### Binary Search input
+
+Locations: `src/features/searching/SearchInputControls.tsx` and `src/features/searching/searchInput.ts`
+
+Binary Search requires a nondecreasing array. The interface validates the same 2–8 whole-number array boundary, sorts accepted values explicitly, and displays that behavior beside the controls. The pure generator independently rejects unordered input with a `RangeError`; correctness therefore does not depend on the UI remembering the precondition. A separate target parser accepts one whole number from 1–99. Changing values or target rebuilds the immutable timeline and restarts playback.
 
 ### Prediction checkpoint
 
@@ -132,6 +138,10 @@ Merge Sort keeps the visible segment unchanged while comparing the front candida
 
 `activeRange` dims unrelated recursion branches, `splitAt` identifies the boundary between the two halves, and `mergedRange` identifies a newly ordered result. The React view decides how those meanings look; the generator never emits opacity, spacing, or colors.
 
+### Binary Search events
+
+Binary Search emits a midpoint comparison followed by either a found state or a smaller `activeRange`. The range is an inclusive pair of stable indices, so discarded cells can remain visible as evidence while visually receding. An empty interval is represented as `[0, -1]`, which gives the renderer an explicit not-found state without inventing a nullable special event. The generator verifies that each input is already ordered before producing any events.
+
 ### Motion and dual array representation
 
 The shared player renders every array in two synchronized forms:
@@ -141,7 +151,7 @@ The shared player renders every array in two synchronized forms:
 
 Both derive from the same immutable `SortStep`; neither owns algorithm state. Comparison, swapped, merged, sorted, and inactive-range classes are calculated once per index and applied to both representations.
 
-Directional swap motion is derived from the semantic pair `[left, right]`. The view computes a signed starting offset, so the new value at the left index arrives from the right and vice versa. Merge events use their index position only to stagger a settling animation across the committed range. These are presentation calculations: event generators still know nothing about distance, duration, easing, or color.
+Directional swap motion is derived from the semantic pair `[left, right]`. The view computes a signed starting offset, so the new value at the left index arrives from the right and vice versa. Merge events use their index position only to stagger a settling animation across the committed range. Search events lift the inspected midpoint and transition discarded indices into a smaller, desaturated state. These are presentation calculations: event generators still know nothing about distance, duration, easing, or color.
 
 Narration remounts by timeline index so each explanation enters as a distinct beat, while the current pseudocode line receives a short emphasis transition. A play-state pulse communicates that time is advancing. The global `prefers-reduced-motion` rule reduces all animations and transitions to effectively instantaneous state changes.
 
@@ -165,7 +175,7 @@ The visualization does not own a separate copy of algorithm state. It derives ev
 
 ## Testing boundaries
 
-Unit tests cover event generators, custom-input parsing, and persistence because they contain correctness-sensitive transformations. Component tests cover prediction interaction and custom-array form behavior. The next useful test layers are:
+Unit tests cover event generators, custom-input parsing, and persistence because they contain correctness-sensitive transformations. Binary Search tests additionally prove logarithmic comparison bounds, interval shrinkage, and rejection of unordered input. Component tests cover prediction interaction and sorting/search form behavior. The next useful test layers are:
 
 1. Shared player interaction tests for button and timer behavior.
 2. Browser-level focus and accessible-state tests.
@@ -206,9 +216,9 @@ Current foundations:
 - Keyboard playback bindings for play/pause, stepping, restart, and speed
 - Protection for native browser shortcuts and focused interactive elements
 - Labeled custom-array field with described constraints and live validation errors
-- Visible shortcut reference in every sorting lesson
+- Visible shortcut reference in every interactive array lesson
 - Indexed memory tape paired with magnitude bars for visual redundancy
-- Reduced-motion fallback for swaps, merges, narration, code emphasis, and playback pulses
+- Reduced-motion fallback for swaps, merges, search elimination, narration, code emphasis, and playback pulses
 - Live prediction feedback with retryable answers
 - Disabled answer state only after a correct response
 - Reduced-motion media query
@@ -224,7 +234,7 @@ Known gaps:
 
 The current timelines are intentionally precomputed. For small teaching inputs, this makes seeking and replay simple while memory use remains negligible.
 
-For algorithms that generate very large traces, possible strategies include input-size limits, event compression, checkpoints, or lazy generation. Merge Sort now creates recursive split, comparison, and merge events, but none of those strategies is justified by the input limit of eight educational values.
+For algorithms that generate very large traces, possible strategies include input-size limits, event compression, checkpoints, or lazy generation. Merge Sort creates recursive split, comparison, and merge events while Binary Search creates only logarithmically many checks; none of those strategies is justified by the input limit of eight educational values.
 
 ## Delivery pipeline
 

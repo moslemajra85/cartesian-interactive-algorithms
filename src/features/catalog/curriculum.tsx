@@ -1,4 +1,6 @@
 import type { ComponentType } from 'react'
+import { BinarySearchLesson } from '../searching/BinarySearchLesson'
+import { binarySearchLesson } from '../searching/binarySearchLessonDefinition'
 import { BubbleSortLesson } from '../sorting/BubbleSortLesson'
 import { InsertionSortLesson } from '../sorting/InsertionSortLesson'
 import { MergeSortLesson } from '../sorting/MergeSortLesson'
@@ -27,7 +29,7 @@ export const chapterCatalog: readonly ChapterDefinition[] = [
   },
   {
     id: 'arrays', number: '02', title: 'Arrays & Sorting', shortTitle: 'Arrays & Sorting',
-    description: 'See data move, compare, and settle into order.', plannedLessonCount: 4,
+    description: 'See data move into order, then use that order to search efficiently.', plannedLessonCount: 5,
     tone: 'coral', availability: 'available',
   },
   {
@@ -52,6 +54,7 @@ const catalogEntries = [
   { order: '04', chapterId: 'arrays', definition: selectionSortLesson, component: SelectionSortLesson },
   { order: '05', chapterId: 'arrays', definition: insertionSortLesson, component: InsertionSortLesson },
   { order: '06', chapterId: 'arrays', definition: mergeSortLesson, component: MergeSortLesson },
+  { order: '07', chapterId: 'arrays', definition: binarySearchLesson, component: BinarySearchLesson },
 ] as const satisfies readonly {
   order: string
   chapterId: string

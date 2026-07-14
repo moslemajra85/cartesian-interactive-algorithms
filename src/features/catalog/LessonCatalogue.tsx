@@ -23,7 +23,7 @@ export function LessonCatalogue({ lessons, completedLessonSlugs, lastLessonSlug,
         <div>
           <p className="eyebrow"><span /> CHAPTER 02 · LESSON CATALOGUE</p>
           <h1 data-route-heading tabIndex={-1}>Arrays &amp; Sorting</h1>
-          <p>Compare four ways to create order, then inspect every decision at your own pace.</p>
+          <p>Compare four ways to create order, then use that order to eliminate half a search at a time.</p>
         </div>
         <div className="catalogue-progress" aria-label={`${completedCount} of ${lessons.length} lessons complete`}>
           <span>{String(completedCount).padStart(2, '0')} / {String(lessons.length).padStart(2, '0')}</span>
@@ -32,7 +32,7 @@ export function LessonCatalogue({ lessons, completedLessonSlugs, lastLessonSlug,
         </div>
       </section>
 
-      <section className="lesson-catalogue-grid" aria-label="Sorting lessons">
+      <section className="lesson-catalogue-grid" aria-label="Array lessons">
         {lessons.map((lesson) => {
           const { definition } = lesson
           const completed = completedLessonSlugs.includes(definition.slug)
@@ -64,7 +64,7 @@ export function LessonCatalogue({ lessons, completedLessonSlugs, lastLessonSlug,
 
       <aside className="catalogue-note">
         <span>LEARNING NOTE</span>
-        <p>These algorithms share the same goal but make different decisions. Focus on each lesson’s invariant—the fact that remains true after every pass.</p>
+        <p>Sorting creates an invariant you can trust; Binary Search spends that order to eliminate candidates. Focus on what each comparison proves, not only on which values move.</p>
       </aside>
     </main>
   )
