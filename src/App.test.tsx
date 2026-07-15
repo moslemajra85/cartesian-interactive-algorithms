@@ -163,5 +163,12 @@ describe('Linked Structures chapter', () => {
     expect(screen.getByText('Search for 99')).toBeTruthy()
     await user.click(screen.getByRole('button', { name: 'Next step' }))
     expect(screen.getByText('Inspect 14')).toBeTruthy()
+
+    await user.click(screen.getByRole('button', { name: '04 · Stack Push & Pop' }))
+    expect(window.location.hash).toBe('#stack-push-pop')
+    await user.click(screen.getByRole('button', { name: 'Try pop' }))
+    expect(screen.getByText('Pop 62')).toBeTruthy()
+    await user.click(screen.getByRole('button', { name: 'Next step' }))
+    expect(screen.getByText('Read top value 62')).toBeTruthy()
   })
 })

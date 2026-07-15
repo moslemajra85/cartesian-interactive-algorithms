@@ -10,7 +10,7 @@ import { createLinkedTraversalSteps } from './linkedTraversal'
 afterEach(cleanup)
 
 function Visualizer({ step, emphasizedIds = [] }: {
-  step: { nodes: LinkedNode[]; headId: string; activeIds: string[] }
+  step: { nodes: LinkedNode[]; headId: string | null; activeIds: string[] }
   emphasizedIds?: string[]
 }) {
   return <LinkedListVisualizer nodes={step.nodes} headId={step.headId} activeIds={step.activeIds} emphasizedIds={emphasizedIds} />

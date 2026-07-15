@@ -336,6 +336,7 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 .linked-delete-experiment { grid-template-columns: minmax(180px, 1fr) 150px 70px; }
 .linked-experiment > button.secondary-experiment { border-color: var(--line); background: transparent; color: var(--ink); }
 .linked-search-experiment { grid-template-columns: minmax(170px, 1fr) 115px 85px 65px; }
+.stack-experiment { grid-template-columns: minmax(165px, 1fr) 90px 110px 75px 65px; }
 .traversal-registers { min-height: 58px; padding: 9px 18px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; border-bottom: 1px solid var(--line); background: #fffdf8; }
 .traversal-registers > span { padding: 7px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; border: 1px solid #d5d0c5; }
 .traversal-registers small { color: #747983; font: 7px var(--mono); }.traversal-registers strong { color: var(--blue); font: 11px var(--mono); }.traversal-registers .is-null strong { color: var(--coral); }
@@ -598,6 +599,7 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
   .linked-experiment > p { grid-column: 1 / -1; }
   .linked-delete-experiment { grid-template-columns: 1fr 70px; }
   .linked-search-experiment { grid-template-columns: 1fr 1fr; }
+  .stack-experiment { grid-template-columns: 1fr 1fr; }
   .traversal-registers { padding-inline: 12px; gap: 5px; }
   .traversal-registers > span { padding-inline: 7px; display: grid; }
   .linked-state-legend { right: 14px; gap: 7px; }

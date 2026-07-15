@@ -59,7 +59,7 @@ export function createLinkedInsertionSteps(values: number[], insertedValue: numb
   return steps
 }
 
-export function traversalIds(step: Pick<LinkedInsertionStep, 'nodes' | 'headId'>): string[] {
+export function traversalIds(step: { nodes: LinkedNode[]; headId: string | null }): string[] {
   const byId = new Map(step.nodes.map((node) => [node.id, node]))
   const visited = new Set<string>()
   const ids: string[] = []

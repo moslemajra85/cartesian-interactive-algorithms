@@ -13,8 +13,9 @@ export type LinkedVariablePointer = {
 
 type LinkedListVisualizerProps = {
   nodes: LinkedNode[]
-  headId: string
+  headId: string | null
   activeIds: string[]
+  headLabel?: string
   emphasizedIds?: string[]
   pointers?: LinkedVariablePointer[]
   visitedIds?: string[]
@@ -27,6 +28,7 @@ export function LinkedListVisualizer({
   nodes,
   headId,
   activeIds,
+  headLabel = 'HEAD',
   emphasizedIds = [],
   pointers = [],
   visitedIds = [],
@@ -54,19 +56,22 @@ export function LinkedListVisualizer({
     ? visitedValues.length ? `Visited values: ${visitedValues.join(', ')}. ` : 'No visited values. '
     : ''
 
-  const renderVariablePointers = (nodeId: string | null) => pointers.filter((pointer) => pointer.nodeId === nodeId).map((pointer) => (
+  const renderVariablePointers = (nodeId: string | null) => {
+    const assignedPointers = pointers.filter((pointer) => pointer.nodeId === nodeId)
+    return assignedPointers.map((pointer, index) => (
     <m.span
       className={`linked-variable-pointer is-${pointer.tone ?? 'current'}`}
       data-pointer-node={pointer.nodeId ?? 'null'}
       data-variable-pointer={pointer.id}
       key={pointer.id}
       layoutId={`linked-variable-${pointer.id}`}
-      style={{ x: '-50%' }}
+      style={{ x: `calc(-50% + ${(index - (assignedPointers.length - 1) / 2) * 64}px)` }}
       transition={{ type: 'spring', stiffness: 420, damping: 31 }}
     >
       <b>{pointer.label}</b><i aria-hidden="true">↓</i>
     </m.span>
-  ))
+    ))
+  }
 
   const renderNode = (node: LinkedNode, reachability: 'reachable' | 'detached') => (
     <m.article
@@ -96,7 +101,7 @@ export function LinkedListVisualizer({
           role="img"
           aria-label={`Reachable list: ${chainIds.map((id) => nodesById.get(id)?.value).join(', ')}. ${pointerDescription ? `${pointerDescription}. ` : ''}${visitedDescription}${followedEdge ? `${edgeAction === 'write' ? 'Writing' : 'Following'} next from ${nodesById.get(followedEdge.fromId)?.value} to ${followedEdge.toId ? nodesById.get(followedEdge.toId)?.value : 'null'}. ` : ''}${detachedNodes.length} detached nodes.`}
         >
-          <m.span className="linked-head" layout>HEAD</m.span>
+          <m.span className="linked-head" layout>{headLabel}</m.span>
           {pointers.length > 0 && (
             <div className="linked-state-legend" aria-hidden="true">
               <span><i className="legend-current" /> named pointer</span>
