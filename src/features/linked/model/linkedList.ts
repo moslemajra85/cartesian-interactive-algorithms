@@ -1,5 +1,6 @@
 export type LinkedNode = { id: string; value: number; nextId: string | null }
 export type LinkedPointerEdge = { fromId: string; toId: string | null }
+export type LinkedPointerMovement = { pointerId: string; fromId: string; toId: string | null; hops: number }
 
 export function createLinkedNodes(values: number[]): LinkedNode[] {
   return values.map((value, index) => ({

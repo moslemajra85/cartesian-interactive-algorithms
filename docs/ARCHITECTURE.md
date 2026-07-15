@@ -119,7 +119,8 @@ linked/
 ├── traversal/
 ├── stack/
 ├── queue/
-└── cycle/
+├── cycle/
+└── middle/
 ```
 
 Each lesson slice owns its React lesson, pure event generator, educational definition, and unit tests. Tests are colocated because they share the same ownership and change together; a top-level test area is reserved for genuinely cross-feature integration setup rather than becoming a second directory tree that mirrors production files. Shared code moves into `model/` or `components/` only after at least two lesson slices need it.

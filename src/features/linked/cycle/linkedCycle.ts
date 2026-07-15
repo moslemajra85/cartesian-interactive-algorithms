@@ -1,15 +1,13 @@
-import { createLinkedNodes, snapshotLinkedNodes, type LinkedNode } from '../model/linkedList'
+import { createLinkedNodes, snapshotLinkedNodes, type LinkedNode, type LinkedPointerMovement } from '../model/linkedList'
 
 export type CyclePhase = 'ready' | 'advance' | 'compare' | 'found' | 'not-found'
-export type PointerMovement = { pointerId: 'slow' | 'fast'; fromId: string; toId: string | null; hops: number }
-
 export type CycleStep = {
   nodes: LinkedNode[]
   headId: string
   activeIds: string[]
   slowId: string | null
   fastId: string | null
-  movements: PointerMovement[]
+  movements: LinkedPointerMovement[]
   comparisonCount: number
   phase: CyclePhase
   title: string
@@ -47,7 +45,7 @@ export function createCycleDetectionSteps(values: number[], cycleEntryIndex: num
     const fastFromId = fastId
     slowId = nextId(nodesById, slowId)
     fastId = nextId(nodesById, nextId(nodesById, fastId))
-    const movements: PointerMovement[] = [
+    const movements: LinkedPointerMovement[] = [
       { pointerId: 'slow', fromId: slowFromId, toId: slowId, hops: 1 },
       { pointerId: 'fast', fromId: fastFromId, toId: fastId, hops: 2 },
     ]
