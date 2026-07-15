@@ -47,6 +47,7 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - User-defined arrays with inline validation and duplicate-value support
 - Dual array representation with indexed memory cells and magnitude bars
 - Directional swap motion, staggered merge settling, candidate-range elimination, midpoint focus, and animated step narration
+- Spring-based linked-node layout transitions, animated rewiring, detachment, and exit choreography
 - Synchronized pseudocode highlighting
 - Step-specific explanations and pass tracking
 - Direct lesson links for each implemented algorithm
@@ -182,8 +183,9 @@ This boundary keeps the algorithm testable without a browser and allows the UI t
 - jsdom for component interaction tests
 - Oxlint
 - CSS animations and responsive layout
+- Motion for React for interruptible node layout and SVG-ready pointer choreography
 
-No visualization or animation library is currently required. Semantic event metadata drives browser-native transitions: swap pairs produce directional travel, merge ranges produce staggered settling, and comparison/range states update both the memory tape and bars. A dependency should only be introduced when timelines require interruption, shared layout measurement, or choreography that CSS can no longer express clearly.
+Semantic event metadata drives every transition. CSS remains responsible for simple emphasis, swap travel, merge settling, and responsive presentation. Motion for React is scoped to linked structures, where stable nodes must move between layouts, survive exit transitions, and animate semantic pointer rewrites. Algorithm generators still emit no coordinates, easing, or duration values.
 
 ## Getting started
 

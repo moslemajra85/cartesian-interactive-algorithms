@@ -110,6 +110,8 @@ Location: `src/features/linked/`
 
 Linked-list timelines store stable node IDs and semantic `nextId` references. Insertion snapshots allocation, successor preservation, and predecessor redirection; deletion snapshots identification, bypass, detachment, and release. Traversal emits inspect and advance events until a match or explicit null exhaustion. Rendering derives reachability from `headId`, so every lesson shares the same definition of list membership. The O(1) mutation claims assume the predecessor is known—searching for it remains O(n).
 
+`LinkedListVisualizer` assigns Motion layout identities from stable semantic node IDs. A node can therefore animate between detached and reachable regions without the algorithm emitting pixel positions. Pointer animation keys derive from `sourceId -> nextId`, so rewiring replaces the correct visual edge. Motion respects the learner's reduced-motion preference; CSS continues to own colors and simple emphasis.
+
 ### Application shell
 
 Location: `src/App.tsx`

@@ -341,9 +341,12 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 .linked-chain { min-width: max-content; display: flex; align-items: center; gap: 8px; }
 .linked-node-group { display: flex; align-items: center; gap: 8px; }
 .linked-chain > b, .linked-node-group > b { color: var(--blue); font: 19px var(--mono); }
+.linked-pointer { display: inline-block; transform-origin: left center; transition: color 180ms ease, text-shadow 180ms ease; }
+.linked-pointer.is-active { color: var(--coral); text-shadow: 0 0 9px rgba(255,101,92,.42); animation: pointer-pulse 700ms ease-in-out infinite alternate; }
+.linked-pointer.is-null { white-space: nowrap; }
 .linked-stage article { width: 105px; min-height: 112px; padding: 12px; display: grid; grid-template-columns: 1fr auto; align-content: center; gap: 8px; border: 1px solid var(--ink); background: var(--paper); box-shadow: 4px 5px 0 rgba(25,32,43,.13); transition: transform 220ms ease, background 220ms ease; }
 .linked-stage article > span { grid-column: 1 / -1; font: 24px var(--mono); }.linked-stage article small { color: #747983; font: 6px var(--mono); }.linked-stage article code { color: var(--ink); background: transparent; font: 6px var(--mono); }
-.linked-stage article.is-active { border-width: 2px; background: var(--gold); transform: translateY(-7px); }.linked-stage article.is-new { border-style: dashed; border-color: var(--coral); }
+.linked-stage article.is-active { border-width: 2px; background: var(--gold); }.linked-stage article.is-new { border-style: dashed; border-color: var(--coral); }
 .detached-nodes { margin-top: 48px; padding-top: 22px; display: flex; align-items: center; gap: 18px; border-top: 1px dashed #999; }.detached-nodes > span { width: 105px; color: #747983; font: 7px/1.5 var(--mono); }
 .linked-code ol { margin-top: 45px; }.linked-code li { min-height: 60px; }
 .sort-stage { position: relative; height: 390px; padding: 58px 42px 25px; overflow: hidden; background-image: linear-gradient(rgba(54,68,86,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(54,68,86,.05) 1px, transparent 1px); background-size: 23px 23px; }
@@ -463,6 +466,7 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 @keyframes playing-mark { to { opacity: .45; } }
 @keyframes midpoint-focus { from { transform: translateY(2px) scale(.94); } 65% { transform: translateY(-12px) scale(1.04); } to { transform: translateY(-8px) scale(1); } }
 @keyframes memory-cell-in { from { opacity: .35; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pointer-pulse { to { opacity: .48; text-shadow: 0 0 14px rgba(255,101,92,.7); } }
 
 @media (max-width: 980px) {
   .hero-section { min-height: auto; grid-template-columns: 1fr; padding-top: 65px; }
