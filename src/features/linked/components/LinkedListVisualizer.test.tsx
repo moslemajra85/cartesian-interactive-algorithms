@@ -4,7 +4,7 @@ import { cleanup, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 import { createLinkedDeletionSteps } from '../deletion/linkedDeletion'
 import { createLinkedInsertionSteps } from '../insertion/linkedInsertion'
-import type { LinkedNode } from '../model/linkedList'
+import { createLinkedNodes, type LinkedNode } from '../model/linkedList'
 import { LinkedListVisualizer } from './LinkedListVisualizer'
 import { createLinkedTraversalSteps } from '../traversal/linkedTraversal'
 
@@ -115,5 +115,15 @@ describe('LinkedListVisualizer motion semantics', () => {
 
     expect(container.querySelectorAll('[data-pointer-node="null"]')).toHaveLength(2)
     expect(screen.getByRole('img').getAttribute('aria-label')).toContain('front is null. rear is null')
+  })
+
+  it('renders a cyclic tail as a loop-back reference instead of null', () => {
+    const nodes = createLinkedNodes([10, 20, 30])
+    nodes[2].nextId = 'node-1'
+    const { container } = render(<LinkedListVisualizer nodes={nodes} headId="node-0" activeIds={[]} />)
+
+    expect(container.querySelector('[data-pointer="node-2->node-1"]')?.textContent).toContain('loops to 20')
+    expect(container.querySelector('[data-pointer="node-2->null"]')).toBeNull()
+    expect(screen.getByRole('img').getAttribute('aria-label')).toContain('Last next loops back to 20')
   })
 })

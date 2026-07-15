@@ -39,6 +39,8 @@ export function LinkedListVisualizer({
   const chainIds = traversalIds({ nodes, headId })
   const nodesById = new Map(nodes.map((node) => [node.id, node]))
   const detachedNodes = nodes.filter((node) => !chainIds.includes(node.id))
+  const terminalNode = nodesById.get(chainIds.at(-1) ?? '')
+  const cycleTarget = terminalNode?.nextId ? nodesById.get(terminalNode.nextId) : null
   const nodeClass = (id: string) => [
     activeIds.includes(id) && 'is-active',
     emphasizedIds.includes(id) && 'is-new',
@@ -99,7 +101,7 @@ export function LinkedListVisualizer({
         <div
           className="linked-stage"
           role="img"
-          aria-label={`Reachable list: ${chainIds.map((id) => nodesById.get(id)?.value).join(', ')}. ${pointerDescription ? `${pointerDescription}. ` : ''}${visitedDescription}${followedEdge ? `${edgeAction === 'write' ? 'Writing' : 'Following'} next from ${nodesById.get(followedEdge.fromId)?.value} to ${followedEdge.toId ? nodesById.get(followedEdge.toId)?.value : 'null'}. ` : ''}${detachedNodes.length} detached nodes.`}
+          aria-label={`Reachable list: ${chainIds.map((id) => nodesById.get(id)?.value).join(', ')}. ${cycleTarget ? `Last next loops back to ${cycleTarget.value}. ` : ''}${pointerDescription ? `${pointerDescription}. ` : ''}${visitedDescription}${followedEdge ? `${edgeAction === 'write' ? 'Writing' : 'Following'} next from ${nodesById.get(followedEdge.fromId)?.value} to ${followedEdge.toId ? nodesById.get(followedEdge.toId)?.value : 'null'}. ` : ''}${detachedNodes.length} detached nodes.`}
         >
           <m.span className="linked-head" layout>{headLabel}</m.span>
           {pointers.length > 0 && (
@@ -135,14 +137,18 @@ export function LinkedListVisualizer({
                 )
               })}
             </AnimatePresence>
-            <m.span className="linked-null-target" layout>
-              {renderVariablePointers(null)}
-              <m.b
-                className={`linked-pointer is-null ${followedEdge?.fromId === chainIds.at(-1) && followedEdge?.toId === null ? 'is-active' : ''}`}
-                data-pointer={`${chainIds.at(-1)}->null`}
-                aria-hidden="true"
-              >→ null</m.b>
-            </m.span>
+            {cycleTarget ? (
+              <m.span className="linked-cycle-target" layout data-pointer={`${terminalNode?.id}->${cycleTarget.id}`} aria-hidden="true">↳ loops to {cycleTarget.value}</m.span>
+            ) : (
+              <m.span className="linked-null-target" layout>
+                {renderVariablePointers(null)}
+                <m.b
+                  className={`linked-pointer is-null ${followedEdge?.fromId === chainIds.at(-1) && followedEdge?.toId === null ? 'is-active' : ''}`}
+                  data-pointer={`${chainIds.at(-1)}->null`}
+                  aria-hidden="true"
+                >→ null</m.b>
+              </m.span>
+            )}
           </m.div>
           <AnimatePresence initial={false}>
             {followedEdge && (

@@ -338,6 +338,7 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 .linked-search-experiment { grid-template-columns: minmax(170px, 1fr) 115px 85px 65px; }
 .stack-experiment { grid-template-columns: minmax(155px, 1fr) 90px 105px 88px 65px; }
 .queue-experiment { grid-template-columns: minmax(155px, 1fr) 95px 105px 88px 65px; }
+.linked-cycle-experiment { grid-template-columns: minmax(180px, 1fr) 145px 95px 65px; }
 .traversal-registers { min-height: 58px; padding: 9px 18px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; border-bottom: 1px solid var(--line); background: #fffdf8; }
 .traversal-registers > span { padding: 7px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; border: 1px solid #d5d0c5; }
 .traversal-registers small { color: #747983; font: 7px var(--mono); }.traversal-registers strong { color: var(--blue); font: 11px var(--mono); }.traversal-registers .is-null strong { color: var(--coral); }
@@ -354,6 +355,7 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 .linked-pointer.is-active { color: var(--coral); text-shadow: 0 0 9px rgba(255,101,92,.42); animation: pointer-pulse 700ms ease-in-out infinite alternate; }
 .linked-pointer.is-null { white-space: nowrap; }
 .linked-null-target { position: relative; min-height: 112px; display: inline-flex; align-items: center; }
+.linked-cycle-target { min-width: 88px; padding: 8px; border: 1px dashed var(--coral); border-radius: 50%; color: var(--coral); font: 7px/1.4 var(--mono); text-align: center; }
 .linked-variable-pointer { position: absolute; z-index: 3; top: -48px; left: 50%; display: grid; justify-items: center; color: var(--coral); font: 8px var(--mono); text-transform: lowercase; }
 .linked-variable-pointer b { padding: 5px 8px; border: 1px solid currentColor; border-radius: 999px; background: var(--paper); box-shadow: 2px 2px 0 rgba(25,32,43,.14); font: inherit; }.linked-variable-pointer i { margin-top: 2px; font: 14px var(--mono); }
 .linked-variable-pointer.is-found { color: #28785f; }.linked-variable-pointer.is-found b { background: #e5f3e9; }
@@ -367,6 +369,7 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
 .linked-node-state { position: absolute; top: 6px; right: 7px; color: #686d74; font: 5px var(--mono); font-style: normal; letter-spacing: .04em; }.linked-node-state.is-found { color: #28785f; font-weight: 700; }
 .linked-edge-operation { width: max-content; margin: 24px auto 0; padding: 7px 11px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--coral); background: var(--paper); box-shadow: 3px 3px 0 rgba(25,32,43,.12); }
 .linked-edge-operation small { color: #747983; font: 6px var(--mono); }.linked-edge-operation code { padding: 0; background: transparent; color: var(--blue); font: 9px var(--mono); }.linked-edge-operation b { color: var(--coral); font: 12px var(--mono); }.linked-edge-operation strong { font: 10px var(--mono); }
+.cycle-movements { padding: 9px 18px; display: flex; justify-content: center; gap: 8px; border-top: 1px solid var(--line); background: #f6f2e9; }.cycle-movements span { padding: 6px 10px; display: flex; align-items: center; gap: 9px; border: 1px solid #d5d0c5; font: 7px var(--mono); }.cycle-movements b { color: var(--blue); }.cycle-movements i { color: #747983; font-style: normal; }.cycle-movements strong { color: var(--coral); }
 .detached-nodes { margin-top: 48px; padding-top: 22px; display: flex; align-items: center; gap: 18px; border-top: 1px dashed #999; }.detached-nodes > span { width: 105px; color: #747983; font: 7px/1.5 var(--mono); }
 .linked-code ol { margin-top: 45px; }.linked-code li { min-height: 60px; }
 .sort-stage { position: relative; height: 390px; padding: 58px 42px 25px; overflow: hidden; background-image: linear-gradient(rgba(54,68,86,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(54,68,86,.05) 1px, transparent 1px); background-size: 23px 23px; }
@@ -602,6 +605,7 @@ footer > span { text-align: right; color: #9da4ae; font: 9px var(--mono); text-t
   .linked-search-experiment { grid-template-columns: 1fr 1fr; }
   .stack-experiment { grid-template-columns: 1fr 1fr; }
   .queue-experiment { grid-template-columns: 1fr 1fr; }
+  .linked-cycle-experiment { grid-template-columns: 1fr 1fr; }
   .traversal-registers { padding-inline: 12px; gap: 5px; }
   .traversal-registers > span { padding-inline: 7px; display: grid; }
   .linked-state-legend { right: 14px; gap: 7px; }
