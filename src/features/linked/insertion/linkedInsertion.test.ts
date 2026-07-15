@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { createLinkedInsertionSteps, traversalIds } from './linkedInsertion'
+import { traversalIds } from '../model/linkedList'
+import { createLinkedInsertionSteps } from './linkedInsertion'
 
 describe('linked-list insertion', () => {
   it('preserves the successor before redirecting the predecessor', () => {

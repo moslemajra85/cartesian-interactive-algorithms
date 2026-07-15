@@ -2,10 +2,11 @@
 
 import { cleanup, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
-import { createLinkedDeletionSteps } from './linkedDeletion'
-import { createLinkedInsertionSteps, type LinkedNode } from './linkedInsertion'
+import { createLinkedDeletionSteps } from '../deletion/linkedDeletion'
+import { createLinkedInsertionSteps } from '../insertion/linkedInsertion'
+import type { LinkedNode } from '../model/linkedList'
 import { LinkedListVisualizer } from './LinkedListVisualizer'
-import { createLinkedTraversalSteps } from './linkedTraversal'
+import { createLinkedTraversalSteps } from '../traversal/linkedTraversal'
 
 afterEach(cleanup)
 

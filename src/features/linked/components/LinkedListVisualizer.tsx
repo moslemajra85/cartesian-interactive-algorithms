@@ -1,6 +1,6 @@
 import { AnimatePresence, LayoutGroup, LazyMotion, MotionConfig } from 'motion/react'
 import * as m from 'motion/react-m'
-import { traversalIds, type LinkedNode, type LinkedPointerEdge } from './linkedInsertion'
+import { traversalIds, type LinkedNode, type LinkedPointerEdge } from '../model/linkedList'
 
 const loadMotionFeatures = () => import('./motionFeatures').then((module) => module.default)
 

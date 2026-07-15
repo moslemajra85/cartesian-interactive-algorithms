@@ -1,5 +1,4 @@
-export type LinkedNode = { id: string; value: number; nextId: string | null }
-export type LinkedPointerEdge = { fromId: string; toId: string | null }
+import { createLinkedNodes, snapshotLinkedNodes, type LinkedNode, type LinkedPointerEdge } from '../model/linkedList'
 export type LinkedInsertionPhase = 'ready' | 'allocate' | 'link-successor' | 'link-predecessor' | 'complete'
 export type LinkedInsertionStep = {
   nodes: LinkedNode[]
@@ -15,7 +14,7 @@ export type LinkedInsertionStep = {
 }
 
 function snapshot(nodes: LinkedNode[], details: Omit<LinkedInsertionStep, 'nodes' | 'headId'>): LinkedInsertionStep {
-  return { nodes: nodes.map((node) => ({ ...node })), headId: 'node-0', ...details }
+  return { nodes: snapshotLinkedNodes(nodes), headId: 'node-0', ...details }
 }
 
 export function createLinkedInsertionSteps(values: number[], insertedValue: number, afterIndex: number): LinkedInsertionStep[] {
@@ -23,7 +22,7 @@ export function createLinkedInsertionSteps(values: number[], insertedValue: numb
   if (!Number.isInteger(afterIndex) || afterIndex < 0 || afterIndex >= values.length) throw new RangeError('Insertion predecessor is outside the list.')
   if (!Number.isInteger(insertedValue)) throw new RangeError('Inserted value must be a whole number.')
 
-  const nodes: LinkedNode[] = values.map((value, index) => ({ id: `node-${index}`, value, nextId: index === values.length - 1 ? null : `node-${index + 1}` }))
+  const nodes = createLinkedNodes(values)
   const predecessor = nodes[afterIndex]
   const successorId = predecessor.nextId
   const inserted: LinkedNode = { id: 'node-new', value: insertedValue, nextId: null }
@@ -57,19 +56,4 @@ export function createLinkedInsertionSteps(values: number[], insertedValue: numb
     phase: 'complete', title: 'Insertion complete', explanation: `The list contains ${nodes.length} nodes. Two references were assigned and zero existing values moved.`,
   }))
   return steps
-}
-
-export function traversalIds(step: { nodes: LinkedNode[]; headId: string | null }): string[] {
-  const byId = new Map(step.nodes.map((node) => [node.id, node]))
-  const visited = new Set<string>()
-  const ids: string[] = []
-  let currentId: string | null = step.headId
-  while (currentId && !visited.has(currentId)) {
-    const node = byId.get(currentId)
-    if (!node) break
-    visited.add(currentId)
-    ids.push(currentId)
-    currentId = node.nextId
-  }
-  return ids
 }

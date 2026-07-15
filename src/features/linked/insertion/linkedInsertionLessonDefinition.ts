@@ -1,4 +1,4 @@
-import type { PredictionCheckpointDefinition } from '../learning/PredictionCheckpoint'
+import type { PredictionCheckpointDefinition } from '../../learning/PredictionCheckpoint'
 
 export const linkedInsertionLesson = {
   slug: 'linked-insertion', title: 'Linked List Insertion', lessonLabel: 'LESSON 03.01', duration: '11 MIN', tagline: 'Allocate one node. Preserve the successor. Redirect the predecessor. Move no existing values.', timeComplexity: 'O(1)', spaceComplexity: 'O(1)',

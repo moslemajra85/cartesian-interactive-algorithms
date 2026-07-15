@@ -108,6 +108,21 @@ Scenarios must make the algorithm honest. Bubble Sort is presented for an adjace
 
 Location: `src/features/linked/`
 
+The chapter uses feature-first folders rather than one global component or test directory:
+
+```text
+linked/
+├── components/          # UI reused by multiple linked lessons
+├── model/               # Framework-independent nodes, edges, snapshots, reachability
+├── insertion/           # Lesson UI, timeline, definition, and tests
+├── deletion/
+├── traversal/
+├── stack/
+└── queue/
+```
+
+Each lesson slice owns its React lesson, pure event generator, educational definition, and unit tests. Tests are colocated because they share the same ownership and change together; a top-level test area is reserved for genuinely cross-feature integration setup rather than becoming a second directory tree that mirrors production files. Shared code moves into `model/` or `components/` only after at least two lesson slices need it.
+
 Linked-list timelines store stable node IDs, semantic `nextId` references, named variable targets, and the exact edge being followed or rewritten. Insertion snapshots allocation, successor preservation, and predecessor redirection; deletion snapshots identification, bypass, detachment, and release. Traversal emits inspect and advance events until a match or explicit null exhaustion. The stack lesson models push and pop around the sole `top` entry point; the queue lesson separates `front` removal from `rear` insertion and explicitly repairs both boundaries when the final item leaves. Both support a nullable `headId` for empty structures. Rendering derives reachability from `headId`, so every lesson shares the same definition of membership. O(1) mutation claims assume the relevant boundary reference is already known—searching remains O(n).
 
 `LinkedListVisualizer` assigns Motion layout identities to stable semantic node IDs and named pointers such as `current`, `predecessor`, and `target`. Nodes can animate between detached and reachable regions while pointer badges move between nodes or into `null`, without the algorithm emitting pixel positions. Edge identities derive from `sourceId -> nextId`; a reference-operation strip states cross-region writes explicitly when a geometrically drawn arrow would be misleading. Motion respects the learner's reduced-motion preference; CSS continues to own colors and simple emphasis.

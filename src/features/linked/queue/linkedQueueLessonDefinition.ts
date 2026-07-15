@@ -1,4 +1,4 @@
-import type { PredictionCheckpointDefinition } from '../learning/PredictionCheckpoint'
+import type { PredictionCheckpointDefinition } from '../../learning/PredictionCheckpoint'
 
 export const linkedQueueLesson = {
   slug: 'queue-enqueue-dequeue', title: 'Queue Enqueue & Dequeue', lessonLabel: 'LESSON 03.05', duration: '12 MIN', tagline: 'Add at rear. Remove at front. Keep two boundaries so neither operation scans the waiting line.', timeComplexity: 'O(1)', spaceComplexity: 'O(1)',

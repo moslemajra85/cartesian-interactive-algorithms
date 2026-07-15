@@ -1,4 +1,4 @@
-import type { LinkedNode, LinkedPointerEdge } from './linkedInsertion'
+import { createLinkedNodes, snapshotLinkedNodes, type LinkedNode, type LinkedPointerEdge } from '../model/linkedList'
 
 export type LinkedDeletionPhase = 'ready' | 'identify' | 'bypass' | 'release' | 'complete'
 export type LinkedDeletionStep = {
@@ -15,13 +15,13 @@ export type LinkedDeletionStep = {
 }
 
 function snapshot(nodes: LinkedNode[], details: Omit<LinkedDeletionStep, 'nodes' | 'headId'>): LinkedDeletionStep {
-  return { nodes: nodes.map((node) => ({ ...node })), headId: 'node-0', ...details }
+  return { nodes: snapshotLinkedNodes(nodes), headId: 'node-0', ...details }
 }
 
 export function createLinkedDeletionSteps(values: number[], targetIndex: number): LinkedDeletionStep[] {
   if (values.length < 2) throw new RangeError('Deletion requires a predecessor and target.')
   if (!Number.isInteger(targetIndex) || targetIndex < 1 || targetIndex >= values.length) throw new RangeError('Target must have a predecessor inside the list.')
-  const nodes: LinkedNode[] = values.map((value, index) => ({ id: `node-${index}`, value, nextId: index === values.length - 1 ? null : `node-${index + 1}` }))
+  const nodes = createLinkedNodes(values)
   const predecessor = nodes[targetIndex - 1]
   const target = nodes[targetIndex]
   const successorId = target.nextId

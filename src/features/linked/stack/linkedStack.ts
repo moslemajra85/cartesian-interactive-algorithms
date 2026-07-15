@@ -1,4 +1,4 @@
-import type { LinkedNode, LinkedPointerEdge } from './linkedInsertion'
+import { createLinkedNodes, snapshotLinkedNodes, type LinkedNode, type LinkedPointerEdge } from '../model/linkedList'
 
 export type StackOperation = 'push' | 'pop'
 export type StackPhase = 'ready' | 'allocate' | 'link' | 'read' | 'move-top' | 'release' | 'complete'
@@ -18,22 +18,14 @@ export type StackStep = {
 }
 
 function snapshot(nodes: LinkedNode[], headId: string | null, details: Omit<StackStep, 'nodes' | 'headId'>): StackStep {
-  return { nodes: nodes.map((node) => ({ ...node })), headId, ...details }
-}
-
-function createNodes(values: number[]): LinkedNode[] {
-  return values.map((value, index) => ({
-    id: `node-${index}`,
-    value,
-    nextId: index === values.length - 1 ? null : `node-${index + 1}`,
-  }))
+  return { nodes: snapshotLinkedNodes(nodes), headId, ...details }
 }
 
 export function createStackSteps(values: number[], operation: StackOperation, pushedValue = 0): StackStep[] {
   if (values.length < 1) throw new RangeError('At least one stack item is required.')
   if (operation === 'push' && !Number.isInteger(pushedValue)) throw new RangeError('Pushed value must be a whole number.')
 
-  const nodes = createNodes(values)
+  const nodes = createLinkedNodes(values)
   let topId: string | null = nodes[0].id
   const base = { newId: null, removedId: null, followedEdge: null, edgeAction: 'follow' as const }
   const steps = [snapshot(nodes, topId, {

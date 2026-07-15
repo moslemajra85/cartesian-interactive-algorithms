@@ -1,4 +1,4 @@
-import type { PredictionCheckpointDefinition } from '../learning/PredictionCheckpoint'
+import type { PredictionCheckpointDefinition } from '../../learning/PredictionCheckpoint'
 export const linkedDeletionLesson = {
   slug: 'linked-deletion', title: 'Linked List Deletion', lessonLabel: 'LESSON 03.02', duration: '10 MIN', tagline: 'Keep the predecessor. Bypass the target. Release only after the remaining chain is safe.', timeComplexity: 'O(1)', spaceComplexity: 'O(1)',
   problem: { title: 'Cancel a stop without breaking the route', scenario: 'A dispatcher must remove a cancelled stop from a live linked delivery route. The driver still needs every later stop, and other services retain references to unchanged records.', constraints: ['The predecessor and target are already known.', 'Every later stop must remain reachable.', 'The cancelled node can be released only after bypassing it.'], question: 'Which pointer must change before the cancelled record can be safely reclaimed?' },

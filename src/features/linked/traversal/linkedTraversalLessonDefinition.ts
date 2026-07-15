@@ -1,4 +1,4 @@
-import type { PredictionCheckpointDefinition } from '../learning/PredictionCheckpoint'
+import type { PredictionCheckpointDefinition } from '../../learning/PredictionCheckpoint'
 
 export const linkedTraversalLesson = {
   slug: 'linked-traversal', title: 'Traversal & Search', lessonLabel: 'LESSON 03.03', duration: '10 MIN', tagline: 'Start at head. Inspect one node. Follow one link. Stop only when the target is found or next becomes null.', timeComplexity: 'O(n)', spaceComplexity: 'O(1)',

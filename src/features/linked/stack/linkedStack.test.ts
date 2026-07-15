@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { traversalIds } from './linkedInsertion'
+import { traversalIds } from '../model/linkedList'
 import { createStackSteps } from './linkedStack'
 
 describe('linked stack operations', () => {

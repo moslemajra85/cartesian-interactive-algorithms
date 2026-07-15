@@ -1,13 +1,13 @@
 import { type FormEvent, useEffect, useMemo, useState } from 'react'
-import { PlaybackControls } from '../learning/PlaybackControls'
-import { PredictionCheckpoint } from '../learning/PredictionCheckpoint'
-import { ProblemBrief } from '../learning/ProblemBrief'
-import { useStepPlayback } from '../learning/useStepPlayback'
-import type { LessonComponentProps } from '../sorting/SortLesson'
+import { PlaybackControls } from '../../learning/PlaybackControls'
+import { PredictionCheckpoint } from '../../learning/PredictionCheckpoint'
+import { ProblemBrief } from '../../learning/ProblemBrief'
+import { useStepPlayback } from '../../learning/useStepPlayback'
+import type { LessonComponentProps } from '../../sorting/SortLesson'
 import { createLinkedDeletionSteps } from './linkedDeletion'
 import { linkedDeletionLesson as definition } from './linkedDeletionLessonDefinition'
-import { LinkedLessonNavigation } from './LinkedLessonNavigation'
-import { LinkedListVisualizer } from './LinkedListVisualizer'
+import { LinkedLessonNavigation } from '../components/LinkedLessonNavigation'
+import { LinkedListVisualizer } from '../components/LinkedListVisualizer'
 
 const values = [14, 31, 47, 62]
 

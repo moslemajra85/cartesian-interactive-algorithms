@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { createLinkedDeletionSteps } from './linkedDeletion'
-import { traversalIds } from './linkedInsertion'
+import { traversalIds } from '../model/linkedList'
 
 describe('linked-list deletion', () => {
   it('bypasses the target before releasing it', () => {

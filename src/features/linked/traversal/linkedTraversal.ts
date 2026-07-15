@@ -1,4 +1,4 @@
-import type { LinkedNode, LinkedPointerEdge } from './linkedInsertion'
+import { createLinkedNodes, snapshotLinkedNodes, type LinkedNode, type LinkedPointerEdge } from '../model/linkedList'
 
 export type LinkedTraversalPhase = 'ready' | 'inspect' | 'advance' | 'found' | 'not-found'
 export type LinkedTraversalStep = {
@@ -15,13 +15,13 @@ export type LinkedTraversalStep = {
 }
 
 function snapshot(nodes: LinkedNode[], details: Omit<LinkedTraversalStep, 'nodes' | 'headId'>): LinkedTraversalStep {
-  return { nodes: nodes.map((node) => ({ ...node })), headId: 'node-0', ...details }
+  return { nodes: snapshotLinkedNodes(nodes), headId: 'node-0', ...details }
 }
 
 export function createLinkedTraversalSteps(values: number[], target: number): LinkedTraversalStep[] {
   if (values.length < 1) throw new RangeError('Traversal requires at least one node.')
   if (!Number.isInteger(target)) throw new RangeError('Target must be a whole number.')
-  const nodes: LinkedNode[] = values.map((value, index) => ({ id: `node-${index}`, value, nextId: index === values.length - 1 ? null : `node-${index + 1}` }))
+  const nodes = createLinkedNodes(values)
   const steps = [snapshot(nodes, {
     activeIds: ['node-0'], currentId: 'node-0', visitedIds: [], followedEdge: null, comparisonCount: 0,
     phase: 'ready', title: `Search for ${target}`,

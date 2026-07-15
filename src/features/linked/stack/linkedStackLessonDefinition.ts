@@ -1,4 +1,4 @@
-import type { PredictionCheckpointDefinition } from '../learning/PredictionCheckpoint'
+import type { PredictionCheckpointDefinition } from '../../learning/PredictionCheckpoint'
 
 export const linkedStackLesson = {
   slug: 'stack-push-pop', title: 'Stack Push & Pop', lessonLabel: 'LESSON 03.04', duration: '11 MIN', tagline: 'Push at top. Pop from top. Preserve the older chain before moving the only entry point.', timeComplexity: 'O(1)', spaceComplexity: 'O(1)',

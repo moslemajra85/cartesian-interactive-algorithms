@@ -342,7 +342,7 @@ Pure event-generator tests protect algorithm correctness. They verify:
 - Custom-array parsing, normalization, size limits, value limits, and duplicate preservation
 - Route parsing, serialization, document titles, unknown paths, and legacy direct links
 
-Component tests exercise prediction attempts, retry behavior, sorting and search input flows, linked-node identity and pointer movement, catalogue navigation, browser history events, route focus, document titles, and not-found behavior. Registry tests protect route uniqueness, chapter availability, and lesson numbering. The current suite contains 201 passing tests.
+Component tests exercise prediction attempts, retry behavior, sorting and search input flows, linked-node identity and pointer movement, catalogue navigation, browser history events, route focus, document titles, and not-found behavior. Registry tests protect route uniqueness, chapter availability, and lesson numbering. The current suite contains 205 passing tests.
 
 ## Roadmap
 
