@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { createLinkedDeletionSteps } from './linkedDeletion'
 import { createLinkedInsertionSteps, type LinkedNode } from './linkedInsertion'
 import { LinkedListVisualizer } from './LinkedListVisualizer'
+import { createLinkedTraversalSteps } from './linkedTraversal'
 
 afterEach(cleanup)
 
@@ -45,5 +46,30 @@ describe('LinkedListVisualizer motion semantics', () => {
     render(<LinkedListVisualizer nodes={step.nodes} headId={step.headId} activeIds={['node-0', 'node-1']} />)
 
     expect(document.querySelector('[data-pointer="node-0->node-1"]')?.classList.contains('is-active')).toBe(true)
+  })
+
+  it('moves the named current pointer while preserving its variable identity', () => {
+    const steps = createLinkedTraversalSteps([10, 20, 30], 30)
+    const { container, rerender } = render(
+      <LinkedListVisualizer nodes={steps[1].nodes} headId={steps[1].headId} activeIds={steps[1].activeIds} pointers={[{ id: 'current', label: 'current', nodeId: steps[1].currentId }]} />,
+    )
+    expect(container.querySelector('[data-variable-pointer="current"]')?.getAttribute('data-pointer-node')).toBe('node-0')
+
+    rerender(<LinkedListVisualizer nodes={steps[2].nodes} headId={steps[2].headId} activeIds={steps[2].activeIds} pointers={[{ id: 'current', label: 'current', nodeId: steps[2].currentId }]} visitedIds={steps[2].visitedIds} followedEdge={steps[2].followedEdge} />)
+    expect(container.querySelector('[data-variable-pointer="current"]')?.getAttribute('data-pointer-node')).toBe('node-1')
+    expect(container.querySelector('[data-node-id="node-0"]')?.textContent).toContain('VISITED')
+    expect(container.querySelector('[data-pointer="node-0->node-1"]')?.classList.contains('is-active')).toBe(true)
+    expect(screen.getByRole('img').getAttribute('aria-label')).toContain('current points to 20')
+  })
+
+  it('shows current at null after an unsuccessful traversal', () => {
+    const step = createLinkedTraversalSteps([10, 20], 99).at(-1)!
+    const { container } = render(
+      <LinkedListVisualizer nodes={step.nodes} headId={step.headId} activeIds={step.activeIds} pointers={[{ id: 'current', label: 'current', nodeId: step.currentId }]} visitedIds={step.visitedIds} followedEdge={step.followedEdge} />,
+    )
+
+    expect(container.querySelector('[data-variable-pointer="current"]')?.getAttribute('data-pointer-node')).toBe('null')
+    expect(container.querySelector('[data-pointer="node-1->null"]')?.classList.contains('is-active')).toBe(true)
+    expect(screen.getByRole('img').getAttribute('aria-label')).toContain('current is null')
   })
 })

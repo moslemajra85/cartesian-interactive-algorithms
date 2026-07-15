@@ -33,7 +33,7 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - Best/average/worst-case lesson that separates observed runs from upper-bound guarantees
 - Recursion lesson with adjustable depth and visible call-stack descent and unwinding
 - Time–space trade-off lab comparing repeated scans with a reusable index
-- Learner-configurable linked-list insertion with stable node identities and visible pointer rewrites
+- Learner-configurable linked-list operations with stable node identities, visible pointer rewrites, and a named `current` pointer that traverses into `null`
 - Learner-configurable linked-list deletion with explicit bypass, detachment, and release phases
 - Linked traversal lab with present and missing targets and visible next-reference movement
 - Typed lesson catalogue with a dedicated Arrays & Sorting chapter screen

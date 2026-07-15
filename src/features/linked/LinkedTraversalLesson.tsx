@@ -19,6 +19,7 @@ export function LinkedTraversalLesson({ lessons, onBack, onOpenLesson, onComplet
   const playback = useStepPlayback(steps.length)
   const { stepIndex, playing, speedIndex, isComplete } = playback
   const step = steps[stepIndex]
+  const currentNode = step.nodes.find((node) => node.id === step.currentId)
 
   useEffect(() => { if (isComplete) onCompleteLesson(definition.slug) }, [isComplete, onCompleteLesson])
 
@@ -53,7 +54,20 @@ export function LinkedTraversalLesson({ lessons, onBack, onOpenLesson, onComplet
             <button type="submit">Apply</button>
             {error && <p role="alert">{error}</p>}
           </form>
-          <LinkedListVisualizer nodes={step.nodes} headId={step.headId} activeIds={step.activeIds} />
+          <div className="traversal-registers" aria-label={`Target ${target}. Current ${currentNode?.value ?? 'null'}. ${step.comparisonCount} comparisons.`}>
+            <span><small>TARGET</small><strong>{target}</strong></span>
+            <span className={step.currentId === null ? 'is-null' : ''}><small>CURRENT</small><strong>{currentNode?.value ?? 'null'}</strong></span>
+            <span><small>COMPARISONS</small><strong>{step.comparisonCount} / {values.length}</strong></span>
+          </div>
+          <LinkedListVisualizer
+            nodes={step.nodes}
+            headId={step.headId}
+            activeIds={step.activeIds}
+            pointers={[{ id: 'current', label: 'current', nodeId: step.currentId, tone: step.phase === 'found' ? 'found' : 'current' }]}
+            visitedIds={step.visitedIds}
+            followedEdge={step.followedEdge}
+            foundId={step.phase === 'found' ? step.currentId : null}
+          />
           <div className="step-narration" aria-live="polite" key={`${target}-${stepIndex}`}><span>{String(stepIndex + 1).padStart(2, '0')}</span><div><strong>{step.title}</strong><p>{step.explanation}</p></div></div>
           <PlaybackControls stepIndex={stepIndex} stepCount={steps.length} playing={playing} speedIndex={speedIndex} isComplete={isComplete} onRestart={playback.restart} onMoveTo={playback.moveTo} onTogglePlayback={playback.togglePlayback} onCycleSpeed={playback.cycleSpeed} />
         </div>

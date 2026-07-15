@@ -1,21 +1,70 @@
 import { AnimatePresence, LayoutGroup, LazyMotion, MotionConfig } from 'motion/react'
 import * as m from 'motion/react-m'
 import { traversalIds, type LinkedNode } from './linkedInsertion'
+import type { LinkedTraversalEdge } from './linkedTraversal'
 
 const loadMotionFeatures = () => import('./motionFeatures').then((module) => module.default)
+
+export type LinkedVariablePointer = {
+  id: string
+  label: string
+  nodeId: string | null
+  tone?: 'current' | 'found'
+}
 
 type LinkedListVisualizerProps = {
   nodes: LinkedNode[]
   headId: string
   activeIds: string[]
   emphasizedIds?: string[]
+  pointers?: LinkedVariablePointer[]
+  visitedIds?: string[]
+  followedEdge?: LinkedTraversalEdge | null
+  foundId?: string | null
 }
 
-export function LinkedListVisualizer({ nodes, headId, activeIds, emphasizedIds = [] }: LinkedListVisualizerProps) {
+export function LinkedListVisualizer({
+  nodes,
+  headId,
+  activeIds,
+  emphasizedIds = [],
+  pointers = [],
+  visitedIds = [],
+  followedEdge,
+  foundId = null,
+}: LinkedListVisualizerProps) {
   const chainIds = traversalIds({ nodes, headId })
   const nodesById = new Map(nodes.map((node) => [node.id, node]))
   const detachedNodes = nodes.filter((node) => !chainIds.includes(node.id))
-  const nodeClass = (id: string) => [activeIds.includes(id) && 'is-active', emphasizedIds.includes(id) && 'is-new'].filter(Boolean).join(' ')
+  const nodeClass = (id: string) => [
+    activeIds.includes(id) && 'is-active',
+    emphasizedIds.includes(id) && 'is-new',
+    visitedIds.includes(id) && 'is-visited',
+    foundId === id && 'is-found',
+  ].filter(Boolean).join(' ')
+  const pointerDescription = pointers.map((pointer) => {
+    const node = pointer.nodeId ? nodesById.get(pointer.nodeId) : null
+    return `${pointer.label} ${node ? `points to ${node.value}` : 'is null'}`
+  }).join('. ')
+  const visitedValues = visitedIds.map((id) => nodesById.get(id)?.value).filter((value) => value !== undefined)
+  const hasTraversalState = pointers.length > 0 || visitedIds.length > 0 || followedEdge !== undefined
+  const visitedDescription = hasTraversalState
+    ? visitedValues.length ? `Visited values: ${visitedValues.join(', ')}. ` : 'No visited values. '
+    : ''
+
+  const renderVariablePointers = (nodeId: string | null) => pointers.filter((pointer) => pointer.nodeId === nodeId).map((pointer) => (
+    <m.span
+      className={`linked-variable-pointer is-${pointer.tone ?? 'current'}`}
+      data-pointer-node={pointer.nodeId ?? 'null'}
+      data-variable-pointer={pointer.id}
+      key={pointer.id}
+      layoutId={`linked-variable-${pointer.id}`}
+      style={{ x: '-50%' }}
+      transition={{ type: 'spring', stiffness: 420, damping: 31 }}
+    >
+      <b>{pointer.label}</b><i aria-hidden="true">↓</i>
+    </m.span>
+  ))
 
   const renderNode = (node: LinkedNode, reachability: 'reachable' | 'detached') => (
     <m.article
@@ -29,6 +78,9 @@ export function LinkedListVisualizer({ nodes, headId, activeIds, emphasizedIds =
       exit={{ opacity: 0, scale: 0.72, y: 18 }}
       transition={{ type: 'spring', stiffness: 360, damping: 30 }}
     >
+      {renderVariablePointers(node.id)}
+      {visitedIds.includes(node.id) && foundId !== node.id && <i className="linked-node-state is-visited" aria-hidden="true">✓ VISITED</i>}
+      {foundId === node.id && <i className="linked-node-state is-found" aria-hidden="true">FOUND</i>}
       <span>{node.value}</span><small>NEXT</small><code>{node.nextId ?? 'null'}</code>
     </m.article>
   )
@@ -37,14 +89,27 @@ export function LinkedListVisualizer({ nodes, headId, activeIds, emphasizedIds =
     <LazyMotion features={loadMotionFeatures} strict>
       <MotionConfig reducedMotion="user">
         <LayoutGroup id="linked-list-layout">
-        <div className="linked-stage" role="img" aria-label={`Reachable list: ${chainIds.map((id) => nodesById.get(id)?.value).join(', ')}. ${detachedNodes.length} detached nodes.`}>
+        <div
+          className="linked-stage"
+          role="img"
+          aria-label={`Reachable list: ${chainIds.map((id) => nodesById.get(id)?.value).join(', ')}. ${pointerDescription ? `${pointerDescription}. ` : ''}${visitedDescription}${followedEdge ? `Following next from ${nodesById.get(followedEdge.fromId)?.value} to ${followedEdge.toId ? nodesById.get(followedEdge.toId)?.value : 'null'}. ` : ''}${detachedNodes.length} detached nodes.`}
+        >
           <m.span className="linked-head" layout>HEAD</m.span>
+          {pointers.length > 0 && (
+            <div className="linked-state-legend" aria-hidden="true">
+              <span><i className="legend-current" /> current pointer</span>
+              <span><i className="legend-visited" /> checked</span>
+              <span><i className="legend-unseen" /> not checked</span>
+            </div>
+          )}
           <m.div className="linked-chain" layout>
             <AnimatePresence initial={false} mode="popLayout">
               {chainIds.map((id, index) => {
                 const node = nodesById.get(id)!
                 const nextId = chainIds[index + 1]
-                const pointerActive = activeIds.includes(id) && Boolean(nextId && activeIds.includes(nextId))
+                const pointerActive = followedEdge === undefined
+                  ? activeIds.includes(id) && Boolean(nextId && activeIds.includes(nextId))
+                  : followedEdge?.fromId === id && followedEdge.toId === nextId
                 return (
                   <m.div className="linked-node-group" layout key={id}>
                     {renderNode(node, 'reachable')}
@@ -63,7 +128,14 @@ export function LinkedListVisualizer({ nodes, headId, activeIds, emphasizedIds =
                 )
               })}
             </AnimatePresence>
-            <m.b className="linked-pointer is-null" layout aria-hidden="true">→ null</m.b>
+            <m.span className="linked-null-target" layout>
+              {renderVariablePointers(null)}
+              <m.b
+                className={`linked-pointer is-null ${followedEdge?.toId === null ? 'is-active' : ''}`}
+                data-pointer={`${chainIds.at(-1)}->null`}
+                aria-hidden="true"
+              >→ null</m.b>
+            </m.span>
           </m.div>
           <AnimatePresence initial={false}>
             {detachedNodes.length > 0 && (
