@@ -1,7 +1,6 @@
 import { AnimatePresence, LayoutGroup, LazyMotion, MotionConfig } from 'motion/react'
 import * as m from 'motion/react-m'
-import { traversalIds, type LinkedNode } from './linkedInsertion'
-import type { LinkedTraversalEdge } from './linkedTraversal'
+import { traversalIds, type LinkedNode, type LinkedPointerEdge } from './linkedInsertion'
 
 const loadMotionFeatures = () => import('./motionFeatures').then((module) => module.default)
 
@@ -9,7 +8,7 @@ export type LinkedVariablePointer = {
   id: string
   label: string
   nodeId: string | null
-  tone?: 'current' | 'found'
+  tone?: 'current' | 'found' | 'reference' | 'new' | 'danger'
 }
 
 type LinkedListVisualizerProps = {
@@ -19,7 +18,8 @@ type LinkedListVisualizerProps = {
   emphasizedIds?: string[]
   pointers?: LinkedVariablePointer[]
   visitedIds?: string[]
-  followedEdge?: LinkedTraversalEdge | null
+  followedEdge?: LinkedPointerEdge | null
+  edgeAction?: 'follow' | 'write'
   foundId?: string | null
 }
 
@@ -31,6 +31,7 @@ export function LinkedListVisualizer({
   pointers = [],
   visitedIds = [],
   followedEdge,
+  edgeAction = 'follow',
   foundId = null,
 }: LinkedListVisualizerProps) {
   const chainIds = traversalIds({ nodes, headId })
@@ -39,6 +40,7 @@ export function LinkedListVisualizer({
   const nodeClass = (id: string) => [
     activeIds.includes(id) && 'is-active',
     emphasizedIds.includes(id) && 'is-new',
+    followedEdge?.fromId === id && 'is-edge-source',
     visitedIds.includes(id) && 'is-visited',
     foundId === id && 'is-found',
   ].filter(Boolean).join(' ')
@@ -47,7 +49,7 @@ export function LinkedListVisualizer({
     return `${pointer.label} ${node ? `points to ${node.value}` : 'is null'}`
   }).join('. ')
   const visitedValues = visitedIds.map((id) => nodesById.get(id)?.value).filter((value) => value !== undefined)
-  const hasTraversalState = pointers.length > 0 || visitedIds.length > 0 || followedEdge !== undefined
+  const hasTraversalState = visitedIds.length > 0 || pointers.some((pointer) => pointer.id === 'current')
   const visitedDescription = hasTraversalState
     ? visitedValues.length ? `Visited values: ${visitedValues.join(', ')}. ` : 'No visited values. '
     : ''
@@ -92,14 +94,14 @@ export function LinkedListVisualizer({
         <div
           className="linked-stage"
           role="img"
-          aria-label={`Reachable list: ${chainIds.map((id) => nodesById.get(id)?.value).join(', ')}. ${pointerDescription ? `${pointerDescription}. ` : ''}${visitedDescription}${followedEdge ? `Following next from ${nodesById.get(followedEdge.fromId)?.value} to ${followedEdge.toId ? nodesById.get(followedEdge.toId)?.value : 'null'}. ` : ''}${detachedNodes.length} detached nodes.`}
+          aria-label={`Reachable list: ${chainIds.map((id) => nodesById.get(id)?.value).join(', ')}. ${pointerDescription ? `${pointerDescription}. ` : ''}${visitedDescription}${followedEdge ? `${edgeAction === 'write' ? 'Writing' : 'Following'} next from ${nodesById.get(followedEdge.fromId)?.value} to ${followedEdge.toId ? nodesById.get(followedEdge.toId)?.value : 'null'}. ` : ''}${detachedNodes.length} detached nodes.`}
         >
           <m.span className="linked-head" layout>HEAD</m.span>
           {pointers.length > 0 && (
             <div className="linked-state-legend" aria-hidden="true">
-              <span><i className="legend-current" /> current pointer</span>
-              <span><i className="legend-visited" /> checked</span>
-              <span><i className="legend-unseen" /> not checked</span>
+              <span><i className="legend-current" /> named pointer</span>
+              {hasTraversalState && <span><i className="legend-visited" /> checked</span>}
+              {hasTraversalState && <span><i className="legend-unseen" /> not checked</span>}
             </div>
           )}
           <m.div className="linked-chain" layout>
@@ -131,12 +133,27 @@ export function LinkedListVisualizer({
             <m.span className="linked-null-target" layout>
               {renderVariablePointers(null)}
               <m.b
-                className={`linked-pointer is-null ${followedEdge?.toId === null ? 'is-active' : ''}`}
+                className={`linked-pointer is-null ${followedEdge?.fromId === chainIds.at(-1) && followedEdge?.toId === null ? 'is-active' : ''}`}
                 data-pointer={`${chainIds.at(-1)}->null`}
                 aria-hidden="true"
               >→ null</m.b>
             </m.span>
           </m.div>
+          <AnimatePresence initial={false}>
+            {followedEdge && (
+              <m.div
+                className="linked-edge-operation"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 8 }}
+              >
+                <small>{edgeAction === 'write' ? 'REFERENCE WRITE' : 'FOLLOW REFERENCE'}</small>
+                <code>{nodesById.get(followedEdge.fromId)?.value}.next</code>
+                <b>{edgeAction === 'write' ? '=' : '→'}</b>
+                <strong>{followedEdge.toId ? nodesById.get(followedEdge.toId)?.value : 'null'}</strong>
+              </m.div>
+            )}
+          </AnimatePresence>
           <AnimatePresence initial={false}>
             {detachedNodes.length > 0 && (
               <m.div className="detached-nodes" layout initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>

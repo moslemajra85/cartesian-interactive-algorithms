@@ -33,8 +33,8 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - Best/average/worst-case lesson that separates observed runs from upper-bound guarantees
 - Recursion lesson with adjustable depth and visible call-stack descent and unwinding
 - Time–space trade-off lab comparing repeated scans with a reusable index
-- Learner-configurable linked-list operations with stable node identities, visible pointer rewrites, and a named `current` pointer that traverses into `null`
-- Learner-configurable linked-list deletion with explicit bypass, detachment, and release phases
+- Learner-configurable linked-list operations with stable node identities and animated `predecessor`, `new`, `target`, `successor`, and `current` pointers
+- Learner-configurable linked-list deletion with explicit bypass, detachment, release phases, and visible reference-write expressions
 - Linked traversal lab with present and missing targets and visible next-reference movement
 - Typed lesson catalogue with a dedicated Arrays & Sorting chapter screen
 - Keyboard-accessible lesson search derived from the typed curriculum registry
@@ -338,7 +338,7 @@ Pure event-generator tests protect algorithm correctness. They verify:
 - Custom-array parsing, normalization, size limits, value limits, and duplicate preservation
 - Route parsing, serialization, document titles, unknown paths, and legacy direct links
 
-Component tests exercise prediction attempts, retry behavior, sorting and search input flows, catalogue navigation, browser history events, route focus, document titles, and not-found behavior. Registry tests protect route uniqueness, chapter availability, and lesson numbering. The current suite contains 100 passing tests. The next useful UI layer is shared-playback coverage for timer behavior and the browser-level keyboard listener around real focused elements.
+Component tests exercise prediction attempts, retry behavior, sorting and search input flows, linked-node identity and pointer movement, catalogue navigation, browser history events, route focus, document titles, and not-found behavior. Registry tests protect route uniqueness, chapter availability, and lesson numbering. The current suite contains 190 passing tests.
 
 ## Roadmap
 

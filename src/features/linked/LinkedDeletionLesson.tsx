@@ -19,6 +19,13 @@ export function LinkedDeletionLesson({ lessons, onBack, onOpenLesson, onComplete
   const { stepIndex, playing, speedIndex, isComplete } = playback
   const step = steps[stepIndex]
   const targetId = `node-${targetIndex}`
+  const nodeValue = (id: string | null) => id === null ? 'null' : step.nodes.find((node) => node.id === id)?.value ?? values[targetIndex]
+  const targetReleased = step.phase === 'release' || step.phase === 'complete'
+  const pointers = [
+    { id: 'predecessor', label: 'predecessor', nodeId: step.predecessorId, tone: 'reference' as const },
+    ...(!targetReleased ? [{ id: 'target', label: 'target', nodeId: step.targetId, tone: 'danger' as const }] : []),
+    { id: 'successor', label: 'successor', nodeId: step.successorId, tone: 'current' as const },
+  ]
 
   useEffect(() => { if (isComplete) onCompleteLesson(definition.slug) }, [isComplete, onCompleteLesson])
 
@@ -46,7 +53,12 @@ export function LinkedDeletionLesson({ lessons, onBack, onOpenLesson, onComplete
             <label>Remove stop<select value={draftTarget} onChange={(event) => setDraftTarget(event.target.value)}>{values.slice(1).map((value, index) => <option value={index + 1} key={value}>{value}</option>)}</select></label>
             <button type="submit">Apply</button>
           </form>
-          <LinkedListVisualizer nodes={step.nodes} headId={step.headId} activeIds={step.activeIds} emphasizedIds={[targetId]} />
+          <div className="traversal-registers linked-pointer-registers" aria-label={`Predecessor ${nodeValue(step.predecessorId)}. Target ${targetReleased ? 'released' : nodeValue(step.targetId)}. Successor ${nodeValue(step.successorId)}.`}>
+            <span><small>PREDECESSOR</small><strong>{nodeValue(step.predecessorId)}</strong></span>
+            <span className={targetReleased ? 'is-released' : ''}><small>TARGET</small><strong>{targetReleased ? 'released' : nodeValue(step.targetId)}</strong></span>
+            <span className={step.successorId === null ? 'is-null' : ''}><small>SUCCESSOR</small><strong>{nodeValue(step.successorId)}</strong></span>
+          </div>
+          <LinkedListVisualizer nodes={step.nodes} headId={step.headId} activeIds={step.activeIds} emphasizedIds={[targetId]} pointers={pointers} followedEdge={step.followedEdge} edgeAction="write" />
           <div className="step-narration" aria-live="polite" key={`${targetIndex}-${stepIndex}`}><span>{String(stepIndex + 1).padStart(2, '0')}</span><div><strong>{step.title}</strong><p>{step.explanation}</p></div></div>
           <PlaybackControls stepIndex={stepIndex} stepCount={steps.length} playing={playing} speedIndex={speedIndex} isComplete={isComplete} onRestart={playback.restart} onMoveTo={playback.moveTo} onTogglePlayback={playback.togglePlayback} onCycleSpeed={playback.cycleSpeed} />
         </div>

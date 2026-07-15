@@ -72,4 +72,29 @@ describe('LinkedListVisualizer motion semantics', () => {
     expect(container.querySelector('[data-pointer="node-1->null"]')?.classList.contains('is-active')).toBe(true)
     expect(screen.getByRole('img').getAttribute('aria-label')).toContain('current is null')
   })
+
+  it('renders several named references and narrates a rewritten edge', () => {
+    const step = createLinkedInsertionSteps([10, 20, 30], 25, 1).find(({ phase }) => phase === 'link-predecessor')!
+    const { container } = render(
+      <LinkedListVisualizer
+        nodes={step.nodes}
+        headId={step.headId}
+        activeIds={step.activeIds}
+        pointers={[
+          { id: 'predecessor', label: 'predecessor', nodeId: step.predecessorId, tone: 'reference' },
+          { id: 'new', label: 'new', nodeId: step.newId, tone: 'new' },
+          { id: 'successor', label: 'successor', nodeId: step.successorId },
+        ]}
+        followedEdge={step.followedEdge}
+        edgeAction="write"
+      />,
+    )
+
+    expect(container.querySelectorAll('[data-variable-pointer]')).toHaveLength(3)
+    expect(container.querySelector('[data-pointer="node-1->node-new"]')?.classList.contains('is-active')).toBe(true)
+    expect(container.querySelector('[data-node-id="node-1"]')?.classList.contains('is-edge-source')).toBe(true)
+    expect(screen.getByText('REFERENCE WRITE')).toBeTruthy()
+    expect(screen.getByText('20.next')).toBeTruthy()
+    expect(screen.getByRole('img').getAttribute('aria-label')).toContain('predecessor points to 20')
+  })
 })

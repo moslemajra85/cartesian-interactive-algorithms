@@ -20,6 +20,12 @@ export function LinkedInsertionLesson({ lessons, onBack, onOpenLesson, onComplet
   const playback = useStepPlayback(steps.length)
   const { stepIndex, playing, speedIndex, isComplete } = playback
   const step = steps[stepIndex]
+  const nodeValue = (id: string | null) => id === null ? 'null' : step.nodes.find((node) => node.id === id)?.value ?? '—'
+  const pointers = [
+    { id: 'predecessor', label: 'predecessor', nodeId: step.predecessorId, tone: 'reference' as const },
+    ...(step.newId ? [{ id: 'new', label: 'new', nodeId: step.newId, tone: 'new' as const }] : []),
+    { id: 'successor', label: 'successor', nodeId: step.successorId, tone: 'current' as const },
+  ]
 
   useEffect(() => { if (isComplete) onCompleteLesson(definition.slug) }, [isComplete, onCompleteLesson])
 
@@ -44,7 +50,12 @@ export function LinkedInsertionLesson({ lessons, onBack, onOpenLesson, onComplet
         <label>New value<input type="number" min="1" max="99" value={draftValue} onChange={(event) => setDraftValue(event.target.value)} aria-invalid={Boolean(error)} /></label>
         <button type="submit">Apply</button>{error && <p role="alert">{error}</p>}
       </form>
-      <LinkedListVisualizer nodes={step.nodes} headId={step.headId} activeIds={step.activeIds} emphasizedIds={['node-new']} />
+      <div className="traversal-registers linked-pointer-registers" aria-label={`Predecessor ${nodeValue(step.predecessorId)}. New ${step.newId ? nodeValue(step.newId) : 'not allocated'}. Successor ${nodeValue(step.successorId)}.`}>
+        <span><small>PREDECESSOR</small><strong>{nodeValue(step.predecessorId)}</strong></span>
+        <span><small>NEW</small><strong>{step.newId ? nodeValue(step.newId) : '—'}</strong></span>
+        <span className={step.successorId === null ? 'is-null' : ''}><small>SUCCESSOR</small><strong>{nodeValue(step.successorId)}</strong></span>
+      </div>
+      <LinkedListVisualizer nodes={step.nodes} headId={step.headId} activeIds={step.activeIds} emphasizedIds={['node-new']} pointers={pointers} followedEdge={step.followedEdge} edgeAction="write" />
       <div className="step-narration" aria-live="polite" key={`${scenario.value}-${scenario.afterIndex}-${stepIndex}`}><span>{String(stepIndex + 1).padStart(2, '0')}</span><div><strong>{step.title}</strong><p>{step.explanation}</p></div></div>
       <PlaybackControls stepIndex={stepIndex} stepCount={steps.length} playing={playing} speedIndex={speedIndex} isComplete={isComplete} onRestart={playback.restart} onMoveTo={playback.moveTo} onTogglePlayback={playback.togglePlayback} onCycleSpeed={playback.cycleSpeed} />
     </div><aside className="code-panel linked-code"><div className="panel-label"><span>POINTER REWRITE</span><i>Preserve before redirect</i></div><ol>{['new = Node(value)', 'new.next = predecessor.next', 'predecessor.next = new', 'return head'].map((line, index) => <li className={Math.max(0, ['allocate', 'link-successor', 'link-predecessor', 'complete'].indexOf(step.phase)) === index ? 'is-active' : ''} key={line}><span>{index + 1}</span><code>{line}</code></li>)}</ol><div className="insight-note"><span>KEY INSIGHT</span><p>O(1) insertion assumes the predecessor is already known. Finding that node from head still costs O(n).</p></div></aside></section>

@@ -1,9 +1,14 @@
 export type LinkedNode = { id: string; value: number; nextId: string | null }
+export type LinkedPointerEdge = { fromId: string; toId: string | null }
 export type LinkedInsertionPhase = 'ready' | 'allocate' | 'link-successor' | 'link-predecessor' | 'complete'
 export type LinkedInsertionStep = {
   nodes: LinkedNode[]
   headId: string
   activeIds: string[]
+  predecessorId: string
+  newId: string | null
+  successorId: string | null
+  followedEdge: LinkedPointerEdge | null
   phase: LinkedInsertionPhase
   title: string
   explanation: string
@@ -22,15 +27,35 @@ export function createLinkedInsertionSteps(values: number[], insertedValue: numb
   const predecessor = nodes[afterIndex]
   const successorId = predecessor.nextId
   const inserted: LinkedNode = { id: 'node-new', value: insertedValue, nextId: null }
-  const steps = [snapshot(nodes, { activeIds: [], phase: 'ready', title: 'Existing chain', explanation: 'Each node stores a value and the identity of its successor. Physical array positions are not part of the structure.' })]
+  const steps = [snapshot(nodes, {
+    activeIds: [predecessor.id], predecessorId: predecessor.id, newId: null, successorId, followedEdge: null,
+    phase: 'ready', title: 'Identify the insertion boundary',
+    explanation: `predecessor points to ${predecessor.value}. Its current next reference ${successorId ? `points to ${nodes.find((node) => node.id === successorId)?.value}` : 'is null at the tail'}.`,
+  })]
 
   nodes.push(inserted)
-  steps.push(snapshot(nodes, { activeIds: [inserted.id], phase: 'allocate', title: `Allocate node ${insertedValue}`, explanation: 'Create one detached node. It is not reachable from head yet, so traversing the list cannot see it.' }))
+  steps.push(snapshot(nodes, {
+    activeIds: [inserted.id], predecessorId: predecessor.id, newId: inserted.id, successorId, followedEdge: null,
+    phase: 'allocate', title: `Allocate node ${insertedValue}`,
+    explanation: 'new points to one detached node. Its next field starts at null, so traversing from head still cannot reach it.',
+  }))
   inserted.nextId = successorId
-  steps.push(snapshot(nodes, { activeIds: [inserted.id, ...(successorId ? [successorId] : [])], phase: 'link-successor', title: successorId ? 'Point new node to the successor' : 'Mark new node as the tail', explanation: successorId ? 'Preserve the remainder of the list first by storing the predecessor’s old successor in new.next.' : 'The predecessor was the tail, so the new node correctly points to null.' }))
+  steps.push(snapshot(nodes, {
+    activeIds: [inserted.id, ...(successorId ? [successorId] : [])], predecessorId: predecessor.id, newId: inserted.id, successorId,
+    followedEdge: { fromId: inserted.id, toId: successorId }, phase: 'link-successor',
+    title: successorId ? 'Point new node to the successor' : 'Keep new.next at null',
+    explanation: successorId ? 'Execute new.next = predecessor.next. This preserves the only reference to the remainder before predecessor changes.' : 'The predecessor was the tail, so new.next correctly remains null.',
+  }))
   predecessor.nextId = inserted.id
-  steps.push(snapshot(nodes, { activeIds: [predecessor.id, inserted.id], phase: 'link-predecessor', title: 'Point predecessor to the new node', explanation: 'The new node is now reachable from head. No existing node value moved in memory.' }))
-  steps.push(snapshot(nodes, { activeIds: [], phase: 'complete', title: 'Insertion complete', explanation: `The list contains ${nodes.length} nodes. Insertion changed two links and moved zero existing values.` }))
+  steps.push(snapshot(nodes, {
+    activeIds: [predecessor.id, inserted.id], predecessorId: predecessor.id, newId: inserted.id, successorId,
+    followedEdge: { fromId: predecessor.id, toId: inserted.id }, phase: 'link-predecessor',
+    title: 'Point predecessor to the new node', explanation: 'Execute predecessor.next = new. The new node becomes reachable from head; no existing value moves in memory.',
+  }))
+  steps.push(snapshot(nodes, {
+    activeIds: [], predecessorId: predecessor.id, newId: inserted.id, successorId, followedEdge: null,
+    phase: 'complete', title: 'Insertion complete', explanation: `The list contains ${nodes.length} nodes. Two references were assigned and zero existing values moved.`,
+  }))
   return steps
 }
 

@@ -1,14 +1,13 @@
-import type { LinkedNode } from './linkedInsertion'
+import type { LinkedNode, LinkedPointerEdge } from './linkedInsertion'
 
 export type LinkedTraversalPhase = 'ready' | 'inspect' | 'advance' | 'found' | 'not-found'
-export type LinkedTraversalEdge = { fromId: string; toId: string | null }
 export type LinkedTraversalStep = {
   nodes: LinkedNode[]
   headId: string
   activeIds: string[]
   currentId: string | null
   visitedIds: string[]
-  followedEdge: LinkedTraversalEdge | null
+  followedEdge: LinkedPointerEdge | null
   comparisonCount: number
   phase: LinkedTraversalPhase
   title: string

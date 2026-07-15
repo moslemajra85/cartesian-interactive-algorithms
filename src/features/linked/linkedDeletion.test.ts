@@ -10,6 +10,10 @@ describe('linked-list deletion', () => {
     expect(bypass.nodes.find((node) => node.id === 'node-1')?.nextId).toBe('node-3')
     expect(bypass.nodes.find((node) => node.id === 'node-2')).toBeTruthy()
     expect(release.nodes.find((node) => node.id === 'node-2')).toBeUndefined()
+    expect(bypass).toMatchObject({
+      predecessorId: 'node-1', targetId: 'node-2', successorId: 'node-3',
+      followedEdge: { fromId: 'node-1', toId: 'node-3' },
+    })
   })
   it('preserves the reachable remainder and stable identities', () => {
     const final = createLinkedDeletionSteps([10, 20, 30, 40], 2).at(-1)!
@@ -17,8 +21,12 @@ describe('linked-list deletion', () => {
     expect(final.nodes.map((node) => node.value)).toEqual([10, 20, 40])
   })
   it('can remove the tail', () => {
-    const final = createLinkedDeletionSteps([10, 20, 30], 2).at(-1)!
+    const steps = createLinkedDeletionSteps([10, 20, 30], 2)
+    const final = steps.at(-1)!
     expect(final.nodes.find((node) => node.id === 'node-1')?.nextId).toBeNull()
+    expect(steps.find((step) => step.phase === 'bypass')).toMatchObject({
+      successorId: null, followedEdge: { fromId: 'node-1', toId: null },
+    })
   })
   it('keeps the initial snapshot immutable', () => {
     const steps = createLinkedDeletionSteps([10, 20, 30], 1)

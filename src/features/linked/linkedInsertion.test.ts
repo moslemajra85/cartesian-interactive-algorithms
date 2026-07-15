@@ -9,6 +9,11 @@ describe('linked-list insertion', () => {
     expect(successor.nodes.find((node) => node.id === 'node-new')?.nextId).toBe('node-2')
     expect(successor.nodes.find((node) => node.id === 'node-1')?.nextId).toBe('node-2')
     expect(redirected.nodes.find((node) => node.id === 'node-1')?.nextId).toBe('node-new')
+    expect(successor).toMatchObject({
+      predecessorId: 'node-1', newId: 'node-new', successorId: 'node-2',
+      followedEdge: { fromId: 'node-new', toId: 'node-2' },
+    })
+    expect(redirected.followedEdge).toEqual({ fromId: 'node-1', toId: 'node-new' })
   })
   it('produces the expected reachable order without changing existing identities', () => {
     const final = createLinkedInsertionSteps([10, 20, 30], 25, 1).at(-1)!
@@ -16,9 +21,13 @@ describe('linked-list insertion', () => {
     expect(final.nodes.map((node) => node.value)).toEqual([10, 20, 30, 25])
   })
   it('supports insertion after the tail', () => {
-    const final = createLinkedInsertionSteps([10, 20], 30, 1).at(-1)!
+    const steps = createLinkedInsertionSteps([10, 20], 30, 1)
+    const final = steps.at(-1)!
     expect(traversalIds(final)).toEqual(['node-0', 'node-1', 'node-new'])
     expect(final.nodes.find((node) => node.id === 'node-new')?.nextId).toBeNull()
+    expect(steps.find((step) => step.phase === 'link-successor')).toMatchObject({
+      successorId: null, followedEdge: { fromId: 'node-new', toId: null },
+    })
   })
   it('does not mutate earlier snapshots', () => {
     const steps = createLinkedInsertionSteps([10, 20], 15, 0)
