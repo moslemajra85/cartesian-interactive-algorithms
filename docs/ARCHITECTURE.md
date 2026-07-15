@@ -108,7 +108,7 @@ Scenarios must make the algorithm honest. Bubble Sort is presented for an adjace
 
 Location: `src/features/linked/`
 
-Linked-list timelines store stable node IDs and semantic `nextId` references. Insertion snapshots allocation, successor preservation, and predecessor redirection; deletion snapshots identification, bypass, detachment, and release. Rendering derives reachability by traversing from `headId`, so detached nodes remain visible without pretending they belong to the chain. Both O(1) claims explicitly assume the predecessor is known—searching for it remains O(n).
+Linked-list timelines store stable node IDs and semantic `nextId` references. Insertion snapshots allocation, successor preservation, and predecessor redirection; deletion snapshots identification, bypass, detachment, and release. Traversal emits inspect and advance events until a match or explicit null exhaustion. Rendering derives reachability from `headId`, so every lesson shares the same definition of list membership. The O(1) mutation claims assume the predecessor is known—searching for it remains O(n).
 
 ### Application shell
 

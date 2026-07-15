@@ -156,5 +156,12 @@ describe('Linked Structures chapter', () => {
     await user.click(screen.getByRole('button', { name: 'Next step' }))
     expect(screen.getByText('Bypass 62')).toBeTruthy()
     expect(screen.getByRole('img').getAttribute('aria-label')).toContain('1 detached nodes')
+
+    await user.click(screen.getByRole('button', { name: '03 · Traversal & Search' }))
+    expect(window.location.hash).toBe('#linked-traversal')
+    await user.click(screen.getByRole('button', { name: 'Try missing' }))
+    expect(screen.getByText('Search for 99')).toBeTruthy()
+    await user.click(screen.getByRole('button', { name: 'Next step' }))
+    expect(screen.getByText('Inspect 14')).toBeTruthy()
   })
 })

@@ -2,7 +2,7 @@
 
 An interactive, visual learning environment for understanding data structures and algorithms through animated execution, synchronized pseudocode, and step-by-step reasoning.
 
-> **Project status:** Active development. The application currently includes the complete six-lesson Foundations chapter, five Arrays & Sorting lessons, and two interactive Linked Structures lessons.
+> **Project status:** Active development. The application currently includes the complete six-lesson Foundations chapter, five Arrays & Sorting lessons, and three interactive Linked Structures lessons.
 
 [![CI and deploy](https://github.com/moslemajra85/cartesian-interactive-algorithms/actions/workflows/ci-and-deploy.yml/badge.svg)](https://github.com/moslemajra85/cartesian-interactive-algorithms/actions/workflows/ci-and-deploy.yml)
 [![Live site](https://img.shields.io/badge/live-GitHub%20Pages-222?logo=github)](https://moslemajra85.github.io/cartesian-interactive-algorithms/)
@@ -35,6 +35,7 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - Time–space trade-off lab comparing repeated scans with a reusable index
 - Learner-configurable linked-list insertion with stable node identities and visible pointer rewrites
 - Learner-configurable linked-list deletion with explicit bypass, detachment, and release phases
+- Linked traversal lab with present and missing targets and visible next-reference movement
 - Typed lesson catalogue with a dedicated Arrays & Sorting chapter screen
 - Keyboard-accessible lesson search derived from the typed curriculum registry
 - Keyboard-accessible navigation drawer (`M` to toggle, `Escape` to close)
@@ -216,6 +217,7 @@ http://localhost:5173/#time-space-tradeoff
 http://localhost:5173/#linked-lists
 http://localhost:5173/#linked-insertion
 http://localhost:5173/#linked-deletion
+http://localhost:5173/#linked-traversal
 http://localhost:5173/#bubble-sort
 http://localhost:5173/#selection-sort
 http://localhost:5173/#insertion-sort
