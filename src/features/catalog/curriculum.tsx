@@ -21,6 +21,8 @@ import { LinkedTraversalLesson } from '../linked/LinkedTraversalLesson'
 import { linkedTraversalLesson } from '../linked/linkedTraversalLessonDefinition'
 import { LinkedStackLesson } from '../linked/LinkedStackLesson'
 import { linkedStackLesson } from '../linked/linkedStackLessonDefinition'
+import { LinkedQueueLesson } from '../linked/LinkedQueueLesson'
+import { linkedQueueLesson } from '../linked/linkedQueueLessonDefinition'
 import { BubbleSortLesson } from '../sorting/BubbleSortLesson'
 import { InsertionSortLesson } from '../sorting/InsertionSortLesson'
 import { MergeSortLesson } from '../sorting/MergeSortLesson'
@@ -97,6 +99,7 @@ const catalogEntries = [
   { order: '02', chapterId: 'linked-lists', definition: linkedDeletionLesson, component: LinkedDeletionLesson },
   { order: '03', chapterId: 'linked-lists', definition: linkedTraversalLesson, component: LinkedTraversalLesson },
   { order: '04', chapterId: 'linked-lists', definition: linkedStackLesson, component: LinkedStackLesson },
+  { order: '05', chapterId: 'linked-lists', definition: linkedQueueLesson, component: LinkedQueueLesson },
 ] as const satisfies readonly {
   order: string
   chapterId: string

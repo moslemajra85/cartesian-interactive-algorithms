@@ -13,11 +13,11 @@ import { linkedStackLesson as definition } from './linkedStackLessonDefinition'
 const initialValues = [62, 47, 31]
 
 export function LinkedStackLesson({ lessons, onBack, onOpenLesson, onCompleteLesson }: LessonComponentProps) {
-  const [scenario, setScenario] = useState<{ operation: StackOperation; value: number }>({ operation: 'push', value: 88 })
+  const [scenario, setScenario] = useState<{ operation: StackOperation; value: number; values: number[] }>({ operation: 'push', value: 88, values: initialValues })
   const [draftOperation, setDraftOperation] = useState<StackOperation>('push')
   const [draftValue, setDraftValue] = useState('88')
   const [error, setError] = useState<string | null>(null)
-  const steps = useMemo(() => createStackSteps(initialValues, scenario.operation, scenario.value), [scenario])
+  const steps = useMemo(() => createStackSteps(scenario.values, scenario.operation, scenario.value), [scenario])
   const playback = useStepPlayback(steps.length)
   const { stepIndex, playing, speedIndex, isComplete } = playback
   const step = steps[stepIndex]
@@ -42,14 +42,14 @@ export function LinkedStackLesson({ lessons, onBack, onOpenLesson, onCompleteLes
     }
     setError(null)
     playback.restart()
-    setScenario({ operation: draftOperation, value })
+    setScenario({ operation: draftOperation, value, values: initialValues })
   }
 
-  const tryPop = () => {
+  const tryFinalPop = () => {
     setError(null)
     setDraftOperation('pop')
     playback.restart()
-    setScenario({ operation: 'pop', value: scenario.value })
+    setScenario({ operation: 'pop', value: scenario.value, values: [initialValues[0]] })
   }
 
   const pushCode = ['new = Node(value)', 'new.next = top', 'top = new', 'return top']
@@ -73,7 +73,7 @@ export function LinkedStackLesson({ lessons, onBack, onOpenLesson, onCompleteLes
             <div><strong>Operate the undo stack</strong><span>Compare adding and removing the newest command.</span></div>
             <label>Operation<select value={draftOperation} onChange={(event) => setDraftOperation(event.target.value as StackOperation)}><option value="push">Push</option><option value="pop">Pop</option></select></label>
             <label>Command code<input type="number" min="1" max="99" value={draftValue} disabled={draftOperation === 'pop'} onChange={(event) => setDraftValue(event.target.value)} aria-invalid={Boolean(error)} /></label>
-            <button className="secondary-experiment" type="button" onClick={tryPop}>Try pop</button>
+            <button className="secondary-experiment" type="button" onClick={tryFinalPop}>Try final item</button>
             <button type="submit">Apply</button>
             {error && <p role="alert">{error}</p>}
           </form>

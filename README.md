@@ -2,7 +2,7 @@
 
 An interactive, visual learning environment for understanding data structures and algorithms through animated execution, synchronized pseudocode, and step-by-step reasoning.
 
-> **Project status:** Active development. The application currently includes the complete six-lesson Foundations chapter, five Arrays & Sorting lessons, and four interactive Linked Structures lessons.
+> **Project status:** Active development. The application currently includes the complete six-lesson Foundations chapter, five Arrays & Sorting lessons, and five interactive Linked Structures lessons.
 
 [![CI and deploy](https://github.com/moslemajra85/cartesian-interactive-algorithms/actions/workflows/ci-and-deploy.yml/badge.svg)](https://github.com/moslemajra85/cartesian-interactive-algorithms/actions/workflows/ci-and-deploy.yml)
 [![Live site](https://img.shields.io/badge/live-GitHub%20Pages-222?logo=github)](https://moslemajra85.github.io/cartesian-interactive-algorithms/)
@@ -37,6 +37,7 @@ The goal is not to make algorithms merely look animated. The goal is to make the
 - Learner-configurable linked-list deletion with explicit bypass, detachment, release phases, and visible reference-write expressions
 - Linked traversal lab with present and missing targets and visible next-reference movement
 - Interactive linked-stack push/pop lab with animated `top`, `new`, and `oldTop` references, including empty-stack semantics
+- Interactive linked-queue enqueue/dequeue lab with animated `front`, `rear`, `new`, and `oldFront` references and explicit empty-boundary repair
 - Typed lesson catalogue with a dedicated Arrays & Sorting chapter screen
 - Keyboard-accessible lesson search derived from the typed curriculum registry
 - Keyboard-accessible navigation drawer (`M` to toggle, `Escape` to close)
@@ -222,6 +223,7 @@ http://localhost:5173/#linked-insertion
 http://localhost:5173/#linked-deletion
 http://localhost:5173/#linked-traversal
 http://localhost:5173/#stack-push-pop
+http://localhost:5173/#queue-enqueue-dequeue
 http://localhost:5173/#bubble-sort
 http://localhost:5173/#selection-sort
 http://localhost:5173/#insertion-sort
@@ -340,7 +342,7 @@ Pure event-generator tests protect algorithm correctness. They verify:
 - Custom-array parsing, normalization, size limits, value limits, and duplicate preservation
 - Route parsing, serialization, document titles, unknown paths, and legacy direct links
 
-Component tests exercise prediction attempts, retry behavior, sorting and search input flows, linked-node identity and pointer movement, catalogue navigation, browser history events, route focus, document titles, and not-found behavior. Registry tests protect route uniqueness, chapter availability, and lesson numbering. The current suite contains 195 passing tests.
+Component tests exercise prediction attempts, retry behavior, sorting and search input flows, linked-node identity and pointer movement, catalogue navigation, browser history events, route focus, document titles, and not-found behavior. Registry tests protect route uniqueness, chapter availability, and lesson numbering. The current suite contains 201 passing tests.
 
 ## Roadmap
 
@@ -368,7 +370,7 @@ Component tests exercise prediction attempts, retry behavior, sorting and search
 
 - [x] Merge Sort
 - [x] Binary Search
-- [ ] Linked lists, stacks, and queues
+- [x] Linked lists, stacks, and queues
 - [ ] Tree traversal
 - [ ] Graph traversal and shortest paths
 - [ ] Problem-solving pattern lessons

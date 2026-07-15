@@ -97,4 +97,22 @@ describe('LinkedListVisualizer motion semantics', () => {
     expect(screen.getByText('20.next')).toBeTruthy()
     expect(screen.getByRole('img').getAttribute('aria-label')).toContain('predecessor points to 20')
   })
+
+  it('renders multiple boundary pointers at null for an empty structure', () => {
+    const { container } = render(
+      <LinkedListVisualizer
+        nodes={[]}
+        headId={null}
+        headLabel="FRONT ENTRY"
+        activeIds={[]}
+        pointers={[
+          { id: 'front', label: 'front', nodeId: null, tone: 'reference' },
+          { id: 'rear', label: 'rear', nodeId: null },
+        ]}
+      />,
+    )
+
+    expect(container.querySelectorAll('[data-pointer-node="null"]')).toHaveLength(2)
+    expect(screen.getByRole('img').getAttribute('aria-label')).toContain('front is null. rear is null')
+  })
 })
